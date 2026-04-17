@@ -1,0 +1,34 @@
+ENTRY (start);
+
+MEMORY{
+  FLASH (rx) : ORIGIN = FLASH_START, LENGTH = FLASH_SIZE
+  RAM (xrw)  : ORIGIN = RAM_START, LENGTH = RAM_SIZE
+}
+
+_estack = ORIGIN(RAM) + LENGTH(RAM);
+
+SECTIONS{
+
+  .text :{
+    _stext = .;
+    . = ALIGN(4);
+    *(.init)
+    . = ALIGN(4);
+    *(.text .text*)
+    . = ALIGN(4);
+    *(.rodata .rodata*)
+    . = ALIGN(4);
+    _etext = .;
+  } >FLASH
+
+  .bss :{
+    _sbss = .;
+    . = ALIGN(4);
+    *(.bss*)
+    . = ALIGN(4);
+    _ebss = .;
+  } >RAM
+
+}
+
+

@@ -42,8 +42,13 @@ start:
 	csrw	MODE_PREFIX(tvec), t0
 
 	# enable all x-mode irqs
-	csrsi	MODE_PREFIX(status), 0b1000
-
+	#ifdef M_MODE
+		csrsi	MODE_PREFIX(status), 0b1000
+	#endif
+	#ifdef S_MODE
+		csrsi	MODE_PREFIX(status), 0b0010
+	#endif
+	
 	# set timer for the first time
 	rdtime	t0
 	li		t1, TIMER_INTERVAL
@@ -51,7 +56,12 @@ start:
 	la		t2, MTIMECMP
 	sd		t1, 0(t2)
 	# enable m-mode timer irq
-	li		t1, 0b10000000
+	#ifdef M_MODE
+		li		t1, 0b10000000
+	#endif
+	#ifdef S_MODE
+		li		t1, 0b00100000
+	#endif
 	csrs	MODE_PREFIX(ie), t1
 
 	#ifdef M_MODE

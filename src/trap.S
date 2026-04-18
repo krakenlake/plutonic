@@ -18,7 +18,12 @@
 
 trap_handler:
 	# disable all interrupts - clear xIE in xstatus
-	csrci	MODE_PREFIX(status), 0b1000
+	#ifdef M_MODE
+		csrci	MODE_PREFIX(status), 0b1000
+	#endif
+	#ifdef S_MODE
+		csrci	MODE_PREFIX(status), 0b0010
+	#endif
 
 	# TODO: we need to differentiate our stack and caller stack!
 	csrw	MODE_PREFIX(scratch), sp

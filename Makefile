@@ -4,8 +4,8 @@ default: this
 
 PLUTONIC_VERSION = 0.0.1
 
-TARGET ?= qemu-M-64g
-#TARGET ?= qemu-S-64g
+#TARGET ?= qemu-M-64g
+TARGET ?= qemu-S-64g
 
 # TODO: currently not working
 #TARGET ?= vf2

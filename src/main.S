@@ -6,6 +6,7 @@
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"
 #include "plutonic/trap.h"
+#include "plutonic/register.h"
 
 
 .global start
@@ -16,7 +17,6 @@
 
 # application entry point - activate our trap handler
 start:
-
 	# do not add anything before this
 
 	# in M-Mode we need to make sure that we run only on one hart
@@ -34,9 +34,14 @@ start:
 		csrs	MODE_PREFIX(status), t0
 	#endif
 
-	# init kernel stack
+	#-------------------- save dtb pointer incoming in a1
+	la		t0, dtb
+	SAVE_X	a1, 0(t0)
+
+	#-------------------- init kernel stack
 	la		sp, _estack
 
+	#-------------------- IRQ setup
 	# set up trap vector
 	la		t0, trap_handler
 	csrw	MODE_PREFIX(tvec), t0
@@ -64,16 +69,20 @@ start:
 	#endif
 	csrs	MODE_PREFIX(ie), t1
 
+	#-------------------- IRQ setup
 	#ifdef M_MODE
 		jal		uart_init
 	#endif
 
+	#-------------------- "hart is alive" indicator
 	li		a0, '*'
 	jal		print_char
 
-	# startup message
+	#-------------------- startup message
 	la		a0, string_startup
 	jal		print_string
+
+	jal		print_dtb
 
 forever:
 	# intentionally execute ebreak in order to enter trap handler

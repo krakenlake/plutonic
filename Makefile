@@ -4,8 +4,8 @@ default: this
 
 PLUTONIC_VERSION = 0.0.1
 
-#TARGET ?= qemu-M-64g
-TARGET ?= qemu-S-64g
+TARGET ?= qemu-M-64g
+#TARGET ?= qemu-S-64g
 
 # TODO: currently not working
 #TARGET ?= vf2
@@ -69,7 +69,7 @@ GCCBIN	?= /usr/local/bin
 TOOLBIN ?= /usr/local/bin
 CC      = $(GCCBIN)/riscv64-elf-gcc
 CPP     = $(GCCBIN)/riscv64-elf-cpp
-CFLAGS	+= $(DEBUG) -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\" -nostartfiles -O2 -g -I"src/include"
+CFLAGS	+= $(DEBUG) -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\" -mcmodel=medany -nostartfiles -O2 -g -I"src/include"
 LD		= $(TOOLBIN)/riscv64-elf-ld
 LDFLAGS = --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
 OBJCOPY = $(TOOLBIN)/riscv64-elf-objcopy
@@ -89,8 +89,12 @@ CONFIG = config
 BUILDROOT = build
 BUILD = $(BUILDROOT)/$(TARGET)
 RELEASE = release
-SRC = $(wildcard $(SRCD)/*.S)
-OBJ = $(SRC:$(SRCD)/%.S=$(BUILD)/%.o)
+SRC_S = $(wildcard $(SRCD)/*.S)
+SRC_C = $(wildcard $(SRCD)/*.c)
+SRC = $(SRC_S) $(SRC_D)
+OBJ_S = $(SRC_S:$(SRCD)/%.S=$(BUILD)/%.o)
+OBJ_C = $(SRC_C:$(SRCD)/%.c=$(BUILD)/%.o)
+OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
 
@@ -118,6 +122,9 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $< $@
 
 $(BUILD)/%.o: $(SRCD)/%.S Makefile $(BUILD)/config.h
+	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+
+$(BUILD)/%.o: $(SRCD)/%.c Makefile $(BUILD)/config.h
 	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILD)/$(NAME)-stripped.elf: $(BUILD)/$(NAME).elf

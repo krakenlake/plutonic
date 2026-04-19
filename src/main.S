@@ -19,6 +19,7 @@
 start:
 	# do not add anything before this
 
+	#-------------------- hart control	
 	# in M-Mode we need to make sure that we run only on one hart
 	#ifdef M_MODE
 		csrr	t0, mhartid
@@ -26,6 +27,7 @@ start:
 		bnez	t0, plutonic_wait_hart
 	#endif
 
+	#-------------------- RVF init
 	# enable RVF in xstatus of cpu 
 	# (for M-mode at least this is disabled in QEMU per default)
 	#ifdef HW_QEMU
@@ -34,11 +36,13 @@ start:
 		csrs	MODE_PREFIX(status), t0
 	#endif
 
-	#-------------------- save dtb pointer incoming in a1
+	#-------------------- save incoming parameters
+	# pointer to dtb is in a1
 	la		t0, dtb
 	SAVE_X	a1, 0(t0)
 
 	#-------------------- init kernel stack
+	# use initial value from linker
 	la		sp, _estack
 
 	#-------------------- IRQ setup
@@ -69,7 +73,7 @@ start:
 	#endif
 	csrs	MODE_PREFIX(ie), t1
 
-	#-------------------- IRQ setup
+	#-------------------- console init
 	#ifdef M_MODE
 		jal		uart_init
 	#endif
@@ -82,10 +86,10 @@ start:
 	la		a0, string_startup
 	jal		print_string
 
+	#-------------------- print dtb
 	jal		print_dtb
 
 forever:
-	# intentionally execute ebreak in order to enter trap handler
 	wfi
 #	ebreak
 	j		forever
@@ -111,6 +115,6 @@ string_startup:
 	.ascii "\n |_|"
 	.ascii "\n     v "
 	.ascii PLUTONIC_VERSION
-	.asciz " - experimental RISC-V kernel\n";
+	.asciz " - experimental RISC-V kernel\n\n";
 .size string_startup, .-string_startup
 

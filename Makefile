@@ -69,7 +69,6 @@ GCCBIN	?= /usr/local/bin
 TOOLBIN ?= /usr/local/bin
 CC      = $(GCCBIN)/riscv64-elf-gcc
 CPP     = $(GCCBIN)/riscv64-elf-cpp
-CFLAGS	+= $(DEBUG) -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\" -mcmodel=medany -nostartfiles -O2 -g -I"src/include"
 LD		= $(TOOLBIN)/riscv64-elf-ld
 LDFLAGS = --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
 OBJCOPY = $(TOOLBIN)/riscv64-elf-objcopy
@@ -77,6 +76,15 @@ OBJDUMP = $(TOOLBIN)/riscv64-elf-objdump
 STRIP   = $(TOOLBIN)/riscv64-elf-strip
 GDB		= $(TOOLBIN)/riscv64-elf-gdb
 
+# CFLAGS
+CFLAGS	+= $(DEBUG)
+CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
+CFLAGS	+= -nostartfiles
+# need to access memory beyond 0x7fffffff
+CFLAGS	+= -mcmodel=medany
+CFLAGS	+= -O2 
+CFLAGS	+= -g
+CFLAGS	+= -I"src/include"
 
 # directories
 SRCD	= src

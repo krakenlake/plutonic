@@ -79,7 +79,7 @@ start:
 	#endif
 
 	#-------------------- "hart is alive" indicator
-	li		a0, '*'
+	li		a0, '0'
 	jal		print_char
 
 	#-------------------- startup message
@@ -97,6 +97,9 @@ forever:
 
 
 plutonic_wait_hart:
+	# convert hartid to ASCII number
+	addi	a0, t0, 0x30	
+	jal		print_char
 	wfi
 	j	plutonic_wait_hart
 .size plutonic_wait_hart, .-plutonic_wait_hart
@@ -117,4 +120,3 @@ string_startup:
 	.ascii PLUTONIC_VERSION
 	.asciz " - experimental RISC-V kernel\n\n";
 .size string_startup, .-string_startup
-

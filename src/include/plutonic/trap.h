@@ -1,5 +1,5 @@
-#ifndef TRAP_H
-#define TRAP_H
+#ifndef PLUTONIC_TRAP_H
+#define PLUTONIC_TRAP_H
 
 
 #define TIMER_INTERVAL	10000000
@@ -15,4 +15,4 @@
 #endif
 
 
-#endif /* TRAP_H */
+#endif /* PLUTONIC_TRAP_H */

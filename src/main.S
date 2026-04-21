@@ -7,6 +7,8 @@
 #include "plutonic/ASCII.h"
 #include "plutonic/trap.h"
 #include "plutonic/register.h"
+#include "plutonic/log.h"
+
 
 
 .global start
@@ -79,6 +81,8 @@ start:
 	#endif
 
 	#-------------------- "hart is alive" indicator
+	li		a0, '*'
+	jal		print_char
 	li		a0, '0'
 	jal		print_char
 
@@ -87,7 +91,8 @@ start:
 	jal		print_string
 
 	#-------------------- print dtb
-	jal		print_dtb
+//	jal		print_dtb
+
 
 forever:
 	wfi

@@ -12,3 +12,8 @@ This is my experimental kernel tinkering project and currently not doing anythin
 ## Requirements
 - riscv64 GNU toolchain for building
 - QEMU or other hardware to run the kernel
+
+## Design Decisions
+- kernel is running on 1 (and always the same) hart only
+
+

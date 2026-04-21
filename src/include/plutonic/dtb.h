@@ -1,8 +1,8 @@
-#ifndef DTB_H
-#define DTB_H
+#ifndef PLUTONIC_DTB_H
+#define PLUTONIC_DTB_H
 
 extern int print_char(char);
 
 void print_dtb(void);
 
-#endif /* DTB_H */
+#endif /* PLUTONIC_DTB_H */

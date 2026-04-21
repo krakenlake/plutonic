@@ -2,6 +2,7 @@
 #include "plutonic/register.h"
 #include "plutonic/trap.h"
 #include "plutonic/stack.h"
+#include "plutonic/log.h"
 
 
 .global trap_handler
@@ -178,8 +179,12 @@ output_cause:
 # as that is not automatically guaranteed with RVC enabled
 .align 4
 handle_irq:
-	li		a0, '.'
-	jal		print_char
+//	li		a0, '.'
+//	jal		print_char
+	li		a0, LOG_DEBUG
+	la		a1, string_timer_irq
+	jal		log 
+	
 	# reset timer
 	rdtime	t0
 	li		t1, TIMER_INTERVAL
@@ -334,3 +339,4 @@ string_cause_msg:
 	.asciz "cause\t= ";
 
 
+string_timer_irq: .string "timer IRQ"

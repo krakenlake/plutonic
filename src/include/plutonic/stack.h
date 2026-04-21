@@ -1,5 +1,5 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef PLUTONIC_STACK_H
+#define PLUTONIC_STACK_H
 
 #include "config.h"
 #include "plutonic/register.h"
@@ -99,4 +99,4 @@
 #define POP_TP_S1_S0_RA_RET			j		pop_tp_s1_s0_ra_ret
 
 
-#endif /* STACK_H */
+#endif /* PLUTONIC_STACK_H */

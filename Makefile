@@ -80,6 +80,8 @@ GDB		= $(TOOLBIN)/riscv64-elf-gdb
 CFLAGS	+= $(DEBUG)
 CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 CFLAGS	+= -nostartfiles
+# gcc must not try to replace anything with built-in stuff
+CFLAGS	+= -fno-builtin
 # need to access memory beyond 0x7fffffff
 CFLAGS	+= -mcmodel=medany
 CFLAGS	+= -O2 
@@ -130,7 +132,7 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $< $@
 
 $(BUILD)/%.o: $(SRCD)/%.S Makefile $(BUILD)/config.h
-	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	-$(CC) $(CFLAGS) -D__ASSEMBLY__ -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILD)/%.o: $(SRCD)/%.c Makefile $(BUILD)/config.h
 	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@

@@ -19,9 +19,6 @@
  * __ASSEMBLER__ is a predefined macro in gcc.
  */
 #ifndef __ASSEMBLER__
-	extern int print_char(char);
-	extern int print_decimal(unsigned long);
-
 	void log(int level, char *str);
 #endif
 

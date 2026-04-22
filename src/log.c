@@ -1,5 +1,7 @@
 #include "config.h"
 #include "plutonic/log.h"
+#include "plutonic/print.h"
+
 
  char *loglevel_string[8] = {
 	"EMERGENCY",
@@ -17,9 +19,7 @@
  */
 int kernel_log_level = LOG_DEBUG;
 
-
 char *string_log_sender = "kernel\0";
-char *string_log_delim = ": \0";
 
 
 /*
@@ -28,7 +28,8 @@ char *string_log_delim = ": \0";
 void log(int level, char *str)
 {
 	char *c;
-	unsigned long timestamp=17;
+	char delim = ':';
+	unsigned long timestamp;
 
 	if (level > kernel_log_level) return;
 	if (level < 0 || level > LOG_DEBUG) return;
@@ -42,28 +43,17 @@ void log(int level, char *str)
 
 	print_decimal(timestamp);
 
-	c = string_log_delim;
-	while(*c != 0)
-		print_char(*c++);
-
-	c = string_log_sender;
-	while(*c != 0)
-		print_char(*c++);
-
-	c = string_log_delim;
-	while(*c != 0)
-		print_char(*c++);
-
+	print_char(delim);
 	c = loglevel_string[level];
-	while(*c != 0)
-		print_char(*c++);
+	print_string(c);
 
-	c = string_log_delim;
-	while(*c != 0)
-		print_char(*c++);
-	
-	while(*str != 0)
-		print_char(*str++);
+	print_char(delim);
+	c = string_log_sender;
+	print_string(c);
+
+	print_char(delim);
+	print_string(str);
+
 	print_char('\n');
 		return;
 }

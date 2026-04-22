@@ -103,7 +103,10 @@ forever:
 
 plutonic_wait_hart:
 	# convert hartid to ASCII number
-	addi	a0, t0, 0x30	
+	addi	a0, t0, 0x30
+	# We cannot call print_string here, because that would mess up the
+	# (still global) stack.	But we can call print_char, because that is
+	# a leaf function and only requires ra to return properly.
 	jal		print_char
 	wfi
 	j	plutonic_wait_hart

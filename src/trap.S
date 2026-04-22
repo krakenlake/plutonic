@@ -5,6 +5,7 @@
 #include "plutonic/log.h"
 
 
+.global set_timer
 .global trap_handler
 .global exit_trap_handler
 
@@ -19,9 +20,21 @@
 # as that is not automatically guaranteed with RVC enabled
 .align 4
 
+set_timer:
+	PUSH_RA
+	# set timer for the first time
+	rdtime	t0
+	li		t1, TIMER_INTERVAL
+	add		t1, t0, t1
+	la		t2, MTIMECMP
+	sd		t1, 0(t2)
+	# enable timer IRQs
+	li		t1, IRQ_TIMER
+	csrs	sie, t1
+	POP_RA_RET
 
 trap_handler:
-	# disable all interrupts - clear sie in sstatus
+	# disable all S-mode IRQs
 	csrci	sstatus, S_MODE_IRQ_FLAG
 
 	# TODO: we need to differentiate our stack and caller stack!
@@ -192,15 +205,9 @@ handle_irq:
 
 	# disable timer IRQs
 	li		t1, IRQ_TIMER
-#	csrc	sie, t1
+	csrc	sie, t1
+	jal		set_timer
 
-	# reset timer
-	rdtime	t0
-	li		t1, TIMER_INTERVAL
-	add		t1, t0, t1
-	la		t0, MTIMECMP
-	SAVE_X	t1, 0(t0)
-	
 	j 		exit_trap_handler
 
 exit_trap_handler:

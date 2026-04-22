@@ -10,7 +10,6 @@
 #include "plutonic/log.h"
 
 
-
 .global start
 
 
@@ -19,7 +18,6 @@
 
 # application entry point - activate our trap handler
 start:
-	# do not add anything before this
 
 	#-------------------- hart control	
 	# when booting in S-mode, only the hart we are running on is enabled
@@ -32,7 +30,6 @@ start:
 	#-------------------- init kernel stack
 	# use initial value from linker
 	la		sp, _estack
-
 
 	#-------------------- "hart is alive" indicator
 	li		a0, '*'
@@ -48,24 +45,14 @@ start:
 	# set up trap vector
 	la		t0, trap_handler
 	csrw	stvec, t0
-
 	# enable all S-mode irqs
-	csrsi	sstatus, S_MODE_IRQ_FLAG
-	
-	# set timer for the first time
-	rdtime	t0
-	li		t1, TIMER_INTERVAL
-	add		t1, t0, t1
-	la		t2, MTIMECMP
-	sd		t1, 0(t2)
-	# enable timer IRQs
-	li		t1, IRQ_TIMER
-	csrs	sie, t1
+	csrsi	sstatus, S_MODE_IRQ_FLAG	
+	jal		set_timer
 
 	#-------------------- print dtb
 //	jal		print_dtb
 
-
+// fall through from above
 forever:
 	wfi
 	ebreak

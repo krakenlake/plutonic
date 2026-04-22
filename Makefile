@@ -4,8 +4,7 @@ default: this
 
 PLUTONIC_VERSION = 0.0.1
 
-TARGET ?= qemu-M-64g
-#TARGET ?= qemu-S-64g
+TARGET ?= qemu-64g
 
 # TODO: currently not working
 #TARGET ?= vf2
@@ -13,18 +12,7 @@ TARGET ?= qemu-M-64g
 DEBUG ?= -DDEBUG
 
 
-ifeq ($(TARGET), qemu-M-64g)
-	QEMU_BIOS			= none
-	QEMU_FLAGS			= -machine virt -cpu rv$(TARGET_XLEN),pmp=false,h=true -smp $(QEMU_HARTS) -gdb tcp::1234 -bios none -serial stdio -display none -kernel $(BUILD)/$(NAME).img
-	FLASH_START			= 0x80000000
-	RAM_START			= 0x80020000
-	FLASH_SIZE			= 64K
-	RAM_SIZE			= 32K
-	TARGET_XLEN			= 64
-	CFLAGS				+= -march=rv$(TARGET_XLEN)g
-endif 
-
-ifeq ($(TARGET), qemu-S-64g)
+ifeq ($(TARGET), qemu-64g)
 	QEMU_BIOS			= default
 	QEMU_FLAGS			= -machine virt -cpu rv$(TARGET_XLEN),pmp=false,h=true -smp $(QEMU_HARTS) -gdb tcp::1234 -bios $(QEMU_BIOS) -serial stdio -display none -kernel $(BUILD)/$(NAME).img
 	FLASH_START			= 0x80200000
@@ -165,6 +153,5 @@ device-tree:
 	less $(BUILD)/qemu-device-tree.dts
 
 all: 
-	make TARGET=qemu-M-64g release
-	make TARGET=qemu-S-64g release
+	make TARGET=qemu-64g release
 #	make TARGET=vf2 release

@@ -128,40 +128,23 @@ uart_output_string_done:
 .size uart_output_string, .-uart_output_string
 
 
-# output one char
+# output one char to console via SBI
 # in: char (ASCII) in a0
-#ifdef M_MODE
-	uart_output_char:
-		li		t0, UART_BASE
-	uart_output_char_wait_lsr:
-		lbu		t1, UART_REG_LSR(t0)
-		andi	t1, t1, 0b00100000 
-		beqz	t1, uart_output_char_wait_lsr
-		sb		a0, UART_REG_THR(t0)				# print byte to UART
-		ret
-	.size uart_output_char, .-uart_output_char
-#endif /* M_MODE */
-
-
-# output one char
-# in: char (ASCII) in a0
-#ifdef S_MODE
-	uart_output_char:
-		addi	sp, sp, -(XLEN_BYTES*4)	
-		SAVE_X	a0, 0(sp)
-		SAVE_X	a6, (XLEN_BYTES*1)(sp)
-		SAVE_X	a7, (XLEN_BYTES*2)(sp)
-										# char to be printed in a0 already
-		mv		a6, zero				# SBI fid
-		li		a7, 1					# SBI eid
-		ecall
-		LOAD_X	a0, 0(sp)
-		LOAD_X	a6, (XLEN_BYTES*1)(sp)
-		LOAD_X	a7, (XLEN_BYTES*2)(sp)
-		addi	sp, sp, (XLEN_BYTES*4)
-		ret
-	.size uart_output_char, .-uart_output_char
-#endif /* S_MODE */
+uart_output_char:
+	addi	sp, sp, -(XLEN_BYTES*4)	
+	SAVE_X	a0, 0(sp)
+	SAVE_X	a6, (XLEN_BYTES*1)(sp)
+	SAVE_X	a7, (XLEN_BYTES*2)(sp)
+									# char to be printed in a0 already
+	mv		a6, zero				# SBI fid
+	li		a7, 1					# SBI eid
+	ecall
+	LOAD_X	a0, 0(sp)
+	LOAD_X	a6, (XLEN_BYTES*1)(sp)
+	LOAD_X	a7, (XLEN_BYTES*2)(sp)
+	addi	sp, sp, (XLEN_BYTES*4)
+	ret
+.size uart_output_char, .-uart_output_char
 
 
 .bss

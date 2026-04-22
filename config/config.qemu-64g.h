@@ -11,7 +11,6 @@
 
 // hardware
 #define HW_QEMU
-#define M_MODE
 #define XLEN	64
 #define FLEN	64
 #define TARGET_HAS_RVF

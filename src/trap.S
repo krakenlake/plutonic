@@ -21,16 +21,11 @@
 
 
 trap_handler:
-	# disable all interrupts - clear xIE in xstatus
-	#ifdef M_MODE
-		csrci	MODE_PREFIX(status), 0b1000
-	#endif
-	#ifdef S_MODE
-		csrci	MODE_PREFIX(status), 0b0010
-	#endif
+	# disable all interrupts - clear sie in sstatus
+	csrci	sstatus, 0b0010
 
 	# TODO: we need to differentiate our stack and caller stack!
-	csrw	MODE_PREFIX(scratch), sp
+	csrw	sscratch, sp
 
 	# save int registers on stack
 	addi	sp, sp, -(STK_FRAME_SIZE_INT)
@@ -67,11 +62,11 @@ trap_handler:
 	SAVE_X	x31, (STK_OFF_X31)(sp)
 
 	# now we can safely use t0 to get back and save sp in that same stack frame above
-	csrr	t0, MODE_PREFIX(scratch)
+	csrr	t0, sscratch
 	SAVE_X	t0, (STK_OFF_SP)(sp)			# and save it
 
 	# save xepc
-	csrr	t0, MODE_PREFIX(epc)
+	csrr	t0, sepc
 	SAVE_X	t0, (STK_OFF_PC)(sp)
 
 	# save f0-f31 registers on stack
@@ -110,13 +105,13 @@ trap_handler:
 	SAVE_F	f31, (STK_OFF_F31)(sp)
 
 	# irq or exception? check leftmost bit of xcause
-	csrr	a0, MODE_PREFIX(cause)
+	csrr	a0, scause
 	srli	a0, a0, XLEN-1
 	bnez	a0, handle_irq
 
 	# we have an exception
 	# check if exception was caused by ebreak
-	csrr	t0, MODE_PREFIX(cause)
+	csrr	t0, scause
 	li		t1, 3						# breakpoint exception?
 	bne		t0, t1, handle_exception
 	
@@ -137,19 +132,19 @@ handle_exception:
 	# print xepc
 	la		a0, string_epc_msg
 	jal		print_string
-	csrr	a0, MODE_PREFIX(epc)
+	csrr	a0, sepc
 	jal		print_hex
 
 	# print xtval
 	la		a0, string_tval_msg
 	jal		print_string
-	csrr	a0, MODE_PREFIX(tval)
+	csrr	a0, stval
 	jal		print_hex
 
 	# print xcause
 	la		a0, string_cause_msg
 	jal		print_string
-	csrr	a0, MODE_PREFIX(cause)
+	csrr	a0, scause
 	mv		s0, a0								# save for later
 	jal		print_hex
 
@@ -236,7 +231,7 @@ exit_trap_handler:
 
 	# restore epc from stack for exit below
 	LOAD_X	t0, STK_OFF_PC(sp)
-	csrw	MODE_PREFIX(epc), t0
+	csrw	sepc, t0
 	
 	# restore int registers
 	LOAD_X	ra, (STK_OFF_RA)(sp)
@@ -277,10 +272,10 @@ exit_trap_handler:
 	# done restoring
 
 	# do not leave anything in the scratch register
-	csrw	MODE_PREFIX(scratch), zero
+	csrw	sscratch, zero
 
 	# bye bye - jump to address in xepc (while staying in current mode, see above)
-	MODE_PREFIX(ret)
+	sret
 .size trap_handler, .-trap_handler
 
 
@@ -331,16 +326,11 @@ string_CAUSE_RESERVED:				.string "RESERVED_OR_CUSTOM";
 string_exception_msg:
 	.string "exception: "
 string_epc_msg:				
-	.ascii MODE_PREFIX_CHAR; 
-	.asciz "epc=";
+	.asciz "sepc=";
 string_tval_msg:			
-	.ascii ", ";
-	.ascii MODE_PREFIX_CHAR; 
-	.asciz "tval=";
+	.asciz ", stval=";
 string_cause_msg:
-	.ascii ", "; 
-	.ascii MODE_PREFIX_CHAR; 
-	.asciz "cause=";
+	.asciz ", scause=";
 
 string_timer_irq: 
 	.string "timer IRQ"

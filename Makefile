@@ -132,7 +132,7 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $< $@
 
 $(BUILD)/%.o: $(SRCD)/%.S Makefile $(BUILD)/config.h
-	-$(CC) $(CFLAGS) -D__ASSEMBLY__ -I"$(BUILD)" -MMD -c $< -o $@
+	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILD)/%.o: $(SRCD)/%.c Makefile $(BUILD)/config.h
 	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@

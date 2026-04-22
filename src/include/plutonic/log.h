@@ -12,7 +12,13 @@
 #define	LOG_DEBUG	7
 
 
-#ifndef __ASSEMBLY__
+/*
+ * Include files are included in .S and .c files, but C declarations
+ * are invalid in assembly code, so they need to be guarded.
+ *
+ * __ASSEMBLER__ is a predefined macro in gcc.
+ */
+#ifndef __ASSEMBLER__
 	extern int print_char(char);
 
 	void log(int level, char *str);

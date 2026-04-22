@@ -82,7 +82,7 @@ CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 CFLAGS	+= -nostartfiles
 # gcc must not try to replace anything with built-in stuff
 CFLAGS	+= -fno-builtin
-# need to access memory beyond 0x7fffffff
+# needed to access memory beyond 0x7fffffff
 CFLAGS	+= -mcmodel=medany
 CFLAGS	+= -O2 
 CFLAGS	+= -g

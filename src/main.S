@@ -33,23 +33,6 @@ start:
 	# use initial value from linker
 	la		sp, _estack
 
-	#-------------------- IRQ setup
-	# set up trap vector
-	la		t0, trap_handler
-	csrw	stvec, t0
-
-	# enable all S-mode irqs
-	csrsi	sstatus, 0b0010
-	
-	# set timer for the first time
-	rdtime	t0
-	li		t1, TIMER_INTERVAL
-	add		t1, t0, t1
-	la		t2, MTIMECMP
-	sd		t1, 0(t2)
-	# enable timer irq
-	li		t1, 0b00100000
-	csrs	sie, t1
 
 	#-------------------- "hart is alive" indicator
 	li		a0, '*'
@@ -60,6 +43,24 @@ start:
 	#-------------------- startup message
 	la		a0, string_startup
 	jal		print_string
+
+	#-------------------- IRQ setup
+	# set up trap vector
+	la		t0, trap_handler
+	csrw	stvec, t0
+
+	# enable all S-mode irqs
+	csrsi	sstatus, S_MODE_IRQ_FLAG
+	
+	# set timer for the first time
+	rdtime	t0
+	li		t1, TIMER_INTERVAL
+	add		t1, t0, t1
+	la		t2, MTIMECMP
+	sd		t1, 0(t2)
+	# enable timer IRQs
+	li		t1, IRQ_TIMER
+	csrs	sie, t1
 
 	#-------------------- print dtb
 //	jal		print_dtb

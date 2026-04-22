@@ -22,7 +22,7 @@
 
 trap_handler:
 	# disable all interrupts - clear sie in sstatus
-	csrci	sstatus, 0b0010
+	csrci	sstatus, S_MODE_IRQ_FLAG
 
 	# TODO: we need to differentiate our stack and caller stack!
 	csrw	sscratch, sp
@@ -181,16 +181,26 @@ handle_irq:
 	li		a0, '.'
 	jal		print_char
 */
+
 	li		a0, LOG_DEBUG
 	la		a1, string_timer_irq
 	jal		log 
 	
+	# clear pending timer IRQ
+	li		t0, IRQ_TIMER
+	csrc	sip, t0
+
+	# disable timer IRQs
+	li		t1, IRQ_TIMER
+#	csrc	sie, t1
+
 	# reset timer
 	rdtime	t0
 	li		t1, TIMER_INTERVAL
 	add		t1, t0, t1
 	la		t0, MTIMECMP
 	SAVE_X	t1, 0(t0)
+	
 	j 		exit_trap_handler
 
 exit_trap_handler:

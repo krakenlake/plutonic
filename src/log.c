@@ -27,11 +27,26 @@ char *string_log_delim = ": \0";
  */
 void log(int level, char *str)
 {
+	char *c;
+	unsigned long timestamp=17;
 
 	if (level > kernel_log_level) return;
 	if (level < 0 || level > LOG_DEBUG) return;
-	
-	char *c = string_log_sender;
+
+	__asm( 
+		// read system time from csr 
+		"rdtime t0\n"
+		// and put result into timestamp variable in memory
+		"sd t0,%0"
+		: "=m" (timestamp) );
+
+	print_decimal(timestamp);
+
+	c = string_log_delim;
+	while(*c != 0)
+		print_char(*c++);
+
+	c = string_log_sender;
 	while(*c != 0)
 		print_char(*c++);
 

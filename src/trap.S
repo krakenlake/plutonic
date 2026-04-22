@@ -9,6 +9,9 @@
 .global exit_trap_handler
 
 
+#define STR_BUF_SIZE	128
+
+
 .text
 
 
@@ -171,7 +174,7 @@ output_cause:
 	jal		print_string
 	li		a0, ')'
 	jal		print_char
-
+	jal		print_newline
 	j 		exit_trap_handler
 
 
@@ -179,8 +182,10 @@ output_cause:
 # as that is not automatically guaranteed with RVC enabled
 .align 4
 handle_irq:
-//	li		a0, '.'
-//	jal		print_char
+/*
+	li		a0, '.'
+	jal		print_char
+*/
 	li		a0, LOG_DEBUG
 	la		a1, string_timer_irq
 	jal		log 
@@ -324,19 +329,26 @@ string_CAUSE_HARDWARE_ERROR:		.string "HARDWARE_ERROR";
 string_CAUSE_RESERVED:				.string "RESERVED_OR_CUSTOM";
 
 string_exception_msg:
-	.string "\nexception:"
+	.string "exception: "
 string_epc_msg:				
-	.ascii "\n\t"; 
 	.ascii MODE_PREFIX_CHAR; 
-	.asciz "epc\t= ";
+	.asciz "epc=";
 string_tval_msg:			
-	.ascii "\n\t";
+	.ascii ", ";
 	.ascii MODE_PREFIX_CHAR; 
-	.asciz "tval\t= ";
+	.asciz "tval=";
 string_cause_msg:
-	.ascii "\n\t"; 
+	.ascii ", "; 
 	.ascii MODE_PREFIX_CHAR; 
-	.asciz "cause\t= ";
+	.asciz "cause=";
+
+string_timer_irq: 
+	.string "timer IRQ"
 
 
-string_timer_irq: .string "timer IRQ"
+.bss
+
+
+.align 8
+.comm str_buf, STR_BUF_SIZE
+.size str_buf, STR_BUF_SIZE

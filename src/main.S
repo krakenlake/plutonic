@@ -96,7 +96,7 @@ start:
 
 forever:
 	wfi
-#	ebreak
+	ebreak
 	j		forever
 .size start, .-start
 

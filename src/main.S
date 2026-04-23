@@ -36,9 +36,9 @@ start:
 	la		sp, _estack
 
 	#-------------------- "hart is alive" indicator
+	# visual check that only one hart is running, in case that
+	# more than one character appears, something is not right
 	li		a0, '*'
-	jal		print_char
-	li		a0, '0'
 	jal		print_char
 
 	#-------------------- startup message

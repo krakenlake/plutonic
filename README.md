@@ -3,7 +3,17 @@
 <img width="1046" height="559" alt="Screenshot 2026-04-17 at 18 34 25" src="https://github.com/user-attachments/assets/7415c770-1e3a-43cf-8539-7bf76d7871d4" />
 
 ## Disclaimer
-This is my experimental kernel tinkering project and currently not doing anything exciting (yet?).
+This is my experimental kernel tinkering project and currently not doing anything exciting.
+
+## Current Features
+- booting into S-mode using OpenSBI
+- getting IRQs under control
+- setting up an early stack
+- console output
+- printing a banner
+- setting up a timer IRQ
+- printing debug output
+- catching and printing exceptions
 
 ## Targets
 - RV64G (short for RV64IMAFD_Zicsr_Zifencei)
@@ -34,8 +44,6 @@ https://seiya.me/blog/riscv-hypervisor
 
 https://traxys.me/riscv_os_setup.html
 
-https://github.com/torvalds/linux/tree/master/arch/riscv
-
 https://github.com/lycus/exocore/tree/master
 
 https://zyedidia.github.io/blog/posts/2-baremetal-visionfive/
@@ -44,11 +52,15 @@ https://jborza.com/post/2021-04-21-ecalls-and-syscalls/
 
 https://www.openeuler.org/en/blog/zhangxinhao/risc-v/2020-11-28-RISC-V.html
 
-https://github.com/u-boot/u-boot/tree/master/arch/riscv
 
 ### Sources
 
+https://github.com/torvalds/linux/tree/master/arch/riscv
+
+https://github.com/u-boot/u-boot/tree/master/arch/riscv
+
 https://github.com/riscv-software-src/opensbi
+
 
 ### Courses
 

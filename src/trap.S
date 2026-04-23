@@ -16,26 +16,29 @@
 .text
 
 
-# trap handler needs to be aligned manually 
-# as that is not automatically guaranteed with RVC enabled
-.align 4
-
+/*
+ * read current timestamp, add a constant and set timer IRQ
+ */
 set_timer:
-	PUSH_RA
-	# set timer for the first time
 	rdtime	t0
 	li		t1, TIMER_INTERVAL
-	add		t1, t0, t1
-	la		t2, MTIMECMP
-	sd		t1, 0(t2)
-	# enable timer IRQs
-	li		t1, IRQ_TIMER
-	csrs	sie, t1
-	POP_RA_RET
+	add		a0, t0, t1
+	# call sbi with new time in a0
+    li		a7, 0x54494D45
+    li		a6, 0x00
+	ecall
+	ret
 
+
+/*
+ * trap handler entry point
+ * (needs to be aligned manually as that is not automatically guaranteed 
+ * with RVC enabled)
+ */
+.align 4
 trap_handler:
 	# disable all S-mode IRQs
-	csrci	sstatus, S_MODE_IRQ_FLAG
+	csrci	sstatus, SSTATUS_SIE
 
 	# TODO: we need to differentiate our stack and caller stack!
 	csrw	sscratch, sp
@@ -141,26 +144,22 @@ handle_exception:
 	# 3. abort the current command and wait for the next command
 	la		a0, string_exception_msg
 	jal		print_string
-
 	# print xepc
 	la		a0, string_epc_msg
 	jal		print_string
 	csrr	a0, sepc
 	jal		print_hex
-
 	# print xtval
 	la		a0, string_tval_msg
 	jal		print_string
 	csrr	a0, stval
 	jal		print_hex
-
 	# print xcause
 	la		a0, string_cause_msg
 	jal		print_string
 	csrr	a0, scause
 	mv		s0, a0								# save for later
 	jal		print_hex
-
 	# print CAUSE verbose
 	li		a0, ' '
 	jal		print_char
@@ -185,29 +184,13 @@ output_cause:
 	jal		print_newline
 	j 		exit_trap_handler
 
-
-# trap handler needs to be aligned manually 
-# as that is not automatically guaranteed with RVC enabled
-.align 4
 handle_irq:
-/*
-	li		a0, '.'
-	jal		print_char
-*/
-
+	# log message
 	li		a0, LOG_DEBUG
 	la		a1, string_timer_irq
-	jal		log 
-	
-	# clear pending timer IRQ
-	li		t0, IRQ_TIMER
-	csrc	sip, t0
-
-	# disable timer IRQs
-	li		t1, IRQ_TIMER
-	csrc	sie, t1
+	jal		log 	
+	# set timer for next time
 	jal		set_timer
-
 	j 		exit_trap_handler
 
 exit_trap_handler:

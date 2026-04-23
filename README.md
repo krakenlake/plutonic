@@ -34,6 +34,10 @@ This is my experimental kernel tinkering project and currently not doing anythin
 
 https://operating-system-in-1000-lines.vercel.app/en/
 
+https://github.com/yhzhang0128/egos-2000
+
+https://github.com/eyengin/xv6-riscv-unmatched/tree/unmatched
+
 https://popovicu.com/posts/writing-an-operating-system-kernel-from-scratch/
 
 https://popovicu.com/posts/risc-v-sbi-and-full-boot-process/
@@ -51,6 +55,10 @@ https://zyedidia.github.io/blog/posts/2-baremetal-visionfive/
 https://jborza.com/post/2021-04-21-ecalls-and-syscalls/
 
 https://www.openeuler.org/en/blog/zhangxinhao/risc-v/2020-11-28-RISC-V.html
+
+https://github.com/nanovms/nanos
+
+https://git.kolibrios.org/KolibriOS/kolibrios
 
 
 ### Sources

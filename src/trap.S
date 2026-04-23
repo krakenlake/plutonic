@@ -23,10 +23,15 @@ set_timer:
 	rdtime	t0
 	li		t1, TIMER_INTERVAL
 	add		a0, t0, t1
+#ifdef TARGET_HAS_SSTC
+	csrw	stimecmp, a0
+#else
 	# call sbi with new time in a0
     li		a7, 0x54494D45
     li		a6, 0x00
 	ecall
+#endif
+
 	ret
 
 

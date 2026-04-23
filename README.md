@@ -1,6 +1,6 @@
 # plutonic - experimental RISC-V kernel
 
-<img width="1046" height="559" alt="Screenshot 2026-04-17 at 18 34 25" src="https://github.com/user-attachments/assets/7415c770-1e3a-43cf-8539-7bf76d7871d4" />
+<img width="903" height="786" alt="Screenshot 2026-04-23 at 10 46 36" src="https://github.com/user-attachments/assets/7f5a1bcb-4183-46ae-9727-20a5413d6666" />
 
 ## Disclaimer
 This is my experimental kernel tinkering project and currently not doing anything exciting.

@@ -135,14 +135,25 @@ trap_handler:
 	# we have an exception
 	# check if exception was caused by ebreak
 	csrr	t0, scause
-	li		t1, 3						# breakpoint exception?
-	bne		t0, t1, handle_exception
-	
-handle_ebreak:
+	li		t1, SCAUSE_BREAKPOINT
+	beq		t0, t1, handle_exception_ebreak
+	li		t1, SCAUSE_ILLEGAL_INSTRUCTION
+	beq		t0, t1, handle_exception_illegal_instruction
+	j		handle_exception
+
+handle_exception_ebreak:
 	# continue after ebreak when exiting trsp handler
 	LOAD_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
 	addi	t0, t0, 4
 	SAVE_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
+	j		handle_exception
+
+handle_exception_illegal_instruction:
+	# continue after ebreak when exiting trsp handler
+	LOAD_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
+	addi	t0, t0, 4
+	SAVE_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
+	j		handle_exception
 
 handle_exception:
 	# in case of an exception:

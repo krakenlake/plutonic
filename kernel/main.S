@@ -69,7 +69,8 @@ start:
 // fall through from above
 forever:
 	wfi
-#	ebreak
+	unimp
+	ebreak
 	j		forever
 .size start, .-start
 

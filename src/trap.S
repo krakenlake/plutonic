@@ -23,10 +23,12 @@ set_timer:
 	rdtime	t0
 	li		t1, TIMER_INTERVAL
 	add		a0, t0, t1
+	# new time now in a0
 #ifdef TARGET_HAS_SSTC
+	# with sstc extension we can set the timer from S-Mode
 	csrw	stimecmp, a0
 #else
-	# call sbi with new time in a0
+	# otherwise we need to call SBI
     li		a7, 0x54494D45
     li		a6, 0x00
 	ecall

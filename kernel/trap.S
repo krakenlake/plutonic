@@ -139,46 +139,39 @@ trap_handler:
 	beq		t0, t1, handle_exception_ebreak
 	li		t1, SCAUSE_ILLEGAL_INSTRUCTION
 	beq		t0, t1, handle_exception_illegal_instruction
-	j		handle_exception
+	j		skip_this_instruction_after_sret
 
 handle_exception_ebreak:
 	# continue after ebreak when exiting trsp handler
-	LOAD_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
-	addi	t0, t0, 4
-	SAVE_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
-	j		handle_exception
+	j		skip_this_instruction_after_sret
 
 handle_exception_illegal_instruction:
-	# continue after ebreak when exiting trsp handler
+	# TODO: code to emulate unsupported instructions could go here
+	# continue after illegal instruction when exiting trsp handler
+	j		skip_this_instruction_after_sret
+
+skip_this_instruction_after_sret:
 	LOAD_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
 	addi	t0, t0, 4
 	SAVE_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
-	j		handle_exception
 
-handle_exception:
-	# in case of an exception:
-	# 1. print the exception
-	# 2. reset the program to a defined state
-	# 3. abort the current command and wait for the next command
-	la		a0, string_exception_msg
-	jal		print_string
-	# print xepc
+print_exception:
+	li		a0, LOG_DEBUG
+	la		a1, string_exception_msg
+	jal		log 	
+
+	# print sepc
 	la		a0, string_epc_msg
 	jal		print_string
 	csrr	a0, sepc
 	jal		print_hex
-	# print xtval
-	la		a0, string_tval_msg
-	jal		print_string
-	csrr	a0, stval
-	jal		print_hex
-	# print xcause
+	# print scause
 	la		a0, string_cause_msg
 	jal		print_string
 	csrr	a0, scause
 	mv		s0, a0								# save for later
 	jal		print_hex
-	# print CAUSE verbose
+	# print SCAUSE verbose
 	li		a0, ' '
 	jal		print_char
 	li		a0, '('
@@ -199,6 +192,12 @@ output_cause:
 	jal		print_string
 	li		a0, ')'
 	jal		print_char
+	# print stval
+	la		a0, string_tval_msg
+	jal		print_string
+	csrr	a0, stval
+	jal		print_hex
+	# end of printing
 	jal		print_newline
 	j 		exit_trap_handler
 

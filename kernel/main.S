@@ -71,6 +71,8 @@ forever:
 	wfi
 	unimp
 	ebreak
+	ld t0, 0(zero)
+	sd t0, 0(zero)
 	j		forever
 .size start, .-start
 

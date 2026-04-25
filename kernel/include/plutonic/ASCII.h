@@ -1,3 +1,10 @@
+/*
+ * plutonic - experimental RISC-V kernel
+ *
+ * Copyright (C) 2026 krakenlake
+ *
+ */
+
 #ifndef PLUTONIC_ASCII_H
 #define PLUTONIC_ASCII_H
 

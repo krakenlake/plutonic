@@ -1,4 +1,11 @@
-#ifndef PLUTONIC_PRINT_H
+/*
+ * plutonic - experimental RISC-V kernel
+ *
+ * Copyright (C) 2026 krakenlake
+ *
+ */
+
+ #ifndef PLUTONIC_PRINT_H
 #define PLUTONIC_PRINT_H
 
 

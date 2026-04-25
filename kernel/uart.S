@@ -1,3 +1,10 @@
+/*
+ * plutonic - experimental RISC-V kernel
+ *
+ * Copyright (C) 2026 krakenlake
+ *
+ */
+
 #include "config.h"
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"

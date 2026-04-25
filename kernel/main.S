@@ -1,5 +1,8 @@
 /*
  * plutonic - experimental RISC-V kernel
+ *
+ * Copyright (C) 2026 krakenlake
+ *
  */
 
 #include "config.h"

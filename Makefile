@@ -22,6 +22,7 @@ export CC		= $(GCCBIN)/riscv64-elf-gcc
 export CPP		= $(GCCBIN)/riscv64-elf-cpp
 export LD		= $(TOOLBIN)/riscv64-elf-ld
 export AR		= $(TOOLBIN)/riscv64-elf-ar
+export RANLIB	= $(TOOLBIN)/riscv64-elf-ranlib
 export OBJCOPY	= $(TOOLBIN)/riscv64-elf-objcopy
 export OBJDUMP	= $(TOOLBIN)/riscv64-elf-objdump
 export STRIP	= $(TOOLBIN)/riscv64-elf-strip

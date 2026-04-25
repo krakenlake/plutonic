@@ -58,6 +58,7 @@ $(RELEASE):
 
 $(BUILD)/$(NAME).a: $(BUILD) $(OBJ) Makefile $(BUILD)/config.h
 	$(AR) r $@ $(BUILD)/*.o
+	$(RANLIB) $@
 
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $< $@

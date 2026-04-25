@@ -1,11 +1,12 @@
-# plutonic - experimental RISC-V kernel
+# plutonic - Experimental RISC-V kernel
 
 <img width="903" height="786" alt="Screenshot 2026-04-23 at 10 46 36" src="https://github.com/user-attachments/assets/7f5a1bcb-4183-46ae-9727-20a5413d6666" />
 
 ## Disclaimer
 This is my experimental kernel tinkering project and currently not doing anything exciting.
 
-## Current Features
+## Current features
+- build system supporting mix of assembly and C
 - booting into S-mode using OpenSBI
 - getting IRQs under control
 - setting up an early stack
@@ -23,7 +24,7 @@ This is my experimental kernel tinkering project and currently not doing anythin
 - riscv64 GNU toolchain for building
 - QEMU or other hardware to run the kernel
 
-## Design Decisions
+## Current design decisions
 - booting in S-mode required
 - kernel is running on 1 (and always the same) hart only
 
@@ -60,8 +61,11 @@ https://github.com/nanovms/nanos
 
 https://git.kolibrios.org/KolibriOS/kolibrios
 
+https://www.thegoodpenguin.co.uk/blog/an-overview-of-opensbi/
 
-### Sources
+https://www.cs.cornell.edu/courses/cs4411/2022fa/schedule/slides/week5_timer_interrupt.pdf
+
+### References
 
 https://github.com/torvalds/linux/tree/master/arch/riscv
 
@@ -69,12 +73,6 @@ https://github.com/u-boot/u-boot/tree/master/arch/riscv
 
 https://github.com/riscv-software-src/opensbi
 
-
-### Courses
-
-https://www.thegoodpenguin.co.uk/blog/an-overview-of-opensbi/
-
-https://www.cs.cornell.edu/courses/cs4411/2022fa/schedule/slides/week5_timer_interrupt.pdf
 
 ### Specifications
 

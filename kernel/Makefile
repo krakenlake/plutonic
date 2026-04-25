@@ -2,13 +2,6 @@
 
 default: this
 
-PLUTONIC_VERSION = 0.0.1
-
-TARGET ?= qemu-64g
-
-# TODO: currently not working
-#TARGET ?= vf2
-
 DEBUG ?= -DDEBUG
 
 
@@ -19,14 +12,12 @@ ifeq ($(TARGET), qemu-64g)
 	RAM_START			= 0x80020000
 	FLASH_SIZE			= 64K
 	RAM_SIZE			= 32K
-	TARGET_XLEN			= 64
 	CFLAGS				+= -march=rv$(TARGET_XLEN)g
 endif 
 
 ifeq ($(TARGET), vf2)
 	FLASH_START			= 0x80200000
 	RAM_START			= 0x80020000
-	TARGET_XLEN			= 64
 	CFLAGS				+= -march=rv$(TARGET_XLEN)g
 define VF2_RUN_MSG
 
@@ -52,20 +43,8 @@ QEMU_HARTS			= 4
 RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
 
-# tools
-GCCBIN	?= /usr/local/bin
-TOOLBIN ?= /usr/local/bin
-CC      = $(GCCBIN)/riscv64-elf-gcc
-CPP     = $(GCCBIN)/riscv64-elf-cpp
-LD		= $(TOOLBIN)/riscv64-elf-ld
-LDFLAGS = --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
-OBJCOPY = $(TOOLBIN)/riscv64-elf-objcopy
-OBJDUMP = $(TOOLBIN)/riscv64-elf-objdump
-STRIP   = $(TOOLBIN)/riscv64-elf-strip
-GDB		= $(TOOLBIN)/riscv64-elf-gdb
-
-# CFLAGS
-CFLAGS	+= $(DEBUG)
+# flags
+CFLAGS	+= -DDEBUG
 CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 CFLAGS	+= -nostartfiles
 # gcc must not try to replace anything with built-in stuff
@@ -75,6 +54,8 @@ CFLAGS	+= -mcmodel=medany
 CFLAGS	+= -O2 
 CFLAGS	+= -g
 CFLAGS	+= -I"./include"
+LDFLAGS	?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
+
 
 # names
 NAME = plutonic

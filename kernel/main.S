@@ -94,7 +94,7 @@ string_startup:
 	.ascii "\n | |_) | | |_| | || (_) | | | | | (__"
 	.ascii "\n | .__/|_|\\__,_|\\__\\___/|_| |_|_|\\___|"
 	.ascii "\n |_|"
-	.ascii "\n     v "
+	.ascii " experimental RISC-V kernel v";
 	.ascii PLUTONIC_VERSION
-	.asciz " - experimental RISC-V kernel\n\n";
+	.asciz "\n\n"
 .size string_startup, .-string_startup

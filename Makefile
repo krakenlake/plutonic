@@ -9,11 +9,9 @@ export TARGET ?= qemu-64g
 
 export TARGET_XLEN ?= 64
 
-export DEBUG ?= -DDEBUG
-
 # names
-export BUILDROOT = build
-export RELEASE = release
+export BUILDROOT	?= build
+export RELEASE		?= release
 
 # tools
 export GCCBIN	?= /usr/local/bin
@@ -40,15 +38,16 @@ CFLAGS += -fPIC
 CFLAGS += -fPIE
 # gcc must not try to replace anything with built-in stuff
 CFLAGS	+= -fno-builtin
+# no crt0
 CFLAGS	+= -nostartfiles
-CFLAGS	+= -O2 
+CFLAGS	+= -O2
 CFLAGS	+= -g
 
 
 # targets
 all:
-	cd libpltnc && make 
-	cd kernel && make 
+	cd libpltnc && make
+	cd kernel && make
 
 run:
 	cd kernel && make run

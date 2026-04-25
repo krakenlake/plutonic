@@ -7,8 +7,6 @@ LIBPLTNC_VERSION = 0.0.1
 TARGET ?= qemu-64g
 #TARGET ?= vf2
 
-DEBUG ?= -DDEBUG
-
 # tools
 GCCBIN	?= /usr/local/bin
 TOOLBIN ?= /usr/local/bin

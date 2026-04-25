@@ -12,13 +12,11 @@ ifeq ($(TARGET), qemu-64g)
 	RAM_START			= 0x80020000
 	FLASH_SIZE			= 64K
 	RAM_SIZE			= 32K
-	CFLAGS				+= -march=rv$(TARGET_XLEN)g
 endif 
 
 ifeq ($(TARGET), vf2)
 	FLASH_START			= 0x80200000
 	RAM_START			= 0x80020000
-	CFLAGS				+= -march=rv$(TARGET_XLEN)g
 define VF2_RUN_MSG
 
 	running on VF2:
@@ -43,6 +41,7 @@ QEMU_HARTS			= 4
 RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
 # flags
+CFLAGS				+= -march=rv$(TARGET_XLEN)g
 # needed to access memory beyond 0x7fffffff
 CFLAGS	+= -mcmodel=medany
 CFLAGS	+= -I"./include"

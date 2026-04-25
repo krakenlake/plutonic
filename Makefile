@@ -28,7 +28,7 @@ export GDB		= $(TOOLBIN)/riscv64-elf-gdb
 
 # flags
 export CFLAGS += -DDEBUG
-CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
+CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 CFLAGS += -Wall -Werror -Wextra -pedantic
 # warn if inline function cannot be substituted
 CFLAGS	+= -Winline

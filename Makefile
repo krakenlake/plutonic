@@ -28,6 +28,22 @@ export OBJDUMP	= $(TOOLBIN)/riscv64-elf-objdump
 export STRIP	= $(TOOLBIN)/riscv64-elf-strip
 export GDB		= $(TOOLBIN)/riscv64-elf-gdb
 
+# flags
+export CFLAGS += -DDEBUG
+CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
+CFLAGS += -Wall -Werror -Wextra -pedantic
+# warn if inline function cannot be substituted
+CFLAGS	+= -Winline
+# create position-independent code
+CFLAGS += -fPIC
+# create position-independent executables
+CFLAGS += -fPIE
+# gcc must not try to replace anything with built-in stuff
+CFLAGS	+= -fno-builtin
+CFLAGS	+= -nostartfiles
+CFLAGS	+= -O2 
+CFLAGS	+= -g
+
 
 # targets
 all:
@@ -40,7 +56,7 @@ run:
 debug:
 	$(GDB) entry -ex "target remote :1234"
 
-release: 
+release:
 	cd libpltnc && make release
 	cd kernel && make release
 

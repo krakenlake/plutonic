@@ -16,13 +16,7 @@ CC      = $(GCCBIN)/riscv64-elf-gcc
 AR		= $(TOOLBIN)/riscv64-elf-ar
 
 # CFLAGS
-CFLAGS	+= $(DEBUG)
 CFLAGS	+= -LIBPLTNC_VERSION=\"$(LIBPLTNC_VERSION)\"
-CFLAGS	+= -nostartfiles
-# gcc must not try to replace anything with built-in stuff
-CFLAGS	+= -fno-builtin
-CFLAGS	+= -O2 
-CFLAGS	+= -g
 CFLAGS	+= -I"$(SRCD)/include"
 
 # names

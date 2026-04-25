@@ -43,17 +43,8 @@ QEMU_HARTS			= 4
 RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
 # flags
-CFLAGS	+= -DDEBUG
-CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
-CFLAGS	+= -nostartfiles
-# gcc must not try to replace anything with built-in stuff
-CFLAGS	+= -fno-builtin
-# warn if inline function cannot be substituted
-CFLAGS	+= -Winline
 # needed to access memory beyond 0x7fffffff
 CFLAGS	+= -mcmodel=medany
-CFLAGS	+= -O2 
-CFLAGS	+= -g
 CFLAGS	+= -I"./include"
 LDFLAGS	?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
 

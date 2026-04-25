@@ -49,6 +49,8 @@ CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 CFLAGS	+= -nostartfiles
 # gcc must not try to replace anything with built-in stuff
 CFLAGS	+= -fno-builtin
+# warn if inline function cannot be substituted
+CFLAGS	+= -Winline
 # needed to access memory beyond 0x7fffffff
 CFLAGS	+= -mcmodel=medany
 CFLAGS	+= -O2 
@@ -101,10 +103,10 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $(CONFIG)/config.$(TARGET).h $@
 
 $(BUILD)/%.o: %.S Makefile $(BUILD)/config.h
-	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILD)/%.o: %.c Makefile $(BUILD)/config.h
-	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILD)/$(NAME)-stripped.elf: $(BUILD)/$(NAME).elf
 	$(STRIP) $< -o $@

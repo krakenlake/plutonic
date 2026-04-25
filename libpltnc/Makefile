@@ -63,10 +63,10 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $< $@
 
 $(BUILD)/%.o: ./%.S Makefile $(BUILD)/config.h
-	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILD)/%.o: ./%.c Makefile $(BUILD)/config.h
-	-$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(RELEASE)/$(NAME)-$(TARGET).a: $(BUILD)/$(NAME).a
 	cp $(BUILD)/$(NAME).a $@

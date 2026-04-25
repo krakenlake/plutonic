@@ -132,13 +132,13 @@ trap_handler:
 	srli	a0, a0, XLEN-1
 	bnez	a0, handle_irq
 
-	# we have an exception
-	# check if exception was caused by ebreak
+	# we have an exception, filter for specific ones
 	csrr	t0, scause
 	li		t1, SCAUSE_BREAKPOINT
 	beq		t0, t1, handle_exception_ebreak
 	li		t1, SCAUSE_ILLEGAL_INSTRUCTION
 	beq		t0, t1, handle_exception_illegal_instruction
+	# all other exceptions
 	j		skip_this_instruction_after_sret
 
 handle_exception_ebreak:
@@ -158,7 +158,8 @@ skip_this_instruction_after_sret:
 print_exception:
 	li		a0, LOG_DEBUG
 	la		a1, string_exception_msg
-	jal		log 	
+	li		a2, 0								# no newline
+	jal		log_no_newline
 
 	# print sepc
 	la		a0, string_epc_msg

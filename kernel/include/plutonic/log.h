@@ -20,6 +20,8 @@
  */
 #ifndef __ASSEMBLER__
 	void log(int level, char *str);
+	void log_no_newline(int level, char *str);
+	void do_log(int level, char *str, int newline);
 #endif
 
 

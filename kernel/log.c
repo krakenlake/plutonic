@@ -23,9 +23,27 @@ char *string_log_sender = "kernel\0";
 
 
 /*
+ * standard/default log function
+ */
+inline void log(int level, char *str)
+{
+	do_log(level, str, 1);
+}
+
+
+/*
+ * log function that does not print newline at the end
+ */
+inline void log_no_newline(int level, char *str)
+{
+	do_log(level, str, 0);
+}
+
+
+/*
  *  print str to console if level is <= current kernel log level 
  */
-void log(int level, char *str)
+void do_log(int level, char *str, int newline)
 {
 	char *c;
 	char delim = ':';
@@ -39,7 +57,10 @@ void log(int level, char *str)
 		"rdtime t0\n"
 		// and put result into timestamp variable in memory
 		"sd t0,%0"
-		: "=m" (timestamp) );
+		: "=m" (timestamp)	/* output */
+		:					/* no input */
+		: "t0"				/* clobbered */
+	);
 
 	print_decimal(timestamp);
 
@@ -54,7 +75,8 @@ void log(int level, char *str)
 	print_char(delim);
 	print_string(str);
 
-	print_char('\n');
-		return;
+	if (newline) print_char('\n');
+	
+	return;
 }
 

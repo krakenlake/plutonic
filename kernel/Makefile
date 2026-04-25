@@ -42,7 +42,6 @@ endif
 QEMU_HARTS			= 4
 RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
-
 # flags
 CFLAGS	+= -DDEBUG
 CFLAGS	+= -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
@@ -58,7 +57,6 @@ CFLAGS	+= -g
 CFLAGS	+= -I"./include"
 LDFLAGS	?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
 
-
 # names
 NAME = plutonic
 CONFIG = ../config
@@ -73,20 +71,16 @@ OBJ_C = $(SRC_C:./%.c=$(BUILD)/%.o)
 OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
-
 # dependencies
 -include $(DEP)
 
 
 # targets
-this: $(BUILD)/$(NAME).img $(BUILD)/$(NAME)-stripped.elf
-	@ls -ln $(BUILD)/$(NAME).img $(BUILD)/$(NAME)-stripped.elf
+this: $(BUILD)/$(NAME).img
+	@ls -ln $<
 
-$(BUILD):
-	mkdir -p $(BUILD)
-
-$(RELEASE):
-	mkdir -p $(RELEASE)
+$(BUILD) $(RELEASE):
+	mkdir -p $@
 
 $(BUILD)/$(NAME).img: $(BUILD) $(BUILD)/$(NAME).elf
 	$(OBJCOPY) $(BUILD)/$(NAME).elf -O binary $@
@@ -97,8 +91,6 @@ $(BUILD)/$(NAME).elf: Makefile $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a $(OBJ)
 $(BUILD)/link.ld: linker/link.ld.in Makefile $(BUILD)
 	$(CPP) $(CFLAGS) -DFLASH_START=$(FLASH_START) -DFLASH_SIZE=$(FLASH_SIZE) -DRAM_START=$(RAM_START) -DRAM_SIZE=$(RAM_SIZE) -E -P -x c $< > $@ 
 
-#$(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
-#	cp $< $@
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $(CONFIG)/config.$(TARGET).h $@
 
@@ -108,9 +100,6 @@ $(BUILD)/%.o: %.S Makefile $(BUILD)/config.h
 $(BUILD)/%.o: %.c Makefile $(BUILD)/config.h
 	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
-$(BUILD)/$(NAME)-stripped.elf: $(BUILD)/$(NAME).elf
-	$(STRIP) $< -o $@
-
 $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a:
 	cd ../libpltnc && make TARGET=$(TARGET)
 
@@ -118,7 +107,7 @@ $(RELEASE)/plutonic-$(TARGET).img: $(BUILD)/$(NAME).img
 	cp $(BUILD)/$(NAME).img $@
 	@ls -ln $@
 
-release: $(RELEASE) $(RELEASE)/plutonic-$(TARGET).img
+release: $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).img
 
 clean:
 	rm -fr $(BUILD)

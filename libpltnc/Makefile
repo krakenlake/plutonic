@@ -9,13 +9,11 @@ TARGET ?= qemu-64g
 
 DEBUG ?= -DDEBUG
 
-
 # tools
 GCCBIN	?= /usr/local/bin
 TOOLBIN ?= /usr/local/bin
 CC      = $(GCCBIN)/riscv64-elf-gcc
 AR		= $(TOOLBIN)/riscv64-elf-ar
-
 
 # CFLAGS
 CFLAGS	+= $(DEBUG)
@@ -26,7 +24,6 @@ CFLAGS	+= -fno-builtin
 CFLAGS	+= -O2 
 CFLAGS	+= -g
 CFLAGS	+= -I"$(SRCD)/include"
-
 
 # names
 NAME = libpltnc
@@ -42,7 +39,6 @@ OBJ_C = $(SRC_C:./%.c=$(BUILD)/%.o)
 OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
-
 # dependencies
 -include $(DEP)
 
@@ -50,11 +46,8 @@ DEP = $(OBJ:%.o=%.d)
 # targets
 this: $(BUILD)/$(NAME).a
 
-$(BUILD):
-	mkdir -p $(BUILD)
-
-$(RELEASE):
-	mkdir -p $(RELEASE)
+$(BUILD) $(RELEASE):
+	mkdir -p $@
 
 $(BUILD)/$(NAME).a: $(BUILD) $(OBJ) Makefile $(BUILD)/config.h
 	$(AR) r $@ $(BUILD)/*.o
@@ -70,7 +63,7 @@ $(BUILD)/%.o: ./%.c Makefile $(BUILD)/config.h
 	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(RELEASE)/$(NAME)-$(TARGET).a: $(BUILD)/$(NAME).a
-	cp $(BUILD)/$(NAME).a $@
+	cp $< $@
 	@ls -ln $@
 
 release: $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).a

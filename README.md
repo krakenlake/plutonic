@@ -19,7 +19,6 @@ This is my experimental kernel tinkering project and currently not doing anythin
 ## Targets
 - RV64G (short for RV64IMAFD_Zicsr_Zifencei)
 
-
 ## Requirements
 - riscv64 GNU toolchain for building
 - QEMU or other hardware to run the kernel
@@ -28,8 +27,9 @@ This is my experimental kernel tinkering project and currently not doing anythin
 - booting in S-mode required
 - kernel is running on 1 (and always the same) hart only
 
-
 ## Links
+
+<sub>
 
 ### Learning from examples
 
@@ -42,6 +42,8 @@ https://github.com/eyengin/xv6-riscv-unmatched/tree/unmatched
 https://popovicu.com/posts/writing-an-operating-system-kernel-from-scratch/
 
 https://popovicu.com/posts/risc-v-sbi-and-full-boot-process/
+
+https://github.com/popovicu/zig-time-sharing-kernel
 
 https://book.rvemu.app/index.html
 
@@ -73,7 +75,6 @@ https://github.com/u-boot/u-boot/tree/master/arch/riscv
 
 https://github.com/riscv-software-src/opensbi
 
-
 ### Specifications
 
 https://docs.riscv.org/reference/isa/unpriv/unpriv-index.html
@@ -87,3 +88,5 @@ https://devicetree-specification.readthedocs.io/en/stable/flattened-format.html
 ### Misc
 
 https://www.kernel.org/doc/html/v4.10/process/coding-style.html
+
+</sub>

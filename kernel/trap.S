@@ -213,7 +213,7 @@ handle_irq:
 	# log message
 	li		a0, LOG_DEBUG
 	la		a1, string_timer_irq
-	jal		log 	
+	jal		log
 	# set timer for next time
 	jal		set_timer
 	j 		exit_trap_handler
@@ -350,9 +350,9 @@ string_CAUSE_RESERVED:				.string "RESERVED_OR_CUSTOM";
 
 string_exception_msg:
 	.string "exception: "
-string_epc_msg:				
+string_epc_msg:
 	.asciz "sepc=";
-string_tval_msg:			
+string_tval_msg:
 	.asciz ", stval=";
 string_cause_msg:
 	.asciz ", scause=";

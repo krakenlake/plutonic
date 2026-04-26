@@ -7,15 +7,9 @@ LIBPLTNC_VERSION = 0.0.1
 TARGET ?= qemu-64g
 #TARGET ?= vf2
 
-# tools
-GCCBIN	?= /usr/local/bin
-TOOLBIN ?= /usr/local/bin
-CC      = $(GCCBIN)/riscv64-elf-gcc
-AR		= $(TOOLBIN)/riscv64-elf-ar
-
 # CFLAGS
-CFLAGS	+= -LIBPLTNC_VERSION=\"$(LIBPLTNC_VERSION)\"
-CFLAGS	+= -I"$(SRCD)/include"
+CFLAGS += -LIBPLTNC_VERSION=\"$(LIBPLTNC_VERSION)\"
+CFLAGS += -I"$(SRCD)/include"
 
 # names
 NAME = libpltnc
@@ -36,7 +30,8 @@ DEP = $(OBJ:%.o=%.d)
 
 
 # targets
-this: $(BUILD)/$(NAME).a
+this: Makefile $(BUILD)/$(NAME).a
+	@ls -ln $(BUILD)/$(NAME).a
 
 $(BUILD) $(RELEASE):
 	mkdir -p $@
@@ -58,7 +53,7 @@ $(RELEASE)/$(NAME)-$(TARGET).a: $(BUILD)/$(NAME).a
 	cp $< $@
 	@ls -ln $@
 
-release: $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).a
+release: Makefile $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).a
 
 clean:
 	rm -fr $(BUILD)

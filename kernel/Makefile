@@ -41,11 +41,11 @@ QEMU_HARTS			= 4
 RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
 # flags
-CFLAGS				+= -march=rv$(TARGET_XLEN)g
+CFLAGS += -march=rv$(TARGET_XLEN)g
 # needed to access memory beyond 0x7fffffff
-CFLAGS	+= -mcmodel=medany
-CFLAGS	+= -I"./include"
-LDFLAGS	?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
+CFLAGS += -mcmodel=medany
+CFLAGS += -I"./include"
+LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
 
 # names
 NAME = plutonic
@@ -66,8 +66,8 @@ DEP = $(OBJ:%.o=%.d)
 
 
 # targets
-this: $(BUILD)/$(NAME).img
-	@ls -ln $<
+this: Makefile $(BUILD)/$(NAME).img
+	@ls -ln $(BUILD)/$(NAME).img
 
 $(BUILD) $(RELEASE):
 	mkdir -p $@
@@ -97,12 +97,12 @@ $(RELEASE)/plutonic-$(TARGET).img: $(BUILD)/$(NAME).img
 	cp $(BUILD)/$(NAME).img $@
 	@ls -ln $@
 
-release: $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).img
+release: Makefile $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).img
 
 clean:
 	rm -fr $(BUILD)
 
-run: $(BUILD)/$(NAME).img
+run: Makefile $(BUILD)/$(NAME).img
 	$(RUN)
 
 debug:

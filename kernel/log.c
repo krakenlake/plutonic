@@ -83,7 +83,5 @@ void do_log(int level, char *str, int newline)
 	print_string(str);
 
 	if (newline) print_char('\n');
-	
-	return;
 }
 

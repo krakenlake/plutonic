@@ -70,12 +70,29 @@ start:
 //	jal		print_dtb
 
 // fall through from above
+	li		t0, 0
 forever:
 	wfi
+	# check ILLEGAL_INSTRUCTION exception
 	unimp
+	# check BREAKPOINT exception
 	ebreak
-	ld t0, 0(zero)
-	sd t0, 0(zero)
+	# check FAULT_LOAD exception
+	ld		t1, 0(t0)
+	# check FAULT_STORE exception
+	sd 		t1, 0(t0)
+	addi	t0, t0, 1
+
+	mv 		s0, t0
+	li		a0, LOG_DEBUG
+	la		a1, string_register
+	li		a2, 0								# no newline
+	jal		log_no_newline
+	mv		a0, s0
+	jal		print_hex_addr
+	jal		print_newline
+	mv		t0, s0
+
 	j		forever
 .size start, .-start
 
@@ -101,3 +118,7 @@ string_startup:
 	.ascii PLUTONIC_VERSION
 	.asciz "\n\n"
 .size string_startup, .-string_startup
+
+
+string_register:
+	.asciz "t0 = "

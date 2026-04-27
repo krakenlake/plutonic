@@ -7,7 +7,23 @@ DEBUG ?= -DDEBUG
 
 ifeq ($(TARGET), qemu-64g)
 	QEMU_BIOS			= default
-	QEMU_FLAGS			= -machine virt -cpu rv$(TARGET_XLEN),pmp=false,h=true -smp $(QEMU_HARTS) -gdb tcp::1234 -bios $(QEMU_BIOS) -serial stdio -display none -kernel $(BUILD)/$(NAME).img
+	QEMU_FLAGS			= -machine virt
+# cpu type and extensions
+	QEMU_FLAGS			+= -cpu rv$(TARGET_XLEN),pmp=false,h=true
+# number of cpus
+	QEMU_FLAGS			+= -smp $(QEMU_HARTS)
+# turn debugging port on
+	QEMU_FLAGS			+= -gdb tcp::1234
+# boot via SBI
+	QEMU_FLAGS			+= -bios $(QEMU_BIOS)
+# serial device
+	QEMU_FLAGS			+= -serial stdio
+# display
+#	QEMU_FLAGS			+= -display none
+	QEMU_FLAGS			+= -device virtio-vga
+# framebuffer device
+#	QEMU_FLAGS			+= -vga none -device ramfb
+	QEMU_FLAGS			+= -kernel $(BUILD)/$(NAME).img
 	FLASH_START			= 0x80200000
 	RAM_START			= 0x80020000
 	FLASH_SIZE			= 64K
@@ -40,12 +56,19 @@ endif
 QEMU_HARTS			= 4
 RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
-# flags
-CFLAGS += -march=rv$(TARGET_XLEN)g
+# CFLAGS
 # needed to access memory beyond 0x7fffffff
 CFLAGS += -mcmodel=medany
 CFLAGS += -I"./include"
+
+# LDFLAGS
 LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
+
+# CPPFLAGS
+CPPFLAGS += -DFLASH_START=$(FLASH_START)
+CPPFLAGS += -DFLASH_SIZE=$(FLASH_SIZE)
+CPPFLAGS += -DRAM_START=$(RAM_START)
+CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
 
 # names
 NAME = plutonic
@@ -78,8 +101,10 @@ $(BUILD)/$(NAME).img: $(BUILD) $(BUILD)/$(NAME).elf
 $(BUILD)/$(NAME).elf: Makefile $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a $(OBJ) $(BUILD)/link.ld
 	$(LD) -T $(BUILD)/link.ld $(LDFLAGS) -o $@ $(OBJ) $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
 
-$(BUILD)/link.ld: linker/link.ld.in Makefile $(BUILD)
-	$(CPP) $(CFLAGS) -DFLASH_START=$(FLASH_START) -DFLASH_SIZE=$(FLASH_SIZE) -DRAM_START=$(RAM_START) -DRAM_SIZE=$(RAM_SIZE) -E -P -x c $< > $@ 
+$(BUILD)/link.ld: Makefile linker/link.ld.in $(BUILD)
+	$(CPP) $(CPPFLAGS) $(CFLAGS) -E -P -x c linker/link.ld.in > $@ 
+
+linker/link.ld.in:
 
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $(CONFIG)/config.$(TARGET).h $@
@@ -108,7 +133,7 @@ run: Makefile $(BUILD)/$(NAME).img
 debug:
 	$(GDB) entry -ex "target remote :1234"
 
-device-tree:
+devicetree:
 	qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) -machine dumpdtb=$(BUILD)/qemu.dtb
 	dtc -I dtb -O dts $(BUILD)/qemu.dtb -o $(BUILD)/qemu-device-tree.dts
 	less $(BUILD)/qemu-device-tree.dts

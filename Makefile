@@ -9,7 +9,7 @@ export TARGET ?= qemu-64g
 
 export TARGET_XLEN ?= 64
 
-# names
+# output directories
 export BUILDROOT	?= build
 export RELEASE		?= release
 
@@ -28,6 +28,8 @@ export GDB		= $(TOOLBIN)/riscv64-elf-gdb
 # flags
 export CFLAGS += -DDEBUG
 CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
+# target platform
+CFLAGS += -march=rv$(TARGET_XLEN)g
 # warnings
 CFLAGS += -Wall -Werror -Wextra -pedantic
 # warn if inline function cannot be substituted
@@ -60,6 +62,9 @@ debug:
 release: Makefile
 	cd libpltnc && make release
 	cd kernel && make release
+
+devicetree: Makefile
+	cd kernel && make devicetree
 
 clean:
 	rm -fr $(BUILDROOT) $(RELEASE)

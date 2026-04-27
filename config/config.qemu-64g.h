@@ -1,7 +1,6 @@
 // ******************************************************************
 // 
-// Config for QEMU RV64G (=RV64IMAF) full version 
-// (all features)
+// Config for QEMU RV64G
 //
 // ******************************************************************
 
@@ -18,16 +17,6 @@
 
 // include strings for verbose error messages?
 #define ERROR_VERBOSE
-
-// default number of lines for the "d" command if no end address is given
-#define	DEFAULT_D_LINES		16
-
-// default number of lines for the "m" command if no end address is given
-#define M_BYTES_PER_LINE	16
-#define DEFAULT_M_LINES		16
-
-// print a space after commas in disassembler output
-#define SPACE_AFTER_COMMA
 
 // print a CR before each LF
 // Note: at higher levels this varies by system but at this level most

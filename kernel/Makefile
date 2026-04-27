@@ -19,8 +19,8 @@ ifeq ($(TARGET), qemu-64g)
 # serial device
 	QEMU_FLAGS			+= -serial stdio
 # display
-#	QEMU_FLAGS			+= -display none
-	QEMU_FLAGS			+= -device virtio-vga
+	QEMU_FLAGS			+= -display none
+#	QEMU_FLAGS			+= -device virtio-vga
 # framebuffer device
 #	QEMU_FLAGS			+= -vga none -device ramfb
 	QEMU_FLAGS			+= -kernel $(BUILD)/$(NAME).img

@@ -67,12 +67,11 @@ start:
 	csrsi	sstatus, SSTATUS_SIE
 
 	#-------------------- print dtb
-//	jal		print_dtb
+	la		t0, dtb
+	LOAD_X	a0, 0(t0)
+	jal		print_dtb
 
-// fall through from above
-	li		t0, 0
-forever:
-	wfi
+	#-------------------- check exception catching
 	# check ILLEGAL_INSTRUCTION exception
 	unimp
 	# check BREAKPOINT exception
@@ -81,8 +80,15 @@ forever:
 	ld		t1, 0(t0)
 	# check FAULT_STORE exception
 	sd 		t1, 0(t0)
+
+// fall through from above
+	li		t0, 0
+forever:
+	wfi
+
 	addi	t0, t0, 1
 
+	# log t0
 	mv 		s0, t0
 	li		a0, LOG_DEBUG
 	la		a1, string_register

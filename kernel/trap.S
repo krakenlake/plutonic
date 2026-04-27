@@ -351,11 +351,11 @@ string_CAUSE_RESERVED:				.string "RESERVED_OR_CUSTOM";
 string_exception_msg:
 	.string "exception: "
 string_epc_msg:
-	.asciz "sepc=";
+	.string "sepc=";
 string_tval_msg:
-	.asciz ", stval=";
+	.string ", stval=";
 string_cause_msg:
-	.asciz ", scause=";
+	.string ", scause=";
 
 string_timer_irq: 
 	.string "timer IRQ"

@@ -26,7 +26,7 @@ export STRIP	= $(TOOLBIN)/riscv64-elf-strip
 export GDB		= $(TOOLBIN)/riscv64-elf-gdb
 
 # flags
-export CFLAGS += -DDEBUG
+CFLAGS = -DDEBUG
 CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 # target platform
 CFLAGS += -march=rv$(TARGET_XLEN)g
@@ -47,6 +47,8 @@ CFLAGS += -O2
 # add debug symbols
 CFLAGS += -g
 
+export PLUTONIC_CFLAGS = $(CFLAGS)
+export LIBPLTNC_CFLAGS = $(CFLAGS)
 
 # targets
 all: Makefile

@@ -103,6 +103,16 @@ plutonic_wait_hart:
 .size plutonic_wait_hart, .-plutonic_wait_hart
 
 
+thread1:
+	li		a0, '+'
+	jal		print_char
+	li		t0, 99999
+busy_wait1:
+	addi	t0, t0, -1
+	bnez	t0, busy_wait1
+	j		thread1
+
+
 .section .rodata
 
 

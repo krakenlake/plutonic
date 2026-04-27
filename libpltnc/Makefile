@@ -11,39 +11,40 @@ LIBPLTNC_TARGET_XLEN ?= 64
 
 # tools
 LIBPLTNC_TOOLBIN	?= /usr/local/bin
-LIBPLTNC_CC			= $(LIBPLTNC_TOOLBIN)/riscv64-elf-gcc
-LIBPLTNC_CPP		= $(LIBPLTNC_TOOLBIN)/riscv64-elf-cpp
-LIBPLTNC_AR			= $(LIBPLTNC_TOOLBIN)/riscv64-elf-ar
-LIBPLTNC_RANLIB		= $(LIBPLTNC_TOOLBIN)/riscv64-elf-ranlib
+LIBPLTNC_CC			?= $(LIBPLTNC_TOOLBIN)/riscv64-elf-gcc
+LIBPLTNC_CPP		?= $(LIBPLTNC_TOOLBIN)/riscv64-elf-cpp
+LIBPLTNC_AR			?= $(LIBPLTNC_TOOLBIN)/riscv64-elf-ar
+LIBPLTNC_RANLIB		?= $(LIBPLTNC_TOOLBIN)/riscv64-elf-ranlib
 
 # CFLAGS
-LIBPLTNC_CFLAGS += -march=rv$(LIBPLTNC_TARGET_XLEN)g
-LIBPLTNC_CFLAGS += -I"$(LIBPLTNC_SRCD)/include"
-LIBPLTNC_CFLAGS += -DDEBUG
-LIBPLTNC_CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
+CFLAGS = -march=rv$(LIBPLTNC_TARGET_XLEN)g
+CFLAGS += -I"$(LIBPLTNC_SRCD)/include"
+CFLAGS += -DDEBUG
+CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 # warnings
-LIBPLTNC_CFLAGS += -Wall -Werror -Wextra -pedantic
+CFLAGS += -Wall -Werror -Wextra -pedantic
 # warn if inline function cannot be substituted
-LIBPLTNC_CFLAGS += -Winline
+CFLAGS += -Winline
 # create position-independent code
-LIBPLTNC_CFLAGS += -fPIC
+CFLAGS += -fPIC
 # create position-independent executables
-LIBPLTNC_CFLAGS += -fPIE
+CFLAGS += -fPIE
 # gcc must not try to replace anything with built-in stuff
-LIBPLTNC_CFLAGS += -fno-builtin
+CFLAGS += -fno-builtin
 # no crt0
-LIBPLTNC_CFLAGS += -nostartfiles
+CFLAGS += -nostartfiles
 # optimisation
-LIBPLTNC_CFLAGS += -O2
+CFLAGS += -O2
 # add debug symbols
-LIBPLTNC_CFLAGS += -g
+CFLAGS += -g
+LIBPLTNC_CFLAGS ?= $(CFLAGS)
 
 # names
 LIBPLTNC_NAME		= libpltnc
 LIBPLTNC_CONFIG		?= ../config
 LIBPLTNC_BUILDROOT	?= ../build
-LIBPLTNC_BUILD		= $(LIBPLTNC_BUILDROOT)/$(LIBPLTNC_TARGET)/$(LIBPLTNC_NAME)
-LIBPLTNC_RELEASE	= ../release/$(LIBPLTNC_TARGET)
+LIBPLTNC_BUILD		?= $(LIBPLTNC_BUILDROOT)/$(LIBPLTNC_TARGET)/$(LIBPLTNC_NAME)
+LIBPLTNC_RELEASE	?= ../release/$(LIBPLTNC_TARGET)
 LIBPLTNC_SRC_S		= $(wildcard ./*.S)
 LIBPLTNC_SRC_C		= $(wildcard ./*.c)
 LIBPLTNC_SRC		= $(LIBPLTNC_SRC_S) $(LIBPLTNC_SRC_C)

@@ -57,18 +57,40 @@ QEMU_HARTS			= 4
 RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
 # CFLAGS
+CFLAGS = -DDEBUG
+CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
+# target platform
+CFLAGS += -march=rv$(TARGET_XLEN)g
+# warnings
+CFLAGS += -Wall -Werror -Wextra -pedantic
+# warn if inline function cannot be substituted
+CFLAGS += -Winline
+# create position-independent code
+CFLAGS += -fPIC
+# create position-independent executables
+CFLAGS += -fPIE
+# gcc must not try to replace anything with built-in stuff
+CFLAGS += -fno-builtin
+# no crt0
+CFLAGS += -nostartfiles
+# optimisation
+CFLAGS += -O2
+# add debug symbols
+CFLAGS += -g
+
+PLUTONIC_CFLAGS ?= $(CFLAGS)
 # needed to access memory beyond 0x7fffffff
-CFLAGS += -mcmodel=medany
-CFLAGS += -I"./include"
+PLUTONIC_CFLAGS += -mcmodel=medany
+PLUTONIC_CFLAGS += -I"./include"
 
 # LDFLAGS
-LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
+PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
 
 # CPPFLAGS
-CPPFLAGS += -DFLASH_START=$(FLASH_START)
-CPPFLAGS += -DFLASH_SIZE=$(FLASH_SIZE)
-CPPFLAGS += -DRAM_START=$(RAM_START)
-CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
+PLUTONIC_CPPFLAGS += -DFLASH_START=$(FLASH_START)
+PLUTONIC_CPPFLAGS += -DFLASH_SIZE=$(FLASH_SIZE)
+PLUTONIC_CPPFLAGS += -DRAM_START=$(RAM_START)
+PLUTONIC_CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
 
 # names
 NAME = plutonic
@@ -99,10 +121,10 @@ $(BUILD)/$(NAME).img: $(BUILD) $(BUILD)/$(NAME).elf
 	$(OBJCOPY) $(BUILD)/$(NAME).elf -O binary $@
 
 $(BUILD)/$(NAME).elf: Makefile $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a $(OBJ) $(BUILD)/link.ld
-	$(LD) -T $(BUILD)/link.ld $(LDFLAGS) -o $@ $(OBJ) $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
+	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
 
 $(BUILD)/link.ld: Makefile linker/link.ld.in $(BUILD)
-	$(CPP) $(CPPFLAGS) $(CFLAGS) -E -P -x c linker/link.ld.in > $@ 
+	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c linker/link.ld.in > $@ 
 
 linker/link.ld.in:
 
@@ -110,10 +132,10 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $(CONFIG)/config.$(TARGET).h $@
 
 $(BUILD)/%.o: %.S Makefile $(BUILD)/config.h
-	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILD)/%.o: %.c Makefile $(BUILD)/config.h
-	$(CC) $(CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a:
 	cd ../libpltnc && make TARGET=$(TARGET)

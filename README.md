@@ -75,6 +75,12 @@ https://github.com/u-boot/u-boot/tree/master/arch/riscv
 
 https://github.com/riscv-software-src/opensbi
 
+https://gcc.gnu.org/onlinedocs/gcc/index.html
+
+https://www.qemu.org/docs/master/
+
+https://www.kraxel.org/blog/2019/09/display-devices-in-qemu/
+
 ### Specifications
 
 https://docs.riscv.org/reference/isa/unpriv/unpriv-index.html
@@ -86,6 +92,8 @@ https://github.com/riscv/riscv-aia
 https://devicetree-specification.readthedocs.io/en/stable/flattened-format.html
 
 ### Misc
+
+https://projectacrn.github.io/latest/developer-guides/asm_coding_guidelines.html
 
 https://www.kernel.org/doc/html/v4.10/process/coding-style.html
 

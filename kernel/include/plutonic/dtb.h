@@ -32,13 +32,13 @@ struct fdt_header {
 };
 
 struct fdt_reserve_entry {
-    u32 address;
-    u32 size;
+	u32 address;
+	u32 size;
 };
 
 struct fdt_property {
-    u32 len;
-    u32 nameoff;
+	u32 len;
+	u32 nameoff;
 };
 
 void print_dtb(void);

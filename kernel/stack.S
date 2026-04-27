@@ -8,7 +8,7 @@
 #include "config.h"
 #include "plutonic/ASCII.h"
 #include "plutonic/stack.h"
-#include "plutonic/register.h"
+#include "risc-v/register.h"
 
 
 # PUSH

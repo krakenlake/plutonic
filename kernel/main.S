@@ -9,8 +9,8 @@
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"
 #include "plutonic/trap.h"
-#include "plutonic/register.h"
 #include "plutonic/log.h"
+#include "risc-v/register.h"
 
 
 .global start
@@ -19,7 +19,7 @@
 .section .init
 
 
-# application entry point - activate our trap handler
+# kernel entry point
 start:
 
 	#-------------------- hart control	
@@ -81,8 +81,8 @@ start:
 	# check FAULT_STORE exception
 	sd 		t1, 0(t0)
 
-// fall through from above
 	li		t0, 0
+# fall through from above
 forever:
 	wfi
 

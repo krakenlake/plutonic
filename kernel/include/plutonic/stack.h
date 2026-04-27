@@ -9,7 +9,7 @@
 #define PLUTONIC_STACK_H
 
 #include "config.h"
-#include "plutonic/register.h"
+#include "risc-v/register.h"
 
 
 // int register offsets from start of int stack frame

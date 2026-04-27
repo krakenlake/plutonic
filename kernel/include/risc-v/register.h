@@ -13,16 +13,16 @@
  * integer registers
  */
 #if XLEN == 32
-	#define	SAVE_X	sw
 	#define LOAD_X	lw
+	#define	SAVE_X	sw
 	#define LWU		lw
 	#define SWU		sw
 #endif
 #if XLEN == 64
-	#define	SAVE_X	sd
 	#define LOAD_X	ld
+	#define	SAVE_X	sd
 	#define LWU		lwu
-	#define SWU		sw
+	#define SWU		swu
 #endif
 #define XLEN_BYTES			(XLEN/8)
 #define NUM_INT_REGISTERS	32
@@ -61,6 +61,30 @@
 #define SIP_SSIP		(1 << 1)		// software IRQ
 #define SIP_STIP		(1 << 5)		// timer IRQ
 #define SIP_SEIP		(1 << 9)		// external IRQ
+
+/*
+ * scause exception types
+ */
+#define SCAUSE_MISALIGNED_FETCH			0
+#define SCAUSE_FAULT_FETCH				1
+#define SCAUSE_ILLEGAL_INSTRUCTION		2
+#define SCAUSE_BREAKPOINT				3
+#define SCAUSE_MISALIGNED_LOAD			4
+#define SCAUSE_FAULT_LOAD				5
+#define SCAUSE_MISALIGNED_STORE			6
+#define SCAUSE_FAULT_STORE				7
+#define SCAUSE_USER_ECALL				8
+#define SCAUSE_SUPERVISOR_ECALL			9
+#define SCAUSE_HYPERVISOR_ECALL			10
+#define SCAUSE_MACHINE_ECALL			11
+#define SCAUSE_FETCH_PAGE_FAULT			12
+#define SCAUSE_LOAD_PAGE_FAULT			13
+#define SCAUSE_RESERVED_14				14
+#define SCAUSE_STORE_PAGE_FAULT			15
+#define SCAUSE_RESERVED_16				16
+#define SCAUSE_RESERVED_17				17
+#define SCAUSE_SOFTWARE_CHECK			18
+#define SCAUSE_HARDWARE_ERROR			19
 
 
 #endif /* PLUTONIC_REGISTER_H */

@@ -8,7 +8,7 @@
 #include "config.h"
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"
-#include "plutonic/register.h"
+#include "risc-v/register.h"
 #include "plutonic/stack.h"
 
 

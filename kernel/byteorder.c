@@ -9,7 +9,7 @@
 #include "plutonic/byteorder.h"
 
 
-u32 be32_to_cpu(u32 val)
+inline u32 be32_to_cpu(u32 val)
 {
 	return ((val >> 24) & 0xff) |
 			((val << 8) & 0xff0000) |

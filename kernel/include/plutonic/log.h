@@ -18,13 +18,6 @@
 #define	LOG_INFO	6
 #define	LOG_DEBUG	7
 
-
-/*
- * Include files are included in .S and .c files, but C declarations
- * are invalid in assembly code, so they need to be guarded.
- *
- * __ASSEMBLER__ is a predefined macro in gcc.
- */
 #ifndef __ASSEMBLER__
 	void log(int level, char *str);
 	void log_no_newline(int level, char *str);

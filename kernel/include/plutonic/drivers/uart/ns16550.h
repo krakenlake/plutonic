@@ -8,6 +8,7 @@
 #ifndef PLUTONIC_UART_H
 #define PLUTONIC_UART_H
 
+
 #ifdef HW_QEMU
 	#define UART_BASE		0x10000000
 	#define UART_REG_RDR	0x00

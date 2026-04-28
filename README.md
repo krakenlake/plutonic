@@ -67,6 +67,12 @@ https://www.thegoodpenguin.co.uk/blog/an-overview-of-opensbi/
 
 https://www.cs.cornell.edu/courses/cs4411/2022fa/schedule/slides/week5_timer_interrupt.pdf
 
+https://github.com/picolibc/picolibc
+
+https://github.com/plctlab/mlibc
+
+https://github.com/rsenn/dietlibc
+
 ### References
 
 https://github.com/torvalds/linux/tree/master/arch/riscv

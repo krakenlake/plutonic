@@ -8,6 +8,7 @@
 #ifndef PLUTONIC_TRAP_H
 #define PLUTONIC_TRAP_H
 
+
 #include "config.h"
 
 #define TIMER_INTERVAL		10000000

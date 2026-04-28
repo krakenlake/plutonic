@@ -8,25 +8,19 @@
 #ifndef PLUTONIC_DTB_H
 #define PLUTONIC_DTB_H
 
+
 #include "plutonic/types.h"
 
-/*
- * Include files are included in .S and .c files, but C declarations
- * are invalid in assembly code, so they need to be guarded.
- *
- * __ASSEMBLER__ is a predefined macro in gcc.
- */
+#define		FDT_HEADER_MAGIC	0xd00dfeed
+
 #ifndef __ASSEMBLER__
 
 	extern int print_char(char c);
 	extern int print_hex(u64);
 	extern void print_newline(void);
 
-
-	/*
-	* NOTE: all fdt structures use BIG ENDIAN values
-	*/
 	struct fdt_header {
+		/* all BIG_ENDIAN */
 		u32 magic;
 		u32 totalsize;
 		u32 off_dt_struct;
@@ -40,16 +34,20 @@
 	};
 
 	struct fdt_reserve_entry {
+		/* all BIG_ENDIAN */
 		u32 address;
 		u32 size;
 	};
 
 	struct fdt_property {
+		/* all BIG_ENDIAN */
 		u32 len;
 		u32 nameoff;
 	};
 
 	void print_dtb(void);
+
 #endif
+
 
 #endif /* PLUTONIC_DTB_H */

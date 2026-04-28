@@ -30,6 +30,14 @@ void print_dtb(void)
 	print_hex(magic_le);
 	print_newline();
 
+	if ((u32)magic_le == (u32)FDT_HEADER_MAGIC) {
+		log(LOG_DEBUG, "dtb magic number OK");
+	} else {
+		log_no_newline(LOG_ERR, "dtb magic number does not match, expected ");
+		print_hex(FDT_HEADER_MAGIC);
+		print_newline();
+	}
+
 	u64 strings_offset = (u32)be32_to_cpu(dtb->off_dt_strings);
 	u64 strings_start_addr = (u64)(dtb + strings_offset);
 	log_no_newline(LOG_DEBUG, "strings section start addr = ");

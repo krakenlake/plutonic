@@ -19,6 +19,8 @@
 #define	LOG_INFO	6
 #define	LOG_DEBUG	7
 
+#define LOG_DELIM	':'
+
 #ifndef __ASSEMBLER__
 	/* public */
 	void log(int level, char *str);

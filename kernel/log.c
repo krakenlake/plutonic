@@ -76,25 +76,18 @@ void log_str(int level, char *str, char *c)
  */
 void _do_log(int level, char *str, int newline)
 {
-	char *c;
-	char delim = ':';
+	if (level < 0 || level > LOG_DEBUG || level > kernel_log_level) return;
 
-	if (level > kernel_log_level) return;
-	if (level < 0 || level > LOG_DEBUG) return;
-
-//	print_decimal(get_timestamp());
 	print_timestamp();
-	
-	print_char(delim);
-	c = loglevel_string[level];
-	print_string(c);
 
-	print_char(delim);
-	c = string_log_sender;
-	print_string(c);
+	print_char(LOG_DELIM);
+	print_string(loglevel_string[level]);
 
-	print_char(delim);
+	print_char(LOG_DELIM);
+	print_string(string_log_sender);
+
+	print_char(LOG_DELIM);
 	print_string(str);
 
-	if (newline) print_char('\n');
+	if (newline) print_newline();
 }

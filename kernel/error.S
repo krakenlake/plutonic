@@ -29,6 +29,7 @@ throw_error:
 	SAVE_X	a1, (XLEN_BYTES*2)(sp)
 
 	mv		s1, a0
+	li		a0, LOG_ERR
 	la		a1, error_msg
 	jal		log_no_newline
 	mv		a0, s1

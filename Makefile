@@ -40,8 +40,8 @@ CFLAGS += -fPIC
 CFLAGS += -fPIE
 # gcc must not try to replace anything with built-in stuff
 CFLAGS += -fno-builtin
-# we need frame pointers for stack unwinding
-CFLAGS += -fno-omit-frame-pointer
+# we need frame pointers for stack unwinding(?)
+#CFLAGS += -fno-omit-frame-pointer
 # no crt0
 CFLAGS += -nostartfiles
 # optimisation

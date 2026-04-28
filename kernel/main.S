@@ -66,10 +66,36 @@ start:
 	# enable S-mode irqs again
 	csrsi	sstatus, SSTATUS_SIE
 
+
+	#-------------------- print sp
+	li		a0, LOG_DEBUG
+	la		a1, string_sp
+	jal		log_no_newline
+	mv		a0, sp
+	jal		print_hex
+	jal		print_newline
+
 	#-------------------- print dtb
 	la		t0, dtb
 	LOAD_X	a0, 0(t0)
 	jal		print_dtb
+	beqz	a0, dtb_ok
+	mv		s1, a0					# save error code
+	li		a0, LOG_ERR
+	la		a1, string_dtb_error
+	jal		log_no_newline
+	mv		a0, s1
+	jal		print_hex
+	jal		print_newline
+dtb_ok:
+
+	#-------------------- print sp
+	li		a0, LOG_DEBUG
+	la		a1, string_sp
+	jal		log_no_newline
+	mv		a0, sp
+	jal		print_hex
+	jal		print_newline
 
 	#-------------------- check exception catching
 	# check ILLEGAL_INSTRUCTION exception
@@ -92,13 +118,20 @@ forever:
 	mv 		s0, t0
 	li		a0, LOG_DEBUG
 	la		a1, string_register
-	li		a2, 0								# no newline
 	jal		log_no_newline
 	mv		a0, s0
 	jal		print_hex_addr
 	jal		print_newline
-	mv		t0, s0
 
+	#-------------------- print sp
+	li		a0, LOG_DEBUG
+	la		a1, string_sp
+	jal		log_no_newline
+	mv		a0, sp
+	jal		print_hex
+	jal		print_newline
+
+	mv		t0, s0
 	j		forever
 .size start, .-start
 
@@ -138,3 +171,9 @@ string_startup:
 
 string_register:
 	.asciz "t0 = "
+
+string_sp:
+	.asciz "sp = "
+
+string_dtb_error:
+	.asciz "returned to main with error code "

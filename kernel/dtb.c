@@ -24,8 +24,6 @@ long print_dtb(void)
 		return ERR_NOTFOUND;
 	}
 
-	throw_error(ERR_NOTFOUND);
-
 	u32 magic_be = dtb->magic;
 	log_hex(LOG_DEBUG, "dtb magic BIG_ENDIAN = ", magic_be);
 
@@ -52,6 +50,8 @@ long print_dtb(void)
 	log_hex(LOG_DEBUG, "mem_rsvmap section @", mem_rsvmap_start_addr);
 
 	log_str(LOG_DEBUG, "first string = ", (char*)strings_start_addr);
+
+	throw_error(ERR_DUMMY);
 
 	return ERR_OK;
 }

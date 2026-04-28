@@ -16,18 +16,17 @@
 
 .text
 
-
-# in: a0 = error number
-# out: a0 = error number
+# log an error, remove last stack frame and return to calling function
+# in: a0 = error code
+# out: a0 = error code
 throw_error:
 	ld		ra,-8(fp) 
 	mv		sp, fp
 
-	addi	sp, sp, -(XLEN_BYTES*4)
+	addi	sp, sp, -(XLEN_BYTES*3)
 	SAVE_X	ra, 0(sp)
 	SAVE_X	a0, (XLEN_BYTES*1)(sp)
 	SAVE_X	a1, (XLEN_BYTES*2)(sp)
-	SAVE_X	a2, (XLEN_BYTES*3)(sp)
 
 	mv		s1, a0
 	la		a1, error_msg
@@ -39,8 +38,7 @@ throw_error:
 	LOAD_X	ra, 0(sp)
 	LOAD_X	a0, (XLEN_BYTES*1)(sp)
 	LOAD_X	a1, (XLEN_BYTES*2)(sp)
-	LOAD_X	a2, (XLEN_BYTES*3)(sp)
-	addi	sp, sp, (XLEN_BYTES*4)
+	addi	sp, sp, (XLEN_BYTES*3)
 	ret
 .size throw_error, .-throw_error	
 
@@ -49,6 +47,6 @@ throw_error:
 
 
 error_msg:
-	.string "ERROR: error_handler: ERROR = ";
+	.string "ERROR: throw_error: ERROR = ";
 .size error_msg, .-error_msg
 

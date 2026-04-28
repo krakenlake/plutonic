@@ -11,19 +11,15 @@
 #include "plutonic/log.h"
 
 
-.global error_handler
+.global throw_error
 
 
 .text
 
 
-
-
-
-
 # in: a0 = error number
 # out: a0 = error number
-error_handler:
+throw_error:
 	ld		ra,-8(fp) 
 	mv		sp, fp
 
@@ -46,7 +42,7 @@ error_handler:
 	LOAD_X	a2, (XLEN_BYTES*3)(sp)
 	addi	sp, sp, (XLEN_BYTES*4)
 	ret
-.size error_handler, .-error_handler	
+.size throw_error, .-throw_error	
 
 
 .section .rodata

@@ -4,7 +4,6 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-
 #ifndef PLUTONIC_BYTEORDER_H
 #define PLUTONIC_BYTEORDER_H
 

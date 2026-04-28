@@ -4,7 +4,6 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-
 #include "config.h"
 #include "risc-v/register.h"
 #include "plutonic/trap.h"

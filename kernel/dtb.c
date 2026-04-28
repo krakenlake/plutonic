@@ -4,7 +4,6 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-
 #include "config.h"
 #include "plutonic/log.h"
 #include "plutonic/dtb.h"
@@ -25,7 +24,7 @@ long print_dtb(void)
 		return ERR_NOTFOUND;
 	}
 
-	error_handler(ERR_NOTFOUND);
+	throw_error(ERR_NOTFOUND);
 
 	u32 magic_be = dtb->magic;
 	log_hex(LOG_DEBUG, "dtb magic BIG_ENDIAN = ", magic_be);

@@ -4,7 +4,6 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-
 #include "config.h"
 #include "plutonic/log.h"
 #include "plutonic/print.h"
@@ -22,7 +21,7 @@
 	"DEBUG"
  };
 
- 
+
 /*
  * current global kernel log level
  */

@@ -41,7 +41,7 @@ CFLAGS += -fPIE
 # gcc must not try to replace anything with built-in stuff
 CFLAGS += -fno-builtin
 # we need frame pointers for stack unwinding(?)
-#CFLAGS += -fno-omit-frame-pointer
+CFLAGS += -fno-omit-frame-pointer
 # no crt0
 CFLAGS += -nostartfiles
 # optimisation
@@ -53,7 +53,7 @@ export PLUTONIC_CFLAGS = $(CFLAGS)
 export LIBPLTNC_CFLAGS = $(CFLAGS)
 
 # targets
-all: Makefile
+all:
 	cd libpltnc && make
 	cd kernel && make
 

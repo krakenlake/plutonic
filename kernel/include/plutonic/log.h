@@ -4,7 +4,6 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-
 #ifndef PLUTONIC_LOG_H
 #define PLUTONIC_LOG_H
 

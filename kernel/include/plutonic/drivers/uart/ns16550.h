@@ -4,7 +4,6 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-
 #ifndef PLUTONIC_UART_H
 #define PLUTONIC_UART_H
 

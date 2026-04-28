@@ -7,6 +7,7 @@
 #include "config.h"
 #include "plutonic/log.h"
 #include "plutonic/print.h"
+#include "plutonic/time.h"
 #include "plutonic/types.h"
 
 
@@ -77,22 +78,11 @@ void _do_log(int level, char *str, int newline)
 {
 	char *c;
 	char delim = ':';
-	unsigned long timestamp;
 
 	if (level > kernel_log_level) return;
 	if (level < 0 || level > LOG_DEBUG) return;
 
-	__asm( 
-		// read system time from csr 
-		"rdtime t0\n"
-		// and put result into timestamp variable in memory
-		"sd t0,%0"
-		: "=m" (timestamp)	/* output */
-		:					/* no input */
-		: "t0"				/* clobbered */
-	);
-
-	print_decimal(timestamp);
+	print_decimal(get_timestamp());
 
 	print_char(delim);
 	c = loglevel_string[level];

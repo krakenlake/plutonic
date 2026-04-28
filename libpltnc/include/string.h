@@ -5,7 +5,7 @@
  *
  */
 
- #ifndef LIBPLTNC_STRING_H
+#ifndef LIBPLTNC_STRING_H
 #define LIBPLTNC_STRING_H
 
 

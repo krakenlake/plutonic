@@ -152,6 +152,9 @@ clean:
 run: Makefile $(BUILD)/$(NAME).img
 	$(RUN)
 
+gdb: Makefile $(BUILD)/$(NAME).elf
+	$(GDB) $(BUILD)/$(NAME).elf
+
 debug:
 	$(GDB) entry -ex "target remote :1234"
 

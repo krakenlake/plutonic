@@ -11,6 +11,7 @@
 #include "plutonic/byteorder.h"
 #include "plutonic/types.h"
 #include "plutonic/print.h"
+#include "plutonic/error.h"
 
 
 struct fdt_header *dtb;
@@ -18,6 +19,13 @@ struct fdt_header *dtb;
 long print_dtb(void)
 {
 	log(LOG_DEBUG, "looking for dtb...");
+
+	if (dtb == 0) {
+		log(LOG_ERR, "no dtb");
+		return ERR_NOTFOUND;
+	}
+
+	error_handler(ERR_NOTFOUND);
 
 	u32 magic_be = dtb->magic;
 	log_hex(LOG_DEBUG, "dtb magic BIG_ENDIAN = ", magic_be);
@@ -29,7 +37,7 @@ long print_dtb(void)
 		log_hex(LOG_INFO, "found dtb @", (u64)dtb);
 	} else {
 		log_hex(LOG_ERR, "dtb magic number does not match, expected ", FDT_HEADER_MAGIC);
-		return -1;
+		return ERR_CORRUPT;
 	}
 
 	u64 strings_offset = (u32)be32_to_cpu(dtb->off_dt_strings);
@@ -46,5 +54,5 @@ long print_dtb(void)
 
 	log_str(LOG_DEBUG, "first string = ", (char*)strings_start_addr);
 
-	return 0;
+	return ERR_OK;
 }

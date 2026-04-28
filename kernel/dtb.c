@@ -17,7 +17,7 @@ struct fdt_header *dtb;
 
 long print_dtb(void)
 {
-	log(LOG_DEBUG, "looking for dtb...");
+	log(LOG_INFO, "looking for dtb...");
 
 	if (dtb == 0) {
 		log(LOG_ERR, "no dtb");

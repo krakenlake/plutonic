@@ -20,11 +20,13 @@
 #define	LOG_DEBUG	7
 
 #ifndef __ASSEMBLER__
+	/* public */
 	void log(int level, char *str);
 	void log_no_newline(int level, char *str);
 	void log_hex(int level, char *str, u64 val);
 	void log_str(int level, char *str, char *c);
-	void do_log(int level, char *str, int newline);
+	/* private */
+	void _do_log(int level, char *str, int newline);
 #endif
 
 

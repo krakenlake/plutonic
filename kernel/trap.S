@@ -162,7 +162,7 @@ skip_this_instruction_after_sret:
 	SAVE_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
 
 print_exception:
-	li		a0, LOG_DEBUG
+	li		a0, LOG_CRIT
 	la		a1, string_exception_msg
 	li		a2, 0								# no newline
 	jal		log_no_newline

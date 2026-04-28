@@ -9,6 +9,8 @@
 #define PLUTONIC_LOG_H
 
 
+#include "plutonic/types.h"
+
 #define	LOG_EMERG	0
 #define	LOG_ALERT	1
 #define	LOG_CRIT	2
@@ -21,6 +23,8 @@
 #ifndef __ASSEMBLER__
 	void log(int level, char *str);
 	void log_no_newline(int level, char *str);
+	void log_hex(int level, char *str, u64 val);
+	void log_str(int level, char *str, char *c);
 	void do_log(int level, char *str, int newline);
 #endif
 

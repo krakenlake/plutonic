@@ -15,10 +15,6 @@
 
 #ifndef __ASSEMBLER__
 
-	extern int print_char(char c);
-	extern int print_hex(u64);
-	extern void print_newline(void);
-
 	struct fdt_header {
 		/* all BIG_ENDIAN */
 		u32 magic;
@@ -45,7 +41,7 @@
 		u32 nameoff;
 	};
 
-	void print_dtb(void);
+	long print_dtb(void);
 
 #endif
 

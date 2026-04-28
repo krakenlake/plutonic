@@ -8,6 +8,7 @@
 #include "config.h"
 #include "plutonic/log.h"
 #include "plutonic/print.h"
+#include "plutonic/types.h"
 
 
  char *loglevel_string[8] = {
@@ -21,10 +22,11 @@
 	"DEBUG"
  };
 
+ 
 /*
  * current global kernel log level
  */
-int kernel_log_level = LOG_DEBUG;
+int kernel_log_level = LOG_DEBUG;		// default value at boot time
 
 char *string_log_sender = "kernel\0";
 
@@ -85,3 +87,24 @@ void do_log(int level, char *str, int newline)
 	if (newline) print_char('\n');
 }
 
+
+/*
+ * log a string and print hex value after that 
+ */
+void log_hex(int level, char *str, u64 val)
+{
+	log_no_newline(level, str);
+	print_hex(val);
+	print_newline();
+}
+
+
+/*
+ * log a string and print another string after that
+ */
+void log_str(int level, char *str, char *c)
+{
+	log_no_newline(level, str);
+	while (*c != 0) print_char(*c++);
+	print_newline();
+}

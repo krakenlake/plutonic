@@ -82,8 +82,9 @@ void _do_log(int level, char *str, int newline)
 	if (level > kernel_log_level) return;
 	if (level < 0 || level > LOG_DEBUG) return;
 
-	print_decimal(get_timestamp());
-
+//	print_decimal(get_timestamp());
+	print_timestamp();
+	
 	print_char(delim);
 	c = loglevel_string[level];
 	print_string(c);

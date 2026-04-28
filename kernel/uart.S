@@ -138,18 +138,20 @@ uart_output_string_done:
 # output one char to console via SBI
 # in: char (ASCII) in a0
 uart_output_char:
+/* TODO: do we really need this?
 	addi	sp, sp, -(XLEN_BYTES*4)	
 	SAVE_X	a0, 0(sp)
 	SAVE_X	a6, (XLEN_BYTES*1)(sp)
 	SAVE_X	a7, (XLEN_BYTES*2)(sp)
+*/
 									# char to be printed in a0 already
 	mv		a6, zero				# SBI fid
 	li		a7, 1					# SBI eid
 	ecall
-	LOAD_X	a0, 0(sp)
-	LOAD_X	a6, (XLEN_BYTES*1)(sp)
-	LOAD_X	a7, (XLEN_BYTES*2)(sp)
-	addi	sp, sp, (XLEN_BYTES*4)
+//	LOAD_X	a0, 0(sp)
+//	LOAD_X	a6, (XLEN_BYTES*1)(sp)
+//	LOAD_X	a7, (XLEN_BYTES*2)(sp)
+//	addi	sp, sp, (XLEN_BYTES*4)
 	ret
 .size uart_output_char, .-uart_output_char
 

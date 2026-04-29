@@ -76,3 +76,9 @@ devicetree: Makefile
 clean:
 	rm -fr $(BUILDROOT) $(RELEASE)
 
+devtools-mac:
+	brew install riscv64-elf-gcc
+	brew install riscv64-elf-gdb
+	brew install riscv64-elf-binutils
+	brew install qemu
+

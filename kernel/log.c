@@ -73,16 +73,6 @@ void log_str(int level, char *str, char *c)
 
 
 /*
- * log a string and print another string after that
- */
-void log_registers(int level)
-{
-	log(level, "register dump:");
-	print_int_registers();
-}
-
-
-/*
  *  print str to console if level is <= current kernel log level 
  */
 void do_log(int level, char *str, int newline)

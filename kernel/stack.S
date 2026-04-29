@@ -22,7 +22,6 @@
 .global pop_s1_s0_ra_ret
 .global pop_tp_s1_s0_ra_ret						# use tp like another s register
 
-.global print_pc
 .global print_int_registers
 .global print_float_registers
 
@@ -77,17 +76,6 @@ pop_ra_ret:
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
 .size pop_tp_s1_s0_ra_ret, .-pop_tp_s1_s0_ra_ret
-
-
-print_pc:
-	PUSH_RA
-	la		a0, string_pc
-	jal		print_string
-	LOAD_X	a0, (XLEN_BYTES + STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
-	jal		print_hex_addr
-	jal		print_newline
-	POP_RA_RET
-.size print_pc, .-print_pc
 
 
 print_int_registers:
@@ -183,10 +171,3 @@ print_saved_registers_done:
 	POP_TP_S1_S0_RA_RET
 .size print_saved_registers, .-print_saved_registers
 
-
-.section .rodata
-
-
-string_pc:
-	.string "    pc=";
-.size string_pc, .-string_pc

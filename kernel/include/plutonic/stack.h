@@ -110,7 +110,6 @@
 
 
 #define PUSH_ALL_INT_REGISTERS \
-	csrw	sscratch, sp;						\
 	addi	sp, sp, -(STK_FRAME_SIZE_INT);		\
 	SAVE_X	ra, (STK_OFF_RA)(sp);				\
 	SAVE_X	x3, (STK_OFF_X3)(sp);				\
@@ -142,7 +141,7 @@
 	SAVE_X	x29, (STK_OFF_X29)(sp);				\
 	SAVE_X	x30, (STK_OFF_X30)(sp);				\
 	SAVE_X	x31, (STK_OFF_X31)(sp);				\
-	csrr	t0, sscratch;						\
+	addi	t0, sp, STK_FRAME_SIZE_INT;			\
 	SAVE_X	t0, (STK_OFF_SP)(sp);				\
 	csrr	t0, sepc;							\
 	SAVE_X	t0, (STK_OFF_PC)(sp);				\
@@ -253,9 +252,16 @@
 	LOAD_X	x29, (STK_OFF_X29)(sp);				\
 	LOAD_X	x30, (STK_OFF_X30)(sp);				\
 	LOAD_X	x31, (STK_OFF_X31)(sp);				\
-	LOAD_X	sp, (STK_OFF_SP)(sp);				\
-	csrw	sscratch, zero;						\
+	addi	sp, sp, (STK_FRAME_SIZE_INT);		\
 	;
 
+#define DUMP_ALL_REGISTERS \
+	PUSH_ALL_INT_REGISTERS						\
+	PUSH_ALL_FLOAT_REGISTERS					\
+	jal 	print_int_registers;				\
+	jal		print_float_registers;				\
+	POP_ALL_FLOAT_REGISTERS						\
+	POP_ALL_INT_REGISTERS						\
+	;
 
 #endif /* PLUTONIC_STACK_H */

@@ -9,6 +9,7 @@
 #include "plutonic/ASCII.h"
 #include "plutonic/trap.h"
 #include "plutonic/log.h"
+#include "plutonic/stack.h"
 #include "risc-v/register.h"
 
 
@@ -66,14 +67,6 @@ start:
 	csrsi	sstatus, SSTATUS_SIE
 
 
-	#-------------------- print sp
-	li		a0, LOG_DEBUG
-	la		a1, string_sp
-	jal		log_no_newline
-	mv		a0, sp
-	jal		print_hex
-	jal		print_newline
-
 	#-------------------- print dtb
 	la		t0, dtb
 	LOAD_X	a0, 0(t0)
@@ -88,14 +81,6 @@ start:
 	jal		print_newline
 dtb_ok:
 
-	#-------------------- print sp
-	li		a0, LOG_DEBUG
-	la		a1, string_sp
-	jal		log_no_newline
-	mv		a0, sp
-	jal		print_hex
-	jal		print_newline
-
 	#-------------------- check exception catching
 	# check ILLEGAL_INSTRUCTION exception
 	unimp
@@ -106,36 +91,16 @@ dtb_ok:
 	# check FAULT_STORE exception
 	sd 		t1, 0(t0)
 
-	li		t0, 0
+	li		s1, 0
 # fall through from above
 forever:
 	wfi
 
-	addi	t0, t0, 1
+	# check that s1 will be preserved in the loop
+	addi	s1, s1, 1
 
-	# log t0
-	mv 		s0, t0
-	li		a0, LOG_DEBUG
-	la		a1, string_register
-	jal		log_no_newline
-	mv		a0, s0
-	jal		print_hex_addr
-	jal		print_newline
+	DUMP_ALL_REGISTERS
 
-	#-------------------- print sp
-	li		a0, LOG_DEBUG
-	la		a1, string_sp
-	jal		log_no_newline
-	mv		a0, sp
-	jal		print_hex
-	jal		print_newline
-
-
-	#-------------------- register dump
-	li		a0, LOG_DEBUG
-	jal		log_registers
-
-	mv		t0, s0
 	j		forever
 .size start, .-start
 
@@ -172,12 +137,6 @@ string_startup:
 	.asciz "\n\n"
 .size string_startup, .-string_startup
 
-
-string_register:
-	.asciz "t0 = "
-
-string_sp:
-	.asciz "sp = "
 
 string_dtb_error:
 	.asciz "returned to main with error code "

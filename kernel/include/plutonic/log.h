@@ -28,7 +28,7 @@
 	void log_hex(int level, char *str, u64 val);
 	void log_str(int level, char *str, char *c);
 	/* private */
-	void _do_log(int level, char *str, int newline);
+	void do_log(int level, char *str, int newline);
 #endif
 
 

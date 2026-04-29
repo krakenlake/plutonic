@@ -9,6 +9,7 @@
 #include "plutonic/print.h"
 #include "plutonic/time.h"
 #include "plutonic/types.h"
+#include "plutonic/stack.h"
 
 
  char *loglevel_string[8] = {
@@ -36,7 +37,7 @@ char *string_log_sender = "kernel\0";
  */
 inline void log(int level, char *str)
 {
-	_do_log(level, str, 1);
+	do_log(level, str, 1);
 }
 
 
@@ -45,7 +46,7 @@ inline void log(int level, char *str)
  */
 inline void log_no_newline(int level, char *str)
 {
-	_do_log(level, str, 0);
+	do_log(level, str, 0);
 }
 
 
@@ -72,9 +73,19 @@ void log_str(int level, char *str, char *c)
 
 
 /*
+ * log a string and print another string after that
+ */
+void log_registers(int level)
+{
+	log(level, "register dump:");
+	print_int_registers();
+}
+
+
+/*
  *  print str to console if level is <= current kernel log level 
  */
-void _do_log(int level, char *str, int newline)
+void do_log(int level, char *str, int newline)
 {
 	if (level < 0 || level > LOG_DEBUG || level > kernel_log_level) return;
 

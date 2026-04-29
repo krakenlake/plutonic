@@ -130,6 +130,11 @@ forever:
 	jal		print_hex
 	jal		print_newline
 
+
+	#-------------------- register dump
+	li		a0, LOG_DEBUG
+	jal		log_registers
+
 	mv		t0, s0
 	j		forever
 .size start, .-start

@@ -35,14 +35,14 @@ push_ra:
 	addi	sp, sp, -(XLEN_BYTES*1)	
 	SAVE_X	ra, 0(sp)
 	jr		gp
-.size push_ra, .-push_ra	
+.size push_ra, .-push_ra
 
 push_s0_ra:
 	addi	sp, sp, -(XLEN_BYTES*2)
 	SAVE_X	s0, 0(sp)
 	SAVE_X	ra, (XLEN_BYTES*1)(sp)
 	jr		gp
-.size push_s0_ra, .-push_s0_ra	
+.size push_s0_ra, .-push_s0_ra
 
 push_s1_s0_ra:
 	addi	sp, sp, -(XLEN_BYTES*3)
@@ -50,7 +50,7 @@ push_s1_s0_ra:
 	SAVE_X	s0, (XLEN_BYTES*1)(sp)
 	SAVE_X	ra, (XLEN_BYTES*2)(sp)
 	jr		gp
-.size push_s1_s0_ra, .-push_s1_s0_ra	
+.size push_s1_s0_ra, .-push_s1_s0_ra
 
 push_tp_s1_s0_ra:
 	addi	sp, sp, -(XLEN_BYTES*4)
@@ -59,7 +59,7 @@ push_tp_s1_s0_ra:
 	SAVE_X	s0, (XLEN_BYTES*2)(sp)
 	SAVE_X	ra, (XLEN_BYTES*3)(sp)
 	jr		gp
-.size push_tp_s1_s0_ra, .-push_tp_s1_s0_ra	
+.size push_tp_s1_s0_ra, .-push_tp_s1_s0_ra
 
 
 # for function epilogue optimisation (shorter code in total)
@@ -76,7 +76,8 @@ pop_ra_ret:
 	LOAD_X	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
-.size pop_tp_s1_s0_ra_ret, .-pop_tp_s1_s0_ra_ret	
+.size pop_tp_s1_s0_ra_ret, .-pop_tp_s1_s0_ra_ret
+
 
 print_pc:
 	PUSH_RA
@@ -86,35 +87,18 @@ print_pc:
 	jal		print_hex_addr
 	jal		print_newline
 	POP_RA_RET
-.size print_pc, .-print_pc	
-
-
-.section .rodata
-
-
-string_pc:
-	.string "    pc=";
-.size string_pc, .-string_pc
-.text
-
-
+.size print_pc, .-print_pc
 
 
 print_int_registers:
 	PUSH_RA
 	la		a0, get_int_register_name_by_index
 	li		a1, 1
-	
 	li		a2, 31
 	
 	# set a3 to the address of ra in the current stack frame
 	# (XLEN_BYTES are also added to compensate for the pushing ra on entry here)
-	#ifdef TARGET_HAS_RVF
-		addi		a3, sp, XLEN_BYTES + STK_FRAME_SIZE_FLOAT + STK_OFF_RA
-	#else
-		addi		a3, sp, XLEN_BYTES + STK_OFF_RA
-	#endif
-
+	addi	a3, sp, XLEN_BYTES + STK_FRAME_SIZE_FLOAT + STK_OFF_RA
 	li		a4, XLEN_BYTES
 	jal		print_saved_registers
 	POP_RA_RET
@@ -198,3 +182,11 @@ print_saved_registers_done:
 	addi	sp, sp, (XLEN_BYTES*3)		# discard 5 extra local vars
 	POP_TP_S1_S0_RA_RET
 .size print_saved_registers, .-print_saved_registers
+
+
+.section .rodata
+
+
+string_pc:
+	.string "    pc=";
+.size string_pc, .-string_pc

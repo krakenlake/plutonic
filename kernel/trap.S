@@ -30,6 +30,7 @@ set_timer:
 	li		t1, TIMER_INTERVAL
 	add		a0, t0, t1
 	# new time now in a0
+
 #ifdef TARGET_HAS_SSTC
 	# with sstc extension we can set the timer from S-Mode
 	csrw	stimecmp, a0
@@ -54,84 +55,9 @@ trap_handler:
 	csrci	sstatus, SSTATUS_SIE
 
 	# TODO: we need to differentiate our stack and caller stack!
-	csrw	sscratch, sp
-
-	# save int registers on stack
-	addi	sp, sp, -(STK_FRAME_SIZE_INT)
-	SAVE_X	ra, (STK_OFF_RA)(sp)
-	# sp intentionally missing here, see below
-	SAVE_X	x3, (STK_OFF_X3)(sp)
-	SAVE_X	x4, (STK_OFF_X4)(sp)
-	SAVE_X	x5, (STK_OFF_X5)(sp)
-	SAVE_X	x6, (STK_OFF_X6)(sp)
-	SAVE_X	x7, (STK_OFF_X7)(sp)
-	SAVE_X	x8, (STK_OFF_X8)(sp)
-	SAVE_X	x9, (STK_OFF_X9)(sp)
-	SAVE_X	x10, (STK_OFF_X10)(sp)
-	SAVE_X	x11, (STK_OFF_X11)(sp)
-	SAVE_X	x12, (STK_OFF_X12)(sp)
-	SAVE_X	x13, (STK_OFF_X13)(sp)
-	SAVE_X	x14, (STK_OFF_X14)(sp)
-	SAVE_X	x15, (STK_OFF_X15)(sp)
-	SAVE_X	x16, (STK_OFF_X16)(sp)
-	SAVE_X	x17, (STK_OFF_X17)(sp)
-	SAVE_X	x18, (STK_OFF_X18)(sp)
-	SAVE_X	x19, (STK_OFF_X19)(sp)
-	SAVE_X	x20, (STK_OFF_X20)(sp)
-	SAVE_X	x21, (STK_OFF_X21)(sp)
-	SAVE_X	x22, (STK_OFF_X22)(sp)
-	SAVE_X	x23, (STK_OFF_X23)(sp)
-	SAVE_X	x24, (STK_OFF_X24)(sp)
-	SAVE_X	x25, (STK_OFF_X25)(sp)
-	SAVE_X	x26, (STK_OFF_X26)(sp)
-	SAVE_X	x27, (STK_OFF_X27)(sp)
-	SAVE_X	x28, (STK_OFF_X28)(sp)
-	SAVE_X	x29, (STK_OFF_X29)(sp)
-	SAVE_X	x30, (STK_OFF_X30)(sp)
-	SAVE_X	x31, (STK_OFF_X31)(sp)
-
-	# now we can safely use t0 to get back and save sp in that same stack frame above
-	csrr	t0, sscratch
-	SAVE_X	t0, (STK_OFF_SP)(sp)			# and save it
-
-	# save xepc
-	csrr	t0, sepc
-	SAVE_X	t0, (STK_OFF_PC)(sp)
-
-	# save f0-f31 registers on stack
-	addi	sp, sp, -(STK_FRAME_SIZE_FLOAT)
-	SAVE_F	f0, (STK_OFF_F0)(sp)
-	SAVE_F	f1, (STK_OFF_F1)(sp)
-	SAVE_F	f2, (STK_OFF_F2)(sp)
-	SAVE_F	f3, (STK_OFF_F3)(sp)
-	SAVE_F	f4, (STK_OFF_F4)(sp)
-	SAVE_F	f5, (STK_OFF_F5)(sp)
-	SAVE_F	f6, (STK_OFF_F6)(sp)
-	SAVE_F	f7, (STK_OFF_F7)(sp)
-	SAVE_F	f8, (STK_OFF_F8)(sp)
-	SAVE_F	f9, (STK_OFF_F9)(sp)
-	SAVE_F	f10, (STK_OFF_F10)(sp)
-	SAVE_F	f11, (STK_OFF_F11)(sp)
-	SAVE_F	f12, (STK_OFF_F12)(sp)
-	SAVE_F	f13, (STK_OFF_F13)(sp)
-	SAVE_F	f14, (STK_OFF_F14)(sp)
-	SAVE_F	f15, (STK_OFF_F15)(sp)
-	SAVE_F	f16, (STK_OFF_F16)(sp)
-	SAVE_F	f17, (STK_OFF_F17)(sp)
-	SAVE_F	f18, (STK_OFF_F18)(sp)
-	SAVE_F	f19, (STK_OFF_F19)(sp)
-	SAVE_F	f20, (STK_OFF_F20)(sp)
-	SAVE_F	f21, (STK_OFF_F21)(sp)
-	SAVE_F	f22, (STK_OFF_F22)(sp)
-	SAVE_F	f23, (STK_OFF_F23)(sp)
-	SAVE_F	f24, (STK_OFF_F24)(sp)
-	SAVE_F	f25, (STK_OFF_F25)(sp)
-	SAVE_F	f26, (STK_OFF_F26)(sp)
-	SAVE_F	f27, (STK_OFF_F27)(sp)
-	SAVE_F	f28, (STK_OFF_F28)(sp)
-	SAVE_F	f29, (STK_OFF_F29)(sp)
-	SAVE_F	f30, (STK_OFF_F30)(sp)
-	SAVE_F	f31, (STK_OFF_F31)(sp)
+	
+	PUSH_ALL_INT_REGISTERS
+	PUSH_ALL_FLOAT_REGISTERS
 
 	# irq or exception? check leftmost bit of xcause
 	csrr	a0, scause
@@ -218,86 +144,8 @@ handle_irq:
 	j 		exit_trap_handler
 
 exit_trap_handler:
-	# restore float registers
-	LOAD_F	f0, (STK_OFF_F0)(sp)
-	LOAD_F	f1, (STK_OFF_F1)(sp)
-	LOAD_F	f2, (STK_OFF_F2)(sp)
-	LOAD_F	f3, (STK_OFF_F3)(sp)
-	LOAD_F	f4, (STK_OFF_F4)(sp)
-	LOAD_F	f5, (STK_OFF_F5)(sp)
-	LOAD_F	f6, (STK_OFF_F6)(sp)
-	LOAD_F	f7, (STK_OFF_F7)(sp)
-	LOAD_F	f8, (STK_OFF_F8)(sp)
-	LOAD_F	f9, (STK_OFF_F9)(sp)
-	LOAD_F	f10, (STK_OFF_F10)(sp)
-	LOAD_F	f11, (STK_OFF_F11)(sp)
-	LOAD_F	f12, (STK_OFF_F12)(sp)
-	LOAD_F	f13, (STK_OFF_F13)(sp)
-	LOAD_F	f14, (STK_OFF_F14)(sp)
-	LOAD_F	f15, (STK_OFF_F15)(sp)
-	LOAD_F	f16, (STK_OFF_F16)(sp)
-	LOAD_F	f17, (STK_OFF_F17)(sp)
-	LOAD_F	f18, (STK_OFF_F18)(sp)
-	LOAD_F	f19, (STK_OFF_F19)(sp)
-	LOAD_F	f20, (STK_OFF_F20)(sp)
-	LOAD_F	f21, (STK_OFF_F21)(sp)
-	LOAD_F	f22, (STK_OFF_F22)(sp)
-	LOAD_F	f23, (STK_OFF_F23)(sp)
-	LOAD_F	f24, (STK_OFF_F24)(sp)
-	LOAD_F	f25, (STK_OFF_F25)(sp)
-	LOAD_F	f26, (STK_OFF_F26)(sp)
-	LOAD_F	f27, (STK_OFF_F27)(sp)
-	LOAD_F	f28, (STK_OFF_F28)(sp)
-	LOAD_F	f29, (STK_OFF_F29)(sp)
-	LOAD_F	f30, (STK_OFF_F30)(sp)
-	LOAD_F	f31, (STK_OFF_F31)(sp)
-	addi	sp, sp, (STK_FRAME_SIZE_FLOAT)
-
-	# restore epc from stack for exit below
-	LOAD_X	t0, STK_OFF_PC(sp)
-	csrw	sepc, t0
-	
-	# restore int registers
-	LOAD_X	ra, (STK_OFF_RA)(sp)
-	# sp intentionally left out here, do below
-	LOAD_X	x3, (STK_OFF_X3)(sp)
-	LOAD_X	x4, (STK_OFF_X4)(sp)
-	LOAD_X	x5, (STK_OFF_X5)(sp)
-	LOAD_X	x6, (STK_OFF_X6)(sp)
-	LOAD_X	x7, (STK_OFF_X7)(sp)
-	LOAD_X	x8, (STK_OFF_X8)(sp)
-	LOAD_X	x9, (STK_OFF_X9)(sp)
-	LOAD_X	x10, (STK_OFF_X10)(sp)
-	LOAD_X	x11, (STK_OFF_X11)(sp)
-	LOAD_X	x12, (STK_OFF_X12)(sp)
-	LOAD_X	x13, (STK_OFF_X13)(sp)
-	LOAD_X	x14, (STK_OFF_X14)(sp)
-	LOAD_X	x15, (STK_OFF_X15)(sp)
-	LOAD_X	x16, (STK_OFF_X16)(sp)
-	LOAD_X	x17, (STK_OFF_X17)(sp)
-	LOAD_X	x18, (STK_OFF_X18)(sp)
-	LOAD_X	x19, (STK_OFF_X19)(sp)
-	LOAD_X	x20, (STK_OFF_X20)(sp)
-	LOAD_X	x21, (STK_OFF_X21)(sp)
-	LOAD_X	x22, (STK_OFF_X22)(sp)
-	LOAD_X	x23, (STK_OFF_X23)(sp)
-	LOAD_X	x24, (STK_OFF_X24)(sp)
-	LOAD_X	x25, (STK_OFF_X25)(sp)
-	LOAD_X	x26, (STK_OFF_X26)(sp)
-	LOAD_X	x27, (STK_OFF_X27)(sp)
-	LOAD_X	x28, (STK_OFF_X28)(sp)
-	LOAD_X	x29, (STK_OFF_X29)(sp)
-	LOAD_X	x30, (STK_OFF_X30)(sp)
-	LOAD_X	x31, (STK_OFF_X31)(sp)
-
-	# restore original sp saved from caller on entry
-	LOAD_X	sp, (STK_OFF_SP)(sp)
-
-	# done restoring
-
-	# do not leave anything in the scratch register
-	csrw	sscratch, zero
-
+	POP_ALL_FLOAT_REGISTERS
+	POP_ALL_INT_REGISTERS
 	# bye bye - jump to address in xepc (while staying in current mode, see above)
 	sret
 .size trap_handler, .-trap_handler

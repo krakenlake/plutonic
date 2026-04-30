@@ -9,7 +9,6 @@
 #include "plutonic/stack.h"
 #include "risc-v/register.h"
 
-
 .global print_comma
 .global print_newline
 .global print_space
@@ -230,7 +229,6 @@ print_decimal_zero:
 print_decimal_done:
 	POP_S1_S0_RA_RET
 .size print_decimal, .-print_decimal
-
 
 
 .bss

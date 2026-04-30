@@ -258,8 +258,8 @@
 #define DUMP_ALL_REGISTERS \
 	PUSH_ALL_INT_REGISTERS						\
 	PUSH_ALL_FLOAT_REGISTERS					\
-	jal 	print_int_registers;				\
-	jal		print_float_registers;				\
+	jal 	print_saved_int_registers;			\
+	jal		print_saved_float_registers;		\
 	POP_ALL_FLOAT_REGISTERS						\
 	POP_ALL_INT_REGISTERS						\
 	;

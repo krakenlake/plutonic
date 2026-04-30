@@ -8,13 +8,10 @@
 #include "risc-v/register.h"
 #include "plutonic/stack.h"
 
-
-# register table access functions
 .global get_int_register_name_by_index
 .global get_float_register_name_by_index
 .global get_int_register_index_by_name
 .global get_float_register_index_by_name
-
 
 .text
 

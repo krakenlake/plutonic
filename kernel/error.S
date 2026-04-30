@@ -10,11 +10,10 @@
 #include "risc-v/register.h"
 #include "plutonic/log.h"
 
-
 .global throw_error
 
-
 .text
+
 
 # log an error, remove last stack frame and return to calling function
 # in: a0 = error code

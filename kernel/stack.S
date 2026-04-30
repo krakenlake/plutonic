@@ -23,8 +23,8 @@
 .global pop_s1_s0_ra_ret
 .global pop_tp_s1_s0_ra_ret						# use tp like another s register
 
-.global print_int_registers
-.global print_float_registers
+.global print_saved_int_registers
+.global print_saved_float_registers
 
 
 .text
@@ -79,7 +79,7 @@ pop_ra_ret:
 .size pop_tp_s1_s0_ra_ret, .-pop_tp_s1_s0_ra_ret
 
 
-print_int_registers:
+print_saved_int_registers:
 	PUSH_RA
 	la		a0, get_int_register_name_by_index
 	li		a1, 1
@@ -91,10 +91,10 @@ print_int_registers:
 	li		a4, XLEN_BYTES
 	jal		print_saved_registers
 	POP_RA_RET
-.size print_int_registers, .-print_int_registers
+.size print_saved_int_registers, .-print_saved_int_registers
 
 
-print_float_registers:
+print_saved_float_registers:
 	PUSH_RA
 	la		a0, get_float_register_name_by_index
 	li		a1, 0
@@ -103,7 +103,7 @@ print_float_registers:
 	li		a4, FLEN_BYTES
 	jal		print_saved_registers
 	POP_RA_RET
-.size print_float_registers, .-print_float_registers
+.size print_saved_float_registers, .-print_saved_float_registers
 
 
 # dump registers saved on stack

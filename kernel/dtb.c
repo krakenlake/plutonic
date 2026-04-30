@@ -12,8 +12,8 @@
 #include "plutonic/print.h"
 #include "plutonic/error.h"
 
-
 struct fdt_header *dtb;
+
 
 long print_dtb(void)
 {

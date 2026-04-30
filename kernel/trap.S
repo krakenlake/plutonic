@@ -10,14 +10,9 @@
 #include "plutonic/stack.h"
 #include "plutonic/log.h"
 
-
 .global set_timer
 .global trap_handler
 .global exit_trap_handler
-
-
-#define STR_BUF_SIZE	128
-
 
 .text
 
@@ -30,7 +25,6 @@ set_timer:
 	li		t1, TIMER_INTERVAL
 	add		a0, t0, t1
 	# new time now in a0
-
 #ifdef TARGET_HAS_SSTC
 	# with sstc extension we can set the timer from S-Mode
 	csrw	stimecmp, a0
@@ -40,7 +34,6 @@ set_timer:
     li		a6, 0x00
 	ecall
 #endif
-
 	ret
 
 
@@ -53,16 +46,14 @@ set_timer:
 trap_handler:
 	# disable all S-mode IRQs
 	csrci	sstatus, SSTATUS_SIE
-
-	# TODO: we need to differentiate our stack and caller stack!
-	
+	# save all registers on stack
 	PUSH_ALL_INT_REGISTERS
 	PUSH_ALL_FLOAT_REGISTERS
-
 	# irq or exception? check leftmost bit of xcause
 	csrr	a0, scause
 	srli	a0, a0, XLEN-1
 	bnez	a0, handle_irq
+
 
 	# we have an exception, filter for specific ones
 	csrr	t0, scause
@@ -72,27 +63,22 @@ trap_handler:
 	beq		t0, t1, handle_exception_illegal_instruction
 	# all other exceptions
 	j		skip_this_instruction_after_sret
-
 handle_exception_ebreak:
 	# continue after ebreak when exiting trsp handler
 	j		skip_this_instruction_after_sret
-
 handle_exception_illegal_instruction:
 	# TODO: code to emulate unsupported instructions could go here
 	# continue after illegal instruction when exiting trsp handler
 	j		skip_this_instruction_after_sret
-
 skip_this_instruction_after_sret:
 	LOAD_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
 	addi	t0, t0, 4
 	SAVE_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
-
 print_exception:
 	li		a0, LOG_CRIT
 	la		a1, string_exception_msg
 	li		a2, 0								# no newline
 	jal		log_no_newline
-
 	# print sepc
 	la		a0, string_epc_msg
 	jal		print_string
@@ -132,8 +118,13 @@ output_cause:
 	jal		print_hex
 	# end of printing
 	jal		print_newline
+	# dump registers to log
+	jal 	print_saved_int_registers;
+	jal		print_saved_float_registers;
 	j 		exit_trap_handler
 
+
+# we have an IRQ
 handle_irq:
 	# log message
 	li		a0, LOG_DEBUG
@@ -143,6 +134,8 @@ handle_irq:
 	jal		set_timer
 	j 		exit_trap_handler
 
+
+# return after IRQ or exception
 exit_trap_handler:
 	POP_ALL_FLOAT_REGISTERS
 	POP_ALL_INT_REGISTERS
@@ -207,10 +200,3 @@ string_cause_msg:
 string_timer_irq: 
 	.string "timer IRQ"
 
-
-.bss
-
-
-.align 8
-.comm str_buf, STR_BUF_SIZE
-.size str_buf, STR_BUF_SIZE

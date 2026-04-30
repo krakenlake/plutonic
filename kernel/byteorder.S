@@ -9,7 +9,6 @@
 #include "plutonic/stack.h"
 #include "risc-v/register.h"
 
-
 .global be32_to_cpu
 .global cpu_to_be32
 .global swap32

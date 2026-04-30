@@ -83,11 +83,11 @@ dtb_ok:
 
 	#-------------------- check exception catching
 	# check ILLEGAL_INSTRUCTION exception
-	unimp
+#	unimp
 	# check BREAKPOINT exception
-	ebreak
+#	ebreak
 	# check FAULT_LOAD exception
-	ld		t1, 0(t0)
+#	ld		t1, 0(t0)
 	# check FAULT_STORE exception
 	sd 		t1, 0(t0)
 
@@ -99,7 +99,7 @@ forever:
 	# check that s1 will be preserved in the loop
 	addi	s1, s1, 1
 
-	DUMP_ALL_REGISTERS
+//	DUMP_ALL_REGISTERS
 
 	j		forever
 .size start, .-start

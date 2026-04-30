@@ -10,13 +10,11 @@
 #include "risc-v/register.h"
 #include "plutonic/stack.h"
 
-
 .global uart_init
 .global uart_wait_get_char
 .global uart_output_char
 .global uart_output_string
 .global uart_getline
-
 
 .text
 
@@ -74,11 +72,9 @@ uart_get_char:
 	# do not process input further when buffer is full
 	# (only possible user action when buffer is full will be to hit DELETE)
 	bge		s0, t0, uart_get_char
-
 	sb		a0, 0(s0)							# store byte in input buffer
 	addi	s0, s0, 1							# inc buffer ptr
 	j		uart_continue_not_delete
-
 uart_input_is_delete:
 	# TODO: if the previous key transmitted more than 1 byte, this does 
 	# not work properly 
@@ -92,14 +88,12 @@ uart_input_is_delete:
 	li		a0, ASCII_BACKSPACE
 	jal		uart_output_char
 	j		uart_get_char  
-
 uart_continue_not_delete:
 	# output char in a0
 	jal		uart_output_char
 	li		t0, ASCII_RETURN
 	beq		a0, t0, uart_getline_done
 	j		uart_get_char
-
 uart_getline_done:
 	# print LF to follow read CR
 	li a0, ASCII_NEWLINE

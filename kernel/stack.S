@@ -8,6 +8,7 @@
 #include "plutonic/ASCII.h"
 #include "plutonic/stack.h"
 #include "risc-v/register.h"
+#include "plutonic/log.h"
 
 
 # PUSH
@@ -121,9 +122,15 @@ print_saved_registers:
 	mv		tp, a2						# last register index
 	mv		s0, a3						# stack frame base addr
 print_saved_registers_next:
-	li		t0, 3
+	li		t0, 4						# registers per line
 	SAVE_X	t0, (XLEN_BYTES*1)(sp)
-	jal		print_newline
+	mv		s2, a0
+	mv		s3, a1
+	li		a0, LOG_DEBUG
+	la		a1, string_register_dump
+	jal		log_no_newline
+	mv		a0, s2
+	mv		a1, s3
 print_saved_registers_skip_newline:
 	mv		a0, s1						# index of register
 	LOAD_X	t0, 0(sp)					# register name lookup func ptr
@@ -163,11 +170,18 @@ print_saved_registers_skip_space:
 	LOAD_X	t0, (XLEN_BYTES*1)(sp)
 	addi	t0, t0, -1					# count number of printed registers
 	SAVE_X	t0, (XLEN_BYTES*1)(sp)
-	beqz	t0, print_saved_registers_next
-	j		print_saved_registers_skip_newline
+	bnez	t0, print_saved_registers_skip_newline
+	jal		print_newline
+	j		print_saved_registers_next
 print_saved_registers_done:
 	jal		print_newline
 	addi	sp, sp, (XLEN_BYTES*3)		# discard 5 extra local vars
 	POP_TP_S1_S0_RA_RET
 .size print_saved_registers, .-print_saved_registers
+
+
+.section .rodata
+
+string_register_dump:
+	.string "register dump:";
 

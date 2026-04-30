@@ -8,6 +8,7 @@
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"
 #include "risc-v/register.h"
+#include "risc-v/sbi.h"
 #include "plutonic/stack.h"
 
 .global uart_init
@@ -131,20 +132,9 @@ uart_output_string_done:
 # output one char to console via SBI
 # in: char (ASCII) in a0
 uart_output_char:
-/* TODO: do we really need this?
-	addi	sp, sp, -(XLEN_BYTES*4)	
-	SAVE_X	a0, 0(sp)
-	SAVE_X	a6, (XLEN_BYTES*1)(sp)
-	SAVE_X	a7, (XLEN_BYTES*2)(sp)
-*/
-									# char to be printed in a0 already
-	mv		a6, zero				# SBI fid
-	li		a7, 1					# SBI eid
+	li		a6, SBI_LEGACY
+	li		a7, EID_sbi_console_putchar
 	ecall
-//	LOAD_X	a0, 0(sp)
-//	LOAD_X	a6, (XLEN_BYTES*1)(sp)
-//	LOAD_X	a7, (XLEN_BYTES*2)(sp)
-//	addi	sp, sp, (XLEN_BYTES*4)
 	ret
 .size uart_output_char, .-uart_output_char
 

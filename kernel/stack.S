@@ -23,8 +23,8 @@
 .global pop_s1_s0_ra_ret
 .global pop_tp_s1_s0_ra_ret						# use tp like another s register
 
-.global print_saved_int_registers
-.global print_saved_float_registers
+.global log_saved_int_registers
+.global log_saved_float_registers
 
 
 .text
@@ -79,7 +79,7 @@ pop_ra_ret:
 .size pop_tp_s1_s0_ra_ret, .-pop_tp_s1_s0_ra_ret
 
 
-print_saved_int_registers:
+log_saved_int_registers:
 	PUSH_RA
 	la		a0, get_int_register_name_by_index
 	li		a1, 1
@@ -89,21 +89,21 @@ print_saved_int_registers:
 	# (XLEN_BYTES are also added to compensate for the pushing ra on entry here)
 	addi	a3, sp, XLEN_BYTES + STK_FRAME_SIZE_FLOAT + STK_OFF_RA
 	li		a4, XLEN_BYTES
-	jal		print_saved_registers
+	jal		log_saved_registers
 	POP_RA_RET
-.size print_saved_int_registers, .-print_saved_int_registers
+.size log_saved_int_registers, .-log_saved_int_registers
 
 
-print_saved_float_registers:
+log_saved_float_registers:
 	PUSH_RA
 	la		a0, get_float_register_name_by_index
 	li		a1, 0
 	li		a2, 31 
 	addi	a3, sp,  XLEN_BYTES						# compensate for ra pushed on entry
 	li		a4, FLEN_BYTES
-	jal		print_saved_registers
+	jal		log_saved_registers
 	POP_RA_RET
-.size print_saved_float_registers, .-print_saved_float_registers
+.size log_saved_float_registers, .-log_saved_float_registers
 
 
 # dump registers saved on stack
@@ -111,17 +111,16 @@ print_saved_float_registers:
 # in: a1 = first register index
 # in: a2 = last register index
 # in: a3 = stack frame base addr
-print_saved_registers:
+log_saved_registers:
 	PUSH_TP_S1_S0_RA
 	addi	sp, sp, -(XLEN_BYTES*3)		# 3 extra local vars
 	SAVE_X 	a0, 0(sp)					# register name lookup func ptr
 	SAVE_X 	zero, (XLEN_BYTES*1)(sp)	# counting regs per line
 	SAVE_X	zero, (XLEN_BYTES*2)(sp)	# name string ptr
-
 	mv		s1, a1						# first register index
 	mv		tp, a2						# last register index
 	mv		s0, a3						# stack frame base addr
-print_saved_registers_next:
+log_saved_registers_next:
 	li		t0, 4						# registers per line
 	SAVE_X	t0, (XLEN_BYTES*1)(sp)
 	mv		s2, a0
@@ -131,29 +130,29 @@ print_saved_registers_next:
 	jal		log_no_newline
 	mv		a0, s2
 	mv		a1, s3
-print_saved_registers_skip_newline:
+log_saved_registers_skip_newline:
 	mv		a0, s1						# index of register
 	LOAD_X	t0, 0(sp)					# register name lookup func ptr
 	jalr	t0
 	SAVE_X	a0, (XLEN_BYTES*2)(sp)
 	# determine length of found name
 	li		t1, 0						# len counter
-print_saved_registers_len_loop:
+log_saved_registers_len_loop:
 	lb		t0, 0(a0)
-	beqz	t0, print_saved_registers_len_done
+	beqz	t0, log_saved_registers_len_done
 	addi	a0, a0, 1
 	addi	t1, t1, 1
-	j		print_saved_registers_len_loop
-print_saved_registers_len_done:
+	j		log_saved_registers_len_loop
+log_saved_registers_len_done:
 	# length now in t1, print spaces if register name is shorter than 6
 	li		t2, 6						
 	sub 	a5, t2, t1
-print_saved_registers_space_loop:
-	beqz	a5, print_saved_registers_skip_space
+log_saved_registers_space_loop:
+	beqz	a5, log_saved_registers_skip_space
 	jal		print_space
 	addi	a5, a5, -1
-	j 		print_saved_registers_space_loop
-print_saved_registers_skip_space:
+	j 		log_saved_registers_space_loop
+log_saved_registers_skip_space:
 	LOAD_X	a0, (XLEN_BYTES*2)(sp)
 	jal		print_string				# register name
 	li		a0, '='
@@ -162,22 +161,22 @@ print_saved_registers_skip_space:
 	jal		print_hex_addr
 	# check if all registers done
 	li		t0, 31						# last valid index in any case
-	bge		s1, t0, print_saved_registers_done
+	bge		s1, t0, log_saved_registers_done
 	# stop also if register specified in tp reached
-	beq		s1, tp, print_saved_registers_done
+	beq		s1, tp, log_saved_registers_done
 	addi	s0, s0, XLEN_BYTES			# next register
 	addi	s1, s1, 1					# next register name
 	LOAD_X	t0, (XLEN_BYTES*1)(sp)
 	addi	t0, t0, -1					# count number of printed registers
 	SAVE_X	t0, (XLEN_BYTES*1)(sp)
-	bnez	t0, print_saved_registers_skip_newline
+	bnez	t0, log_saved_registers_skip_newline
 	jal		print_newline
-	j		print_saved_registers_next
-print_saved_registers_done:
+	j		log_saved_registers_next
+log_saved_registers_done:
 	jal		print_newline
 	addi	sp, sp, (XLEN_BYTES*3)		# discard 5 extra local vars
 	POP_TP_S1_S0_RA_RET
-.size print_saved_registers, .-print_saved_registers
+.size log_saved_registers, .-log_saved_registers
 
 
 .section .rodata

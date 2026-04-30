@@ -52,26 +52,22 @@ start:
 	# set up trap vector
 	la		t0, trap_handler
 	csrw	stvec, t0
-
 	# disable external and software IRQs
 	li		t0, SIE_SSIE | SIE_SEIE
 	csrc	sie, t0
-
 	# set time for next timer IRQ
 	jal		set_timer
 	# enable timer IRQs
 	li		t0, SIE_STIE
 	csrs	sie, t0
-
 	# enable S-mode irqs again
 	csrsi	sstatus, SSTATUS_SIE
-
 
 	#-------------------- print dtb
 	la		t0, dtb
 	LOAD_X	a0, 0(t0)
 	jal		print_dtb
-	beqz	a0, dtb_ok
+	beqz	a0, dtb_done
 	mv		s1, a0					# save error code
 	li		a0, LOG_ERR
 	la		a1, string_dtb_error
@@ -79,7 +75,7 @@ start:
 	mv		a0, s1
 	jal		print_hex
 	jal		print_newline
-dtb_ok:
+dtb_done:
 
 	#-------------------- check exception catching
 	# check ILLEGAL_INSTRUCTION exception
@@ -99,7 +95,7 @@ forever:
 	# check that s1 will be preserved in the loop
 	addi	s1, s1, 1
 
-//	DUMP_ALL_REGISTERS
+	LOG_ALL_REGISTERS
 
 	j		forever
 .size start, .-start

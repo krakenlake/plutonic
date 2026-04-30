@@ -119,8 +119,8 @@ output_cause:
 	# end of printing
 	jal		print_newline
 	# dump registers to log
-	jal 	print_saved_int_registers;
-	jal		print_saved_float_registers;
+	jal 	log_saved_int_registers;
+	jal		log_saved_float_registers;
 	j 		exit_trap_handler
 
 

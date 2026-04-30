@@ -132,9 +132,18 @@ uart_output_string_done:
 # output one char to console via SBI
 # in: char (ASCII) in a0
 uart_output_char:
-	li		a6, SBI_LEGACY
-	li		a7, EID_sbi_console_putchar
+	# save a0 and a1 over SBI call
+	addi	sp, sp, -16
+	SAVE_X	a0, 0(sp)
+	SAVE_X	a1, 8(sp)
+	# call SBI
+	li		a7, SBI_EXT_DBCN
+	li		a6, EID_sbi_debug_console_write_byte
 	ecall
+	# restore a0, a1
+	LOAD_X	a0, 0(sp)
+	LOAD_X	a1, 8(sp)
+	addi	sp, sp, 16
 	ret
 .size uart_output_char, .-uart_output_char
 

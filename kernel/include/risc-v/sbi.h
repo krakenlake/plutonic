@@ -8,6 +8,7 @@
 #define PLUTONIC_SBI_H
 
 /*
+ * based on:
  * RISC-V Supervisor Binary Interface Specification
  * Version v3.0, 2025-07-16: Ratified
  */
@@ -30,19 +31,22 @@
 
 
 /*
- * Base extension
+ * Legacy extension
  */
 #define SBI_LEGACY					0
 #define EID_sbi_console_putchar		1
 
- #define SBI_EXT_BASE				0x10
-#define sbi_get_spec_version		0
-#define sbi_get_impl_id				1
-#define sbi_get_impl_version		2
-#define sbi_probe_extension			3
-#define sbi_get_mvendorid			4
-#define sbi_get_marchid				5
-#define sbi_get_mimpid				6
+/*
+ * Base extension
+ */
+#define SBI_EXT_BASE					0x10
+#define EID_sbi_get_spec_version		0
+#define EID_sbi_get_impl_id				1
+#define EID_sbi_get_impl_version		2
+#define EID_sbi_probe_extension			3
+#define EID_sbi_get_mvendorid			4
+#define EID_sbi_get_marchid				5
+#define EID_sbi_get_mimpid				6
 
 #define SBI_EXT_TIME	0x54494D45
 
@@ -58,8 +62,13 @@
 
 #define SBI_EXT_PMU		0x504D55
 
+/*
+ * Debug console extension
+ */
 #define SBI_EXT_DBCN						0x4442434E
-#define sbi_debug_console_write_byte	2
+#define EID_sbi_debug_console_write			0
+#define EID_sbi_debug_console_read			1
+#define EID_sbi_debug_console_write_byte	2
 
 #define SBI_EXT_STA		0x535441
 

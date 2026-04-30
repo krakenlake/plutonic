@@ -5,16 +5,19 @@
 ## Disclaimer
 This is my experimental kernel tinkering project and currently not doing anything exciting.
 
-## Current features
+## Currently implemented
 - build system supporting mix of assembly and C
 - booting into S-mode using OpenSBI
 - getting IRQs under control
 - setting up an early stack
-- console output
+- console output via OpenSBI
 - printing a banner
 - setting up a timer IRQ
+- waiting for IRQ loop
 - printing debug output
 - catching and printing exceptions
+- full register dumps
+- checking for device tree
 
 ## Targets
 - RV64G (short for RV64IMAFD_Zicsr_Zifencei)

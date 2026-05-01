@@ -147,9 +147,11 @@ log_saved_registers_len_done:
 	# length now in t1, print spaces if register name is shorter than 6
 	li		t2, 6						
 	sub 	a5, t2, t1
+	# print spaces
+	li		a0, ' '
 log_saved_registers_space_loop:
 	beqz	a5, log_saved_registers_skip_space
-	jal		print_space
+	jal		print_char
 	addi	a5, a5, -1
 	j 		log_saved_registers_space_loop
 log_saved_registers_skip_space:

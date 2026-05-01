@@ -9,9 +9,7 @@
 #include "plutonic/stack.h"
 #include "risc-v/register.h"
 
-.global print_comma
 .global print_newline
-.global print_space
 .global print_hex
 .global print_hex_raw
 .global print_hex_byte
@@ -30,17 +28,6 @@
 .text
 
 
-print_comma:
-	PUSH_RA
-	li		a0, ','
-	jal		print_char
-	#ifdef SPACE_AFTER_COMMA
-		jal		print_space
-	#endif
-	POP_RA_RET
-.size print_comma, .-print_comma
-
-
 print_newline:
 	PUSH_RA
 	#ifdef USE_CRLF
@@ -51,13 +38,6 @@ print_newline:
 	jal		print_char
 	POP_RA_RET
 .size print_newline, .-print_newline
-
-
-print_space:
-	li		a0, ' '
-	j		print_char
-.size print_space, .-print_space
-
 
 
 # print hex value with "0x" prefix

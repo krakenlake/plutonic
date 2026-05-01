@@ -57,28 +57,28 @@ log_saved_float_registers:
 # in: a3 = stack frame base addr
 log_saved_registers:
 	addi	sp, sp, -(XLEN_BYTES*9)
-	SAVE_X	s4, 0(sp)
+	SAVE_X	s0, 0(sp)
 	SAVE_X	s1, (XLEN_BYTES*1)(sp)
-	SAVE_X	s0, (XLEN_BYTES*2)(sp)
-	SAVE_X	s2, (XLEN_BYTES*3)(sp)
-	SAVE_X	s3, (XLEN_BYTES*4)(sp)
+	SAVE_X	s2, (XLEN_BYTES*2)(sp)
+	SAVE_X	s3, (XLEN_BYTES*3)(sp)
+	SAVE_X	s4, (XLEN_BYTES*4)(sp)
 	SAVE_X	s5, (XLEN_BYTES*5)(sp)
 	SAVE_X	s6, (XLEN_BYTES*6)(sp)
 	SAVE_X	s7, (XLEN_BYTES*7)(sp)
 	SAVE_X	ra, (XLEN_BYTES*8)(sp)
-	mv		s5, a0							# register name lookup func ptr
-	li		s7, 0
+	mv		s0, a3						# stack frame base addr
 	mv		s1, a1						# first register index
 	mv		s4, a2						# last register index
-	mv		s0, a3						# stack frame base addr
+	mv		s5, a0						# register name lookup func ptr
+	li		s7, 0
 log_saved_registers_next:
-	li		s6, 4
+	li		s6, 4						# 4 registers per line
 	mv		s2, a0
 	mv		s3, a1
 	li		a0, LOG_DEBUG
 	la		a1, string_register_dump
 	jal		log_no_newline
-	mv		a0, s2
+	# prepare lookup function call
 	mv		a1, s3
 log_saved_registers_skip_newline:
 	mv		a0, s1						# index of register
@@ -123,11 +123,11 @@ log_saved_registers_skip_space:
 	j		log_saved_registers_next
 log_saved_registers_done:
 	jal		print_newline
-	LOAD_X	s4, 0(sp)
+	LOAD_X	s0, 0(sp)
 	LOAD_X	s1, (XLEN_BYTES*1)(sp)
-	LOAD_X	s0, (XLEN_BYTES*2)(sp)
-	LOAD_X	s2, (XLEN_BYTES*3)(sp)
-	LOAD_X	s3, (XLEN_BYTES*4)(sp)
+	LOAD_X	s2, (XLEN_BYTES*2)(sp)
+	LOAD_X	s3, (XLEN_BYTES*3)(sp)
+	LOAD_X	s4, (XLEN_BYTES*4)(sp)
 	LOAD_X	s5, (XLEN_BYTES*5)(sp)
 	LOAD_X	s6, (XLEN_BYTES*6)(sp)
 	LOAD_X	s7, (XLEN_BYTES*7)(sp)

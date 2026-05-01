@@ -11,18 +11,6 @@
 #include "plutonic/log.h"
 
 
-# PUSH
-.global push_ra
-.global push_s0_ra
-.global push_s1_s0_ra
-.global push_tp_s1_s0_ra						# use tp like another s register 
-
-# POP
-.global pop_ra_ret
-.global pop_s0_ra_ret
-.global pop_s1_s0_ra_ret
-.global pop_tp_s1_s0_ra_ret						# use tp like another s register
-
 .global log_saved_int_registers
 .global log_saved_float_registers
 
@@ -30,57 +18,9 @@
 .text
 
 
-# for function prologue optimisation (shorter code in total)
-push_ra:
+log_saved_int_registers:
 	addi	sp, sp, -(XLEN_BYTES*1)	
 	SAVE_X	ra, 0(sp)
-	jr		gp
-.size push_ra, .-push_ra
-
-push_s0_ra:
-	addi	sp, sp, -(XLEN_BYTES*2)
-	SAVE_X	s0, 0(sp)
-	SAVE_X	ra, (XLEN_BYTES*1)(sp)
-	jr		gp
-.size push_s0_ra, .-push_s0_ra
-
-push_s1_s0_ra:
-	addi	sp, sp, -(XLEN_BYTES*3)
-	SAVE_X	s1, 0(sp)
-	SAVE_X	s0, (XLEN_BYTES*1)(sp)
-	SAVE_X	ra, (XLEN_BYTES*2)(sp)
-	jr		gp
-.size push_s1_s0_ra, .-push_s1_s0_ra
-
-push_tp_s1_s0_ra:
-	addi	sp, sp, -(XLEN_BYTES*4)
-	SAVE_X	tp, 0(sp)
-	SAVE_X	s1, (XLEN_BYTES*1)(sp)
-	SAVE_X	s0, (XLEN_BYTES*2)(sp)
-	SAVE_X	ra, (XLEN_BYTES*3)(sp)
-	jr		gp
-.size push_tp_s1_s0_ra, .-push_tp_s1_s0_ra
-
-
-# for function epilogue optimisation (shorter code in total)
-pop_tp_s1_s0_ra_ret:
-	LOAD_X	tp, 0(sp)
-	addi	sp, sp, (XLEN_BYTES*1)
-pop_s1_s0_ra_ret:
-	LOAD_X	s1, 0(sp)
-	addi	sp, sp, (XLEN_BYTES*1)
-pop_s0_ra_ret:
-	LOAD_X	s0, 0(sp)
-	addi	sp, sp, (XLEN_BYTES*1)
-pop_ra_ret:
-	LOAD_X	ra, 0(sp)
-	addi	sp, sp, (XLEN_BYTES*1)
-	ret
-.size pop_tp_s1_s0_ra_ret, .-pop_tp_s1_s0_ra_ret
-
-
-log_saved_int_registers:
-	PUSH_RA
 	la		a0, get_int_register_name_by_index
 	li		a1, 1
 	li		a2, 31
@@ -90,19 +30,24 @@ log_saved_int_registers:
 	addi	a3, sp, XLEN_BYTES + STK_FRAME_SIZE_FLOAT + STK_OFF_RA
 	li		a4, XLEN_BYTES
 	jal		log_saved_registers
-	POP_RA_RET
+	LOAD_X	ra, 0(sp)
+	addi	sp, sp, (XLEN_BYTES*1)
+	ret
 .size log_saved_int_registers, .-log_saved_int_registers
 
 
 log_saved_float_registers:
-	PUSH_RA
+	addi	sp, sp, -(XLEN_BYTES*1)	
+	SAVE_X	ra, 0(sp)
 	la		a0, get_float_register_name_by_index
 	li		a1, 0
 	li		a2, 31 
 	addi	a3, sp,  XLEN_BYTES						# compensate for ra pushed on entry
 	li		a4, FLEN_BYTES
 	jal		log_saved_registers
-	POP_RA_RET
+	LOAD_X	ra, 0(sp)
+	addi	sp, sp, (XLEN_BYTES*1)
+	ret
 .size log_saved_float_registers, .-log_saved_float_registers
 
 
@@ -112,7 +57,12 @@ log_saved_float_registers:
 # in: a2 = last register index
 # in: a3 = stack frame base addr
 log_saved_registers:
-	PUSH_TP_S1_S0_RA
+	addi	sp, sp, -(XLEN_BYTES*4)
+	SAVE_X	tp, 0(sp)
+	SAVE_X	s1, (XLEN_BYTES*1)(sp)
+	SAVE_X	s0, (XLEN_BYTES*2)(sp)
+	SAVE_X	ra, (XLEN_BYTES*3)(sp)
+	# TODO: clean this up
 	addi	sp, sp, -(XLEN_BYTES*3)		# 3 extra local vars
 	SAVE_X 	a0, 0(sp)					# register name lookup func ptr
 	SAVE_X 	zero, (XLEN_BYTES*1)(sp)	# counting regs per line
@@ -177,7 +127,13 @@ log_saved_registers_skip_space:
 log_saved_registers_done:
 	jal		print_newline
 	addi	sp, sp, (XLEN_BYTES*3)		# discard 5 extra local vars
-	POP_TP_S1_S0_RA_RET
+	LOAD_X	tp, 0(sp)
+	LOAD_X	s1, (XLEN_BYTES*1)(sp)
+	LOAD_X	s0, (XLEN_BYTES*2)(sp)
+	LOAD_X	ra, (XLEN_BYTES*3)(sp)
+	addi	sp, sp, (XLEN_BYTES*4)
+	ret
+
 .size log_saved_registers, .-log_saved_registers
 
 

@@ -57,7 +57,10 @@ uart_get_char_wait:
 # get a line of input from UART until RETURN is hit
 # out: buffer start in a0
 uart_getline:
-	PUSH_S1_S0_RA
+	addi	sp, sp, -(XLEN_BYTES*3)
+	SAVE_X	s1, 0(sp)
+	SAVE_X	s0, (XLEN_BYTES*1)(sp)
+	SAVE_X	ra, (XLEN_BYTES*2)(sp)
 	jal		uart_clear_buffer
 	la		s0, uart_input_buffer
 	mv		s1, s0								# save a copy in s1 for later
@@ -101,14 +104,19 @@ uart_getline_done:
 	jal uart_output_char
 	# return buffer address
 	mv		a0, s1
-	POP_S1_S0_RA_RET
+	LOAD_X	s1, 0(sp)
+	LOAD_X	s0, (XLEN_BYTES*1)(sp)
+	LOAD_X	ra, (XLEN_BYTES*2)(sp)
+	addi	sp, sp, (XLEN_BYTES*3)
+	ret
 .size uart_getline, .-uart_getline
 
 
 # output zero-terminated string
 # in: string ptr in a0
 uart_output_string:
-	PUSH_RA
+	addi	sp, sp, -(XLEN_BYTES*1)	
+	SAVE_X	ra, 0(sp)
 	mv		a1, a0
 uart_output_string_loop:
 	lb		a0, 0(a1)
@@ -125,7 +133,9 @@ uart_output_string_char:
 	addi	a1, a1, 1
 	j		uart_output_string_loop
 uart_output_string_done:
-	POP_RA_RET
+	LOAD_X	ra, 0(sp)
+	addi	sp, sp, (XLEN_BYTES*1)
+	ret
 .size uart_output_string, .-uart_output_string
 
 

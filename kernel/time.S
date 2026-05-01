@@ -20,8 +20,11 @@ get_timestamp:
 .size get_timestamp, .-get_timestamp
 
 print_timestamp:
-	PUSH_RA
+	addi	sp, sp, -(XLEN_BYTES*1)	
+	SAVE_X	ra, 0(sp)
 	rdtime	a0
 	jal		print_decimal
-	POP_RA_RET
+	LOAD_X	ra, 0(sp)
+	addi	sp, sp, (XLEN_BYTES*1)
+	ret
 .size print_timestamp, .-print_timestamp

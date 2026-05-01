@@ -94,18 +94,6 @@
 #define STK_OFF_F31				(FLEN_BYTES*31)
 
 /*
- * function prologue/epilogue optimisation
- */
-#define PUSH_RA						jal		gp, push_ra
-#define POP_RA_RET					j		pop_ra_ret
-#define PUSH_S0_RA					jal		gp, push_s0_ra
-#define POP_S0_RA_RET				j		pop_s0_ra_ret
-#define PUSH_S1_S0_RA				jal		gp, push_s1_s0_ra
-#define POP_S1_S0_RA_RET			j		pop_s1_s0_ra_ret
-#define PUSH_TP_S1_S0_RA			jal		gp, push_tp_s1_s0_ra
-#define POP_TP_S1_S0_RA_RET			j		pop_tp_s1_s0_ra_ret
-
-/*
  * push/pop registers
  */
 #define PUSH_ALL_INT_REGISTERS \

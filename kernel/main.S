@@ -6,7 +6,7 @@
  */
 #include "config.h"
 #include "plutonic/drivers/uart/ns16550.h"
-#include "plutonic/ASCII.h"
+#include <plutonic/ASCII.h>
 #include "plutonic/trap.h"
 #include "plutonic/log.h"
 #include "plutonic/stack.h"

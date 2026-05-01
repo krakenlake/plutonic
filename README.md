@@ -34,7 +34,7 @@ This is my experimental kernel tinkering project and currently not doing anythin
 
 <sub>
 
-### Learning from examples
+### Getting started
 
 https://operating-system-in-1000-lines.vercel.app/en/
 
@@ -70,11 +70,17 @@ https://www.thegoodpenguin.co.uk/blog/an-overview-of-opensbi/
 
 https://www.cs.cornell.edu/courses/cs4411/2022fa/schedule/slides/week5_timer_interrupt.pdf
 
+### Standard C library
+
 https://github.com/picolibc/picolibc
 
 https://github.com/plctlab/mlibc
 
 https://github.com/rsenn/dietlibc
+
+### Graphics
+
+https://anchorboot.org/posts/2024/04/21/vga-text-mode.html
 
 ### References
 

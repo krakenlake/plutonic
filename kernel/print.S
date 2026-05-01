@@ -206,9 +206,10 @@ print_decimal_skip_invert:
 print_decimal_loop:
 	# dec buffer ptr
 	addi	s0, s0, -1
-	li		a1, 10
-	# a0 = quotient, a1 = divisor
-	jal		divrem
+	li		t1, 10
+	# a0 = quotient, t1 = divisor
+	rem		a1, a0, t1
+	div		a0, a0, t1
 	# output digit as ASCII to buffer
 	addi	t0, a1, 48
 	sb		t0, 0(s0)

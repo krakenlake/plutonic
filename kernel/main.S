@@ -12,7 +12,6 @@
 #include "plutonic/stack.h"
 #include "risc-v/register.h"
 
-
 .global start
 
 

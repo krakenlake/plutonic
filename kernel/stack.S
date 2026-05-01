@@ -10,7 +10,6 @@
 #include "risc-v/register.h"
 #include "plutonic/log.h"
 
-
 .global log_saved_int_registers
 .global log_saved_float_registers
 
@@ -57,22 +56,23 @@ log_saved_float_registers:
 # in: a2 = last register index
 # in: a3 = stack frame base addr
 log_saved_registers:
-	addi	sp, sp, -(XLEN_BYTES*4)
-	SAVE_X	tp, 0(sp)
+	addi	sp, sp, -(XLEN_BYTES*9)
+	SAVE_X	s4, 0(sp)
 	SAVE_X	s1, (XLEN_BYTES*1)(sp)
 	SAVE_X	s0, (XLEN_BYTES*2)(sp)
-	SAVE_X	ra, (XLEN_BYTES*3)(sp)
-	# TODO: clean this up
-	addi	sp, sp, -(XLEN_BYTES*3)		# 3 extra local vars
-	SAVE_X 	a0, 0(sp)					# register name lookup func ptr
-	SAVE_X 	zero, (XLEN_BYTES*1)(sp)	# counting regs per line
-	SAVE_X	zero, (XLEN_BYTES*2)(sp)	# name string ptr
+	SAVE_X	s2, (XLEN_BYTES*3)(sp)
+	SAVE_X	s3, (XLEN_BYTES*4)(sp)
+	SAVE_X	s5, (XLEN_BYTES*5)(sp)
+	SAVE_X	s6, (XLEN_BYTES*6)(sp)
+	SAVE_X	s7, (XLEN_BYTES*7)(sp)
+	SAVE_X	ra, (XLEN_BYTES*8)(sp)
+	mv		s5, a0							# register name lookup func ptr
+	li		s7, 0
 	mv		s1, a1						# first register index
-	mv		tp, a2						# last register index
+	mv		s4, a2						# last register index
 	mv		s0, a3						# stack frame base addr
 log_saved_registers_next:
-	li		t0, 4						# registers per line
-	SAVE_X	t0, (XLEN_BYTES*1)(sp)
+	li		s6, 4
 	mv		s2, a0
 	mv		s3, a1
 	li		a0, LOG_DEBUG
@@ -82,9 +82,8 @@ log_saved_registers_next:
 	mv		a1, s3
 log_saved_registers_skip_newline:
 	mv		a0, s1						# index of register
-	LOAD_X	t0, 0(sp)					# register name lookup func ptr
-	jalr	t0
-	SAVE_X	a0, (XLEN_BYTES*2)(sp)
+	jalr	s5
+	mv		s7, a0
 	# determine length of found name
 	li		t1, 0						# len counter
 log_saved_registers_len_loop:
@@ -105,7 +104,7 @@ log_saved_registers_space_loop:
 	addi	a5, a5, -1
 	j 		log_saved_registers_space_loop
 log_saved_registers_skip_space:
-	LOAD_X	a0, (XLEN_BYTES*2)(sp)
+	mv		a0, s7
 	jal		print_string				# register name
 	li		a0, '='
 	jal		print_char
@@ -114,24 +113,26 @@ log_saved_registers_skip_space:
 	# check if all registers done
 	li		t0, 31						# last valid index in any case
 	bge		s1, t0, log_saved_registers_done
-	# stop also if register specified in tp reached
-	beq		s1, tp, log_saved_registers_done
+	# stop also if register specified in s4 reached
+	beq		s1, s4, log_saved_registers_done
 	addi	s0, s0, XLEN_BYTES			# next register
 	addi	s1, s1, 1					# next register name
-	LOAD_X	t0, (XLEN_BYTES*1)(sp)
-	addi	t0, t0, -1					# count number of printed registers
-	SAVE_X	t0, (XLEN_BYTES*1)(sp)
-	bnez	t0, log_saved_registers_skip_newline
+	addi	s6, s6, -1
+	bnez	s6, log_saved_registers_skip_newline
 	jal		print_newline
 	j		log_saved_registers_next
 log_saved_registers_done:
 	jal		print_newline
-	addi	sp, sp, (XLEN_BYTES*3)		# discard 5 extra local vars
-	LOAD_X	tp, 0(sp)
+	LOAD_X	s4, 0(sp)
 	LOAD_X	s1, (XLEN_BYTES*1)(sp)
 	LOAD_X	s0, (XLEN_BYTES*2)(sp)
-	LOAD_X	ra, (XLEN_BYTES*3)(sp)
-	addi	sp, sp, (XLEN_BYTES*4)
+	LOAD_X	s2, (XLEN_BYTES*3)(sp)
+	LOAD_X	s3, (XLEN_BYTES*4)(sp)
+	LOAD_X	s5, (XLEN_BYTES*5)(sp)
+	LOAD_X	s6, (XLEN_BYTES*6)(sp)
+	LOAD_X	s7, (XLEN_BYTES*7)(sp)
+	LOAD_X	ra, (XLEN_BYTES*8)(sp)
+	addi	sp, sp, (XLEN_BYTES*9)
 	ret
 
 .size log_saved_registers, .-log_saved_registers

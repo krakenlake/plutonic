@@ -95,12 +95,12 @@ uart_input_is_delete:
 uart_continue_not_delete:
 	# output char in a0
 	jal		uart_output_char
-	li		t0, ASCII_RETURN
+	li		t0, ASCII_CR
 	beq		a0, t0, uart_getline_done
 	j		uart_get_char
 uart_getline_done:
 	# print LF to follow read CR
-	li a0, ASCII_NEWLINE
+	li a0, ASCII_LF
 	jal uart_output_char
 	# return buffer address
 	mv		a0, s1
@@ -142,10 +142,20 @@ uart_output_string_done:
 # output one char to console via SBI
 # in: char (ASCII) in a0
 uart_output_char:
-	# save a0 and a1 over SBI call
+	# save a0 and a1 over SBI calls
 	addi	sp, sp, -16
 	SAVE_X	a0, 0(sp)
 	SAVE_X	a1, 8(sp)
+	# print CR first if we have an LF to print
+	li		t0, ASCII_LF
+	bne		a0, t0,uart_output_char_skip_CR
+	# call SBI
+	li		a0, ASCII_CR
+	li		a7, SBI_EXT_DBCN
+	li		a6, EID_sbi_debug_console_write_byte
+	ecall
+	LOAD_X	a0, 0(sp)
+uart_output_char_skip_CR:
 	# call SBI
 	li		a7, SBI_EXT_DBCN
 	li		a6, EID_sbi_debug_console_write_byte

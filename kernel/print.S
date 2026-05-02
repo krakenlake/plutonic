@@ -30,11 +30,7 @@
 print_newline:
 	addi	sp, sp, -(XLEN_BYTES*1)	
 	SAVE_X	ra, 0(sp)
-	#ifdef USE_CRLF
-		li		a0, ASCII_RETURN
-		jal		print_char
-	#endif
-	li		a0, ASCII_NEWLINE
+	li		a0, ASCII_LF
 	jal		print_char
 	LOAD_X	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)

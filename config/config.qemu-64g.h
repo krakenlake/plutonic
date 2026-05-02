@@ -18,11 +18,6 @@
 // include strings for verbose error messages?
 #define ERROR_VERBOSE
 
-// print a CR before each LF
-// Note: at higher levels this varies by system but at this level most
-// things expect both.
-#define USE_CRLF
-
 // size of character input buffer in bytes
 #define BUFFER_SIZE			80
 

@@ -76,6 +76,7 @@ devicetree: Makefile
 clean:
 	rm -fr $(BUILDROOT) $(RELEASE)
 
+# install or update development toolchain on MacOS
 devtools-mac:
 	brew install riscv64-elf-gcc
 	brew install riscv64-elf-gdb

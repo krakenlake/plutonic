@@ -10,6 +10,7 @@
 #include "plutonic/trap.h"
 #include "plutonic/log.h"
 #include "plutonic/stack.h"
+#include "plutonic/console.h"
 #include "risc-v/register.h"
 
 .global start
@@ -45,7 +46,7 @@ start:
 
 	#-------------------- startup message
 	la		a0, string_startup
-	jal		print_string
+	jal		console_out
 
 	#-------------------- IRQ setup
 	# set up trap vector

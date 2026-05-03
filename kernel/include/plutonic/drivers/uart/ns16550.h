@@ -32,6 +32,10 @@
 	#define UART_MODE_8N1   0b00000011
 #endif
 
+#ifndef __ASSEMBLER__
+	void uart_output_char(char c);
+#endif
+
 
 
 #endif /* PLUTONIC_UART_H */

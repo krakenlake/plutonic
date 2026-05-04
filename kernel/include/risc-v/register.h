@@ -6,6 +6,7 @@
  */
 #ifndef PLUTONIC_REGISTER_H
 #define PLUTONIC_REGISTER_H
+#include "config.h"
 
 
 /*

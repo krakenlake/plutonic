@@ -8,6 +8,8 @@
 #ifndef LIBPLTNC_STRING_H
 #define LIBPLTNC_STRING_H
 
-
+#ifndef __ASSEMBLER__
+	extern char* strcat(char *str1, char *str2);
+#endif
 
 #endif /* LIBPLTNC_STRING_H */

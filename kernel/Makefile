@@ -71,8 +71,11 @@ CFLAGS += -fPIC
 CFLAGS += -fPIE
 # gcc must not try to replace anything with built-in stuff
 CFLAGS += -fno-builtin
+CFLAGS += -ffreestanding
 # no crt0
 CFLAGS += -nostartfiles
+# we need frame pointers for stack unwinding(?)
+CFLAGS += -fno-omit-frame-pointer
 # optimisation
 CFLAGS += -O2
 # add debug symbols
@@ -81,7 +84,8 @@ CFLAGS += -g
 PLUTONIC_CFLAGS ?= $(CFLAGS)
 # needed to access memory beyond 0x7fffffff
 PLUTONIC_CFLAGS += -mcmodel=medany
-PLUTONIC_CFLAGS += -I"./include"
+PLUTONIC_CFLAGS += -I"../kernel/include"
+PLUTONIC_CFLAGS += -I"../libpltnc/include"
 
 # LDFLAGS
 PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv

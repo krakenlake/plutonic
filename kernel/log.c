@@ -10,6 +10,9 @@
 #include "plutonic/time.h"
 #include "plutonic/types.h"
 #include "plutonic/stack.h"
+#include "plutonic/console.h"
+#include "plutonic/ASCII.h"
+#include "string.h"
 
 
  char *loglevel_string[8] = {
@@ -23,14 +26,8 @@
 	"DEBUG"
  };
 
-
-/*
- * current global kernel log level
- */
-int kernel_log_level = LOG_DEBUG;		// default value at boot time
-
-char *string_log_sender = "kernel\0";
-
+int kernel_log_level = LOG_DEBUG;			// gobal kernel log level (default)
+char *string_log_sender = "kernel\0";		// global kernel sender ID
 
 /*
  * standard/default log function
@@ -77,18 +74,31 @@ void log_str(int level, char *str, char *c)
  */
 void do_log(int level, char *str, int newline)
 {
+	char buf[256];
+	char *p = buf;
+	u64 timestamp;
+
 	if (level < 0 || level > LOG_DEBUG || level > kernel_log_level) return;
 
-	print_timestamp();
+	timestamp = get_timestamp();
+	print_decimal(timestamp);
 
-	print_char(LOG_DELIM);
-	print_string(loglevel_string[level]);
+	buf[0] = LOG_DELIM;
+	buf[1] = '\0';
+	strcat(buf, loglevel_string[level]);
 
-	print_char(LOG_DELIM);
-	print_string(string_log_sender);
+	char delim_str[2] = {LOG_DELIM , '\0'};
+	strcat(buf, delim_str);
+	strcat(buf, string_log_sender);
+	strcat(buf, delim_str);
+	strcat(buf, str);
 
-	print_char(LOG_DELIM);
-	print_string(str);
-
-	if (newline) print_newline();
+	console_out(buf);
+	if (newline){
+		p=buf;
+		*p++ = ASCII_LF;
+		*p++ = 0;
+		console_out(buf);
+	};
 }
+

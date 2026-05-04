@@ -18,13 +18,3 @@ get_timestamp:
 	rdtime	a0
 	ret
 .size get_timestamp, .-get_timestamp
-
-print_timestamp:
-	addi	sp, sp, -(XLEN_BYTES*1)	
-	SAVE_X	ra, 0(sp)
-	rdtime	a0
-	jal		print_decimal
-	LOAD_X	ra, 0(sp)
-	addi	sp, sp, (XLEN_BYTES*1)
-	ret
-.size print_timestamp, .-print_timestamp

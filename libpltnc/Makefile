@@ -72,10 +72,10 @@ $(LIBPLTNC_BUILD)/config.h: $(LIBPLTNC_CONFIG)/config.$(LIBPLTNC_TARGET).h
 	cp $< $@
 
 $(LIBPLTNC_BUILD)/%.o: ./%.S Makefile $(LIBPLTNC_BUILD)/config.h
-	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -I"$(LIBPLTNC_BUILD)" -MMD -c $< -o $@
+	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -Iinclude -MMD -c $< -o $@
 
 $(LIBPLTNC_BUILD)/%.o: ./%.c Makefile $(LIBPLTNC_BUILD)/config.h
-	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -I"$(LIBPLTNC_BUILD)" -MMD -c $< -o $@
+	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -Iinclude -MMD -c $< -o $@
 
 $(LIBPLTNC_RELEASE)/$(LIBPLTNC_NAME)-$(LIBPLTNC_TARGET).a: $(LIBPLTNC_BUILD)/$(LIBPLTNC_NAME).a
 	cp $< $@

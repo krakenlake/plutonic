@@ -84,8 +84,8 @@ void log_str(int level, char *msg, char *c)
 	char *p;
 	if (skip_message(level)) return;
 	p = begin_logline(level);
-	p = strchain(p, c);
 	p = strchain(p, msg);
+	p = strchain(p, c);
 	p = strchain(p, str_LF);
 	console_out(log_buf);
 }

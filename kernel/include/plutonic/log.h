@@ -23,12 +23,13 @@
 
 #ifndef __ASSEMBLER__
 	/* public */
-	void log(int level, char *str);
-	void log_no_newline(int level, char *str);
+	void log(int level, char *msg);
+	void log_no_newline(int level, char *msg);
 	void log_hex(int level, char *str, u64 val);
 	void log_str(int level, char *str, char *c);
 	/* private */
-	void do_log(int level, char *str, int newline);
+	int skip_message(int level);
+	char* begin_logline(int level);
 #endif
 
 

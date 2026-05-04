@@ -26,35 +26,51 @@
 	"DEBUG"
  };
 
-int kernel_log_level = LOG_DEBUG;			// gobal kernel log level (default)
-char *string_log_sender = "kernel\0";		// global kernel sender ID
-char delim_str[2] = {LOG_DELIM , '\0'};
-char str_LF[2] = {ASCII_LF , '\0'};
+
+int 	kernel_log_level = LOG_DEBUG;			// gobal kernel log level (default)
+char 	*string_log_sender = "kernel\0";		// global kernel sender ID
+char 	delim_str[2] = {LOG_DELIM, '\0'};
+char 	str_LF[2] = {ASCII_LF, '\0'};
+char	log_buf[1024];
+
 
 /*
  * standard/default log function
  */
-inline void log(int level, char *str)
+void log(int level, char *msg)
 {
-	do_log(level, str, 1);
+	char *p;
+	if (skip_message(level)) return;
+	p = begin_logline(level);
+	p = strchain(p, msg);
+	p = strchain(p, str_LF);
+	console_out(log_buf);
 }
 
 
 /*
  * log function that does not print newline at the end
  */
-inline void log_no_newline(int level, char *str)
+void log_no_newline(int level, char *msg)
 {
-	do_log(level, str, 0);
+	char *p;
+	if (skip_message(level)) return;
+	p = begin_logline(level);
+	p = strchain(p, msg);
+	console_out(log_buf);
 }
 
 
 /*
  * log a string and print hex value after that 
  */
-void log_hex(int level, char *str, u64 val)
+void log_hex(int level, char *msg, u64 val)
 {
-	log_no_newline(level, str);
+	char *p;
+	if (skip_message(level)) return;
+	p = begin_logline(level);
+	p = strchain(p, msg);
+	console_out(log_buf);
 	print_hex(val);
 	print_newline();
 }
@@ -63,36 +79,39 @@ void log_hex(int level, char *str, u64 val)
 /*
  * log a string and print another string after that
  */
-void log_str(int level, char *str, char *c)
+void log_str(int level, char *msg, char *c)
 {
-	log_no_newline(level, str);
-	while (*c != 0) print_char(*c++);
-	print_newline();
+	char *p;
+	if (skip_message(level)) return;
+	p = begin_logline(level);
+	p = strchain(p, c);
+	p = strchain(p, msg);
+	p = strchain(p, str_LF);
+	console_out(log_buf);
 }
 
 
 /*
- *  print str to console if level is <= current kernel log level 
+ *  check if message shall be printed at current loglevel 
  */
-void do_log(int level, char *str, int newline)
+inline int skip_message(int level)
 {
-	char buf[256];
-	char *p = buf;
-	u64 timestamp;
+	return (level < 0 || level > LOG_DEBUG || level > kernel_log_level);
+}
 
-	if (level < 0 || level > LOG_DEBUG || level > kernel_log_level) return;
 
-	timestamp = get_timestamp();
-	print_decimal(timestamp);
-
-	buf[0] = LOG_DELIM;
-	buf[1] = '\0';
-	p = strchain(&buf[1], loglevel_string[level]);
+/*
+ *  prepare prefix of logline in buffer 
+ */
+char* begin_logline(int level)
+{
+	char *p;
+	print_decimal(get_timestamp());
+	log_buf[0] = LOG_DELIM;
+	log_buf[1] = '\0';
+	p = strchain(&log_buf[1], loglevel_string[level]);
 	p = strchain(p, delim_str);
 	p = strchain(p, string_log_sender);
 	p = strchain(p, delim_str);
-	p = strchain(p, str);
-	if (newline) p = strchain(p, str_LF);
-	console_out(buf);
+	return p;
 }
-

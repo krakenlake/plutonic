@@ -12,7 +12,7 @@
 #include "plutonic/stack.h"
 #include "plutonic/console.h"
 #include "plutonic/ASCII.h"
-#include "string.h"
+#include "libpltnc/strings.h"
 
 
  char *loglevel_string[8] = {
@@ -28,6 +28,8 @@
 
 int kernel_log_level = LOG_DEBUG;			// gobal kernel log level (default)
 char *string_log_sender = "kernel\0";		// global kernel sender ID
+char delim_str[2] = {LOG_DELIM , '\0'};
+char str_LF[2] = {ASCII_LF , '\0'};
 
 /*
  * standard/default log function
@@ -85,20 +87,12 @@ void do_log(int level, char *str, int newline)
 
 	buf[0] = LOG_DELIM;
 	buf[1] = '\0';
-	strcat(buf, loglevel_string[level]);
-
-	char delim_str[2] = {LOG_DELIM , '\0'};
-	strcat(buf, delim_str);
-	strcat(buf, string_log_sender);
-	strcat(buf, delim_str);
-	strcat(buf, str);
-
+	p = strchain(&buf[1], loglevel_string[level]);
+	p = strchain(p, delim_str);
+	p = strchain(p, string_log_sender);
+	p = strchain(p, delim_str);
+	p = strchain(p, str);
+	if (newline) p = strchain(p, str_LF);
 	console_out(buf);
-	if (newline){
-		p=buf;
-		*p++ = ASCII_LF;
-		*p++ = 0;
-		console_out(buf);
-	};
 }
 

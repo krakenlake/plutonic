@@ -98,7 +98,7 @@ PLUTONIC_CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
 
 # names
 NAME = plutonic
-CONFIG = ../config
+CONFIG = config
 BUILDROOT = ../build
 BUILD = $(BUILDROOT)/$(TARGET)/kernel
 RELEASE = ../release/$(TARGET)

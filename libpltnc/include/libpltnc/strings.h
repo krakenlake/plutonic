@@ -4,7 +4,6 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-
 #ifndef LIBPLTNC_STRINGS_H
 #define LIBPLTNC_STRINGS_H
 

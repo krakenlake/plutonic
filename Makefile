@@ -59,6 +59,7 @@ all:
 	cd kernel && make
 
 run: Makefile
+	cd libpltnc && make
 	cd kernel && make run
 
 debug:

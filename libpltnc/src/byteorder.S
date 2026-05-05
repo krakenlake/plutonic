@@ -6,8 +6,6 @@
  */
 #include "config.h"
 
-.global be32_to_cpu
-.global cpu_to_be32
 .global swap32
 
 .text
@@ -16,11 +14,7 @@
 # swap lower 4 bytes: big endian to low endian
 # in: a0
 # out: a0
-.type be32_to_cpu, @function
-.type cpu_to_be32, @function
 .type swap32, @function
-be32_to_cpu:
-cpu_to_be32:
 swap32:
 	mv		a1, zero			# init result
 	# byte 0
@@ -44,4 +38,4 @@ swap32:
 	or		a0, a1, t2			# final return register is a0
 	sext.w	a0, a0				# sign-extend final result
 	ret
-.size be32_to_cpu, .-be32_to_cpu
+.size swap32, .-swap32

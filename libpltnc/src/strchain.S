@@ -19,6 +19,7 @@
 .type strchain, @function
 strchain:
 loop1:
+	# todo: use ld here as well when possible
 	lb		t0, 0(a0)
 	beqz	t0, str1_ended
 	addi	a0, a0, 1

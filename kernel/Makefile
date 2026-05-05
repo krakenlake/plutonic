@@ -127,10 +127,8 @@ $(BUILD)/$(NAME).img: $(BUILD) $(BUILD)/$(NAME).elf
 $(BUILD)/$(NAME).elf: Makefile $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a $(OBJ) $(BUILD)/link.ld
 	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
 
-$(BUILD)/link.ld: Makefile linker/link.ld.in $(BUILD)
-	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c linker/link.ld.in > $@ 
-
-linker/link.ld.in:
+$(BUILD)/link.ld: Makefile config/link.ld.in $(BUILD)
+	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c config/link.ld.in > $@ 
 
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $(CONFIG)/config.$(TARGET).h $@

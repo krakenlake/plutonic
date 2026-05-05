@@ -36,7 +36,7 @@ loop2:
 	# when ptr into string2 is XLEN_BYTES aligned, do full register loads
 fastloop:
 	li		t0, XLEN_BYTES			# bytes per load
-	LOAD_X	t1, 0(a1)				# load full register
+	LOAD	t1, 0(a1)				# load full register
 next_byte:
 	# todo: improve further by checking if t1 contains a full 0x00 byte
 	andi	t3, t1, 0xff			# if byte is 0, string ends

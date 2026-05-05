@@ -29,10 +29,10 @@
 
 print_newline:
 	addi	sp, sp, -(XLEN_BYTES*1)	
-	SAVE_X	ra, 0(sp)
+	STORE	ra, 0(sp)
 	li		a0, ASCII_LF
 	jal		print_char
-	LOAD_X	ra, 0(sp)
+	LOAD	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
 .size print_newline, .-print_newline
@@ -42,8 +42,8 @@ print_newline:
 # in: a0 = value to print
 print_hex:
 	addi	sp, sp, -(XLEN_BYTES*2)
-	SAVE_X	s0, 0(sp)
-	SAVE_X	ra, (XLEN_BYTES*1)(sp)
+	STORE	s0, 0(sp)
+	STORE	ra, (XLEN_BYTES*1)(sp)
 	# print "0x"
 	mv		s0, a0						# save a0 for later
 	li		a0, '0'
@@ -53,8 +53,8 @@ print_hex:
 	mv		a0, s0						# restore a0
 	# print value
 	jal		print_hex_raw
-	LOAD_X	s0, 0(sp)
-	LOAD_X	ra, (XLEN_BYTES*1)(sp)
+	LOAD	s0, 0(sp)
+	LOAD	ra, (XLEN_BYTES*1)(sp)
 	addi	sp, sp, (XLEN_BYTES*2)
 	ret
 .size print_hex, .-print_hex
@@ -64,7 +64,7 @@ print_hex:
 # in: a0 = value to print
 print_hex_raw:
 	addi	sp, sp, -(XLEN_BYTES*1)	
-	SAVE_X	ra, 0(sp)
+	STORE	ra, 0(sp)
 	# terminate buffer at the end
 	# TODO: do buffer termination only once
 	la		t2, out_buf
@@ -86,7 +86,7 @@ print_hex_new_decimal:
 	# print buffer
 	mv		a0, t2
 	jal		print_string
-	LOAD_X	ra, 0(sp)
+	LOAD	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
 .size print_hex_raw, .-print_hex_raw
@@ -96,8 +96,8 @@ print_hex_new_decimal:
 # in: byte value in a0
 print_hex_byte:
 	addi	sp, sp, -(XLEN_BYTES*2)
-	SAVE_X	s0, 0(sp)
-	SAVE_X	ra, (XLEN_BYTES*1)(sp)
+	STORE	s0, 0(sp)
+	STORE	ra, (XLEN_BYTES*1)(sp)
 	li		t0, 15
 	bgt		a0, t0, print_hex_byte_two_digits
 	# print a leading zero if necessary
@@ -107,8 +107,8 @@ print_hex_byte:
 	mv		a0, s0						# restore a0
 print_hex_byte_two_digits:
 	jal		print_hex_raw
-	LOAD_X	s0, 0(sp)
-	LOAD_X	ra, (XLEN_BYTES*1)(sp)
+	LOAD	s0, 0(sp)
+	LOAD	ra, (XLEN_BYTES*1)(sp)
 	addi	sp, sp, (XLEN_BYTES*2)
 	ret
 .size print_hex_byte, .-print_hex_byte
@@ -120,9 +120,9 @@ print_hex_byte_two_digits:
 # in: a2 = print 0x prefix? (0=no, otherwise yes)
 print_hex_fixed_width:
 	addi	sp, sp, -(XLEN_BYTES*3)
-	SAVE_X	s1, 0(sp)
-	SAVE_X	s0, (XLEN_BYTES*1)(sp)
-	SAVE_X	ra, (XLEN_BYTES*2)(sp)
+	STORE	s1, 0(sp)
+	STORE	s0, (XLEN_BYTES*1)(sp)
+	STORE	ra, (XLEN_BYTES*2)(sp)
 	mv		s0, a0
 	mv		s1, a1
 	beqz	a2, print_hex_fixed_width_loop
@@ -137,9 +137,9 @@ print_hex_fixed_width_loop:
 	and		a0, a0, 0xff 				# mask low order byte and print
 	call	print_hex_byte
 	bnez	s1, print_hex_fixed_width_loop
-	LOAD_X	s1, 0(sp)
-	LOAD_X	s0, (XLEN_BYTES*1)(sp)
-	LOAD_X	ra, (XLEN_BYTES*2)(sp)
+	LOAD	s1, 0(sp)
+	LOAD	s0, (XLEN_BYTES*1)(sp)
+	LOAD	ra, (XLEN_BYTES*2)(sp)
 	addi	sp, sp, (XLEN_BYTES*3)
 	ret
 .size print_hex_fixed_width, .-print_hex_fixed_width
@@ -158,7 +158,7 @@ print_hex_addr:
 # in: a0 = char to print
 print_ascii:
 	addi	sp, sp, -(XLEN_BYTES*1)	
-	SAVE_X	ra, 0(sp)
+	STORE	ra, 0(sp)
 	# consider only chars from 0x20-0x7e as printable
 	li		t0, 0x20
 	blt		a0, t0, print_ascii_substitute
@@ -169,7 +169,7 @@ print_ascii_substitute:
 	li		a0, '.'						# print dot if char is not printable
 print_ascii_out:
 	jal		print_char
-	LOAD_X	ra, 0(sp)
+	LOAD	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
 .size print_ascii, .-print_ascii
@@ -193,9 +193,9 @@ print_string:
 # in: a0 = value to print
 print_decimal:
 	addi	sp, sp, -(XLEN_BYTES*3)
-	SAVE_X	s1, 0(sp)
-	SAVE_X	s0, (XLEN_BYTES*1)(sp)
-	SAVE_X	ra, (XLEN_BYTES*2)(sp)
+	STORE	s1, 0(sp)
+	STORE	s0, (XLEN_BYTES*1)(sp)
+	STORE	ra, (XLEN_BYTES*2)(sp)
 	beqz	a0, print_decimal_zero
 	# save a0
 	mv		s1, a0
@@ -233,9 +233,9 @@ print_decimal_zero:
 	li		a0, '0'
 	jal		print_char
 print_decimal_done:
-	LOAD_X	s1, 0(sp)
-	LOAD_X	s0, (XLEN_BYTES*1)(sp)
-	LOAD_X	ra, (XLEN_BYTES*2)(sp)
+	LOAD	s1, 0(sp)
+	LOAD	s0, (XLEN_BYTES*1)(sp)
+	LOAD	ra, (XLEN_BYTES*2)(sp)
 	addi	sp, sp, (XLEN_BYTES*3)
 	ret
 .size print_decimal, .-print_decimal

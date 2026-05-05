@@ -23,9 +23,9 @@ throw_error:
 	mv		sp, fp
 
 	addi	sp, sp, -(XLEN_BYTES*3)
-	SAVE_X	ra, 0(sp)
-	SAVE_X	a0, (XLEN_BYTES*1)(sp)
-	SAVE_X	a1, (XLEN_BYTES*2)(sp)
+	STORE	ra, 0(sp)
+	STORE	a0, (XLEN_BYTES*1)(sp)
+	STORE	a1, (XLEN_BYTES*2)(sp)
 
 	mv		s1, a0
 	li		a0, LOG_ERR
@@ -35,9 +35,9 @@ throw_error:
 	jal		print_hex
 	jal		print_newline
 
-	LOAD_X	ra, 0(sp)
-	LOAD_X	a0, (XLEN_BYTES*1)(sp)
-	LOAD_X	a1, (XLEN_BYTES*2)(sp)
+	LOAD	ra, 0(sp)
+	LOAD	a0, (XLEN_BYTES*1)(sp)
+	LOAD	a1, (XLEN_BYTES*2)(sp)
 	addi	sp, sp, (XLEN_BYTES*3)
 	ret
 .size throw_error, .-throw_error	

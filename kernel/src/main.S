@@ -32,7 +32,7 @@ start:
 	#-------------------- save incoming parameters
 	# pointer to dtb is in a1
 	la		t0, dtb
-	SAVE_X	a1, 0(t0)
+	STORE	a1, 0(t0)
 
 	#-------------------- init kernel stack
 	# use initial value from linker
@@ -65,7 +65,7 @@ start:
 
 	#-------------------- print dtb
 	la		t0, dtb
-	LOAD_X	a0, 0(t0)
+	LOAD	a0, 0(t0)
 	jal		print_dtb
 	beqz	a0, dtb_done
 	mv		s1, a0					# save error code

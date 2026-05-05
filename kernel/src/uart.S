@@ -58,9 +58,9 @@ uart_get_char_wait:
 # out: buffer start in a0
 uart_getline:
 	addi	sp, sp, -(XLEN_BYTES*3)
-	SAVE_X	s1, 0(sp)
-	SAVE_X	s0, (XLEN_BYTES*1)(sp)
-	SAVE_X	ra, (XLEN_BYTES*2)(sp)
+	STORE	s1, 0(sp)
+	STORE	s0, (XLEN_BYTES*1)(sp)
+	STORE	ra, (XLEN_BYTES*2)(sp)
 	jal		uart_clear_buffer
 	la		s0, uart_input_buffer
 	mv		s1, s0								# save a copy in s1 for later
@@ -104,9 +104,9 @@ uart_getline_done:
 	jal uart_output_char
 	# return buffer address
 	mv		a0, s1
-	LOAD_X	s1, 0(sp)
-	LOAD_X	s0, (XLEN_BYTES*1)(sp)
-	LOAD_X	ra, (XLEN_BYTES*2)(sp)
+	LOAD	s1, 0(sp)
+	LOAD	s0, (XLEN_BYTES*1)(sp)
+	LOAD	ra, (XLEN_BYTES*2)(sp)
 	addi	sp, sp, (XLEN_BYTES*3)
 	ret
 .size uart_getline, .-uart_getline
@@ -116,7 +116,7 @@ uart_getline_done:
 # in: string ptr in a0
 uart_output_string:
 	addi	sp, sp, -(XLEN_BYTES*1)	
-	SAVE_X	ra, 0(sp)
+	STORE	ra, 0(sp)
 	mv		a1, a0
 uart_output_string_loop:
 	lb		a0, 0(a1)
@@ -125,7 +125,7 @@ uart_output_string_loop:
 	addi	a1, a1, 1
 	j		uart_output_string_loop
 uart_output_string_done:
-	LOAD_X	ra, 0(sp)
+	LOAD	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
 .size uart_output_string, .-uart_output_string
@@ -136,8 +136,8 @@ uart_output_string_done:
 uart_output_char:
 	# save a0 and a1 over SBI calls
 	addi	sp, sp, -16
-	SAVE_X	a0, 0(sp)
-	SAVE_X	a1, 8(sp)
+	STORE	a0, 0(sp)
+	STORE	a1, 8(sp)
 	# print CR first if we have an LF to print
 	li		t0, ASCII_LF
 	bne		a0, t0,uart_output_char_skip_CR
@@ -146,15 +146,15 @@ uart_output_char:
 	li		a7, SBI_EXT_DBCN
 	li		a6, EID_sbi_debug_console_write_byte
 	ecall
-	LOAD_X	a0, 0(sp)
+	LOAD	a0, 0(sp)
 uart_output_char_skip_CR:
 	# call SBI
 	li		a7, SBI_EXT_DBCN
 	li		a6, EID_sbi_debug_console_write_byte
 	ecall
 	# restore a0, a1
-	LOAD_X	a0, 0(sp)
-	LOAD_X	a1, 8(sp)
+	LOAD	a0, 0(sp)
+	LOAD	a1, 8(sp)
 	addi	sp, sp, 16
 	ret
 .size uart_output_char, .-uart_output_char

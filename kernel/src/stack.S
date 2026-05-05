@@ -19,7 +19,7 @@
 
 log_saved_int_registers:
 	addi	sp, sp, -(XLEN_BYTES*1)	
-	SAVE_X	ra, 0(sp)
+	STORE	ra, 0(sp)
 	la		a0, get_int_register_name_by_index
 	li		a1, 1
 	li		a2, 31
@@ -29,7 +29,7 @@ log_saved_int_registers:
 	addi	a3, sp, XLEN_BYTES + STK_FRAME_SIZE_FLOAT + STK_OFF_RA
 	li		a4, XLEN_BYTES
 	jal		log_saved_registers
-	LOAD_X	ra, 0(sp)
+	LOAD	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
 .size log_saved_int_registers, .-log_saved_int_registers
@@ -37,14 +37,14 @@ log_saved_int_registers:
 
 log_saved_float_registers:
 	addi	sp, sp, -(XLEN_BYTES*1)	
-	SAVE_X	ra, 0(sp)
+	STORE	ra, 0(sp)
 	la		a0, get_float_register_name_by_index
 	li		a1, 0
 	li		a2, 31 
 	addi	a3, sp,  XLEN_BYTES						# compensate for ra pushed on entry
 	li		a4, FLEN_BYTES
 	jal		log_saved_registers
-	LOAD_X	ra, 0(sp)
+	LOAD	ra, 0(sp)
 	addi	sp, sp, (XLEN_BYTES*1)
 	ret
 .size log_saved_float_registers, .-log_saved_float_registers
@@ -57,15 +57,15 @@ log_saved_float_registers:
 # in: a3 = stack frame base addr
 log_saved_registers:
 	addi	sp, sp, -(XLEN_BYTES*9)
-	SAVE_X	s0, 0(sp)
-	SAVE_X	s1, (XLEN_BYTES*1)(sp)
-	SAVE_X	s2, (XLEN_BYTES*2)(sp)
-	SAVE_X	s3, (XLEN_BYTES*3)(sp)
-	SAVE_X	s4, (XLEN_BYTES*4)(sp)
-	SAVE_X	s5, (XLEN_BYTES*5)(sp)
-	SAVE_X	s6, (XLEN_BYTES*6)(sp)
-	SAVE_X	s7, (XLEN_BYTES*7)(sp)
-	SAVE_X	ra, (XLEN_BYTES*8)(sp)
+	STORE	s0, 0(sp)
+	STORE	s1, (XLEN_BYTES*1)(sp)
+	STORE	s2, (XLEN_BYTES*2)(sp)
+	STORE	s3, (XLEN_BYTES*3)(sp)
+	STORE	s4, (XLEN_BYTES*4)(sp)
+	STORE	s5, (XLEN_BYTES*5)(sp)
+	STORE	s6, (XLEN_BYTES*6)(sp)
+	STORE	s7, (XLEN_BYTES*7)(sp)
+	STORE	ra, (XLEN_BYTES*8)(sp)
 	mv		s0, a3						# stack frame base addr
 	mv		s1, a1						# first register index
 	mv		s4, a2						# last register index
@@ -108,7 +108,7 @@ log_saved_registers_skip_space:
 	jal		print_string				# register name
 	li		a0, '='
 	jal		print_char
-	LOAD_X	a0, 0(s0)					# saved value
+	LOAD	a0, 0(s0)					# saved value
 	jal		print_hex_addr
 	# check if all registers done
 	li		t0, 31						# last valid index in any case
@@ -123,15 +123,15 @@ log_saved_registers_skip_space:
 	j		log_saved_registers_next
 log_saved_registers_done:
 	jal		print_newline
-	LOAD_X	s0, 0(sp)
-	LOAD_X	s1, (XLEN_BYTES*1)(sp)
-	LOAD_X	s2, (XLEN_BYTES*2)(sp)
-	LOAD_X	s3, (XLEN_BYTES*3)(sp)
-	LOAD_X	s4, (XLEN_BYTES*4)(sp)
-	LOAD_X	s5, (XLEN_BYTES*5)(sp)
-	LOAD_X	s6, (XLEN_BYTES*6)(sp)
-	LOAD_X	s7, (XLEN_BYTES*7)(sp)
-	LOAD_X	ra, (XLEN_BYTES*8)(sp)
+	LOAD	s0, 0(sp)
+	LOAD	s1, (XLEN_BYTES*1)(sp)
+	LOAD	s2, (XLEN_BYTES*2)(sp)
+	LOAD	s3, (XLEN_BYTES*3)(sp)
+	LOAD	s4, (XLEN_BYTES*4)(sp)
+	LOAD	s5, (XLEN_BYTES*5)(sp)
+	LOAD	s6, (XLEN_BYTES*6)(sp)
+	LOAD	s7, (XLEN_BYTES*7)(sp)
+	LOAD	ra, (XLEN_BYTES*8)(sp)
 	addi	sp, sp, (XLEN_BYTES*9)
 	ret
 

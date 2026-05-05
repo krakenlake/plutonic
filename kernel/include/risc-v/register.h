@@ -13,14 +13,14 @@
  * integer registers
  */
 #if XLEN == 32
-	#define LOAD_X	lw
-	#define	SAVE_X	sw
+	#define LOAD	lw
+	#define	STORE	sw
 	#define LWU		lw
 	#define SWU		sw
 #endif
 #if XLEN == 64
-	#define LOAD_X	ld
-	#define	SAVE_X	sd
+	#define LOAD	ld
+	#define	STORE	sd
 	#define LWU		lwu
 	#define SWU		swu
 #endif

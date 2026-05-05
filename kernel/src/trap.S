@@ -71,9 +71,9 @@ handle_exception_illegal_instruction:
 	# continue after illegal instruction when exiting trsp handler
 	j		skip_this_instruction_after_sret
 skip_this_instruction_after_sret:
-	LOAD_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
+	LOAD	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
 	addi	t0, t0, 4
-	SAVE_X	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
+	STORE	t0, (STK_FRAME_SIZE_FLOAT + STK_OFF_PC)(sp)
 print_exception:
 	li		a0, LOG_CRIT
 	la		a1, string_exception_msg

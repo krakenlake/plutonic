@@ -89,14 +89,13 @@ copy_bytes:
 	# t1 contained a 0x00 byte, so we need to store t1 byte-wise
 store_bytes:
 	sb		t1, 0(a0)
-	srli	t1, t1, 8				# shift next register byte into position
-	addi	a0, a0, 1				# advance dst ptr
 	andi	t3, t1, 0xff
 	beqz	t3, copy_done
+	srli	t1, t1, 8				# shift next register byte into position
+	addi	a0, a0, 1				# advance dst ptr
 	j 		store_bytes
 
 copy_done:
-	sb		zero, 0(a0)
 	ret
 .size strchain, .-strchain
 

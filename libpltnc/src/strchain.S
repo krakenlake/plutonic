@@ -19,13 +19,31 @@
 # out: ptr to null-termination of resulting string
 .type strchain, @function
 strchain:
+	# load constants for zero byte testing only once
+	la		a2, strchain_constants
+	LOAD	t4, 0(a2)				# t4 = 0x0101010101010101
+	LOAD	t5, 8(a2)				# t5 = 0x8080808080808080
 loop1:
-	# todo: use ld here as well when possible
-	lb		t0, 0(a0)
-	beqz	t0, str1_ended
+	# scan to end of a0
+	LOAD	t1, 0(a0)				# load full register
+	# check if t1 contains any 0x00 bytes
+	sub 	t4, t1, t4				# t4 = t1 - 0x0101010101010101
+	not		t6, t1					# t6 = ~a0
+	and		t6, t2, t5				# t6 = ~a0 & 0x8080808080808080
+	and		t6, t4, t6				# t6 = (a0 - 0x0101010101010101) & (~a0 & 0x8080808080808080)
+	# result in t7
+	bnez	t6, next_quad_loop1
+	# continue byte-wise if there was a 0x00 byte in t1
+	lb		t1, 0(a0)
+	beqz	t1, str1_ended
 	addi	a0, a0, 1
 	j		loop1	
+next_quad_loop1:
+	addi	a0, a0, XLEN_BYTES
+	j		loop1
 str1_ended:
+	# a0 is now guaranteed to point to the end of string1
+
 loop2:
 	andi	t2, a1, XLEN_BYTES		# check for 8-byte alignment
 	beqz	t2, fastloop_init		# go fetching 8 bytes at once if XLEN_BYTES aligned
@@ -38,10 +56,6 @@ loop2:
 	j		loop2
 	# when ptr into string2 is XLEN_BYTES aligned, do full register loads
 fastloop_init:
-	# load constants for zero byte testing only once
-	la		a2, strchain_constants
-	LOAD	t4, 0(a2)				# t4 = 0x0101010101010101
-	LOAD	t5, 8(a2)				# t5 = 0x8080808080808080
 fastloop:
 	LOAD	t1, 0(a1)				# load full register
 	# check if t1 contains any 0x00 bytes

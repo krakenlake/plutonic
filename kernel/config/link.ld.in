@@ -11,21 +11,21 @@ SECTIONS{
 
   .text :{
     _stext = .;
-    . = ALIGN(4);
+    . = ALIGN(8);
     *(.init)
-    . = ALIGN(4);
+    . = ALIGN(8);
     *(.text .text*)
-    . = ALIGN(4);
+    . = ALIGN(8);
     *(.rodata .rodata*)
-    . = ALIGN(4);
+    . = ALIGN(8);
     _etext = .;
   } >FLASH
 
   .bss :{
     _sbss = .;
-    . = ALIGN(4);
+    . = ALIGN(8);
     *(.bss*)
-    . = ALIGN(4);
+    . = ALIGN(8);
     _ebss = .;
   } >RAM
 

@@ -42,7 +42,7 @@ set_timer:
  * (needs to be aligned manually as that is not automatically guaranteed 
  * with RVC enabled)
  */
-.align 4
+.align 8
 trap_handler:
 	# disable all S-mode IRQs
 	csrci	sstatus, SSTATUS_SIE

@@ -103,7 +103,7 @@ print_exception:
 	LWU		a0, string_CAUSE_RESERVED
 	j		output_cause
 known_cause:
-	slli	a0, s0, 2							# set a0 = xcause * 4
+	slli	a0, s0, 3							# set a0 = xcause * 8 (XLEN_BYTES)
 	la		s0, cause_verbose_table				# start of CAUSE string table
 	add		a0, a0, s0
 	LWU		a0, 0(a0)
@@ -148,26 +148,26 @@ exit_trap_handler:
 
 .align 4
 cause_verbose_table:
-	.word string_CAUSE_MISALIGNED_FETCH			#  0
-	.word string_CAUSE_FAULT_FETCH				#  1
-	.word string_CAUSE_ILLEGAL_INSTRUCTION		#  2
-	.word string_CAUSE_BREAKPOINT				#  3
-	.word string_CAUSE_MISALIGNED_LOAD			#  4
-	.word string_CAUSE_FAULT_LOAD				#  5
-	.word string_CAUSE_MISALIGNED_STORE			#  6
-	.word string_CAUSE_FAULT_STORE				#  7
-	.word string_CAUSE_USER_ECALL				#  8
-	.word string_CAUSE_SUPERVISOR_ECALL			#  9
-	.word string_CAUSE_HYPERVISOR_ECALL			# 10
-	.word string_CAUSE_MACHINE_ECALL			# 11
-	.word string_CAUSE_FETCH_PAGE_FAULT			# 12
-	.word string_CAUSE_LOAD_PAGE_FAULT			# 13
-	.word string_CAUSE_RESERVED					# 14
-	.word string_CAUSE_STORE_PAGE_FAULT			# 15
-	.word string_CAUSE_RESERVED					# 16
-	.word string_CAUSE_RESERVED					# 17
-	.word string_CAUSE_SOFTWARE_CHECK			# 18
-	.word string_CAUSE_HARDWARE_ERROR			# 19
+	.quad string_CAUSE_MISALIGNED_FETCH			#  0
+	.quad string_CAUSE_FAULT_FETCH				#  1
+	.quad string_CAUSE_ILLEGAL_INSTRUCTION		#  2
+	.quad string_CAUSE_BREAKPOINT				#  3
+	.quad string_CAUSE_MISALIGNED_LOAD			#  4
+	.quad string_CAUSE_FAULT_LOAD				#  5
+	.quad string_CAUSE_MISALIGNED_STORE			#  6
+	.quad string_CAUSE_FAULT_STORE				#  7
+	.quad string_CAUSE_USER_ECALL				#  8
+	.quad string_CAUSE_SUPERVISOR_ECALL			#  9
+	.quad string_CAUSE_HYPERVISOR_ECALL			# 10
+	.quad string_CAUSE_MACHINE_ECALL			# 11
+	.quad string_CAUSE_FETCH_PAGE_FAULT			# 12
+	.quad string_CAUSE_LOAD_PAGE_FAULT			# 13
+	.quad string_CAUSE_RESERVED					# 14
+	.quad string_CAUSE_STORE_PAGE_FAULT			# 15
+	.quad string_CAUSE_RESERVED					# 16
+	.quad string_CAUSE_RESERVED					# 17
+	.quad string_CAUSE_SOFTWARE_CHECK			# 18
+	.quad string_CAUSE_HARDWARE_ERROR			# 19
 
 string_CAUSE_MISALIGNED_FETCH:		.string "MISALIGNED_FETCH";
 string_CAUSE_FAULT_FETCH:			.string "FAULT_FETCH";

@@ -146,7 +146,7 @@ exit_trap_handler:
 
 .section .rodata
 
-.align 4
+.align 8
 cause_verbose_table:
 	.quad string_CAUSE_MISALIGNED_FETCH			#  0
 	.quad string_CAUSE_FAULT_FETCH				#  1

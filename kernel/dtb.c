@@ -7,10 +7,10 @@
 #include "config.h"
 #include "plutonic/log.h"
 #include "plutonic/dtb.h"
-#include "plutonic/byteorder.h"
 #include "plutonic/types.h"
 #include "plutonic/print.h"
 #include "plutonic/error.h"
+#include "libpltnc/byteorder.h"
 
 struct fdt_header *dtb;
 

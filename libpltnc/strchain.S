@@ -7,13 +7,15 @@
 #include "config.h"
 #include "risc-v/register.h"
 
+.global strchain
+
 .text
+
 
 # string1 = string1 + string2
 # in: a0 = char* string1
 # in: a1 = char* string2
 # out: ptr to null-termination of resulting string
-.global strchain
 .type strchain, @function
 strchain:
 loop1:

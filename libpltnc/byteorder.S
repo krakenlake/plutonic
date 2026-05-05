@@ -5,9 +5,6 @@
  *
  */
 #include "config.h"
-#include "plutonic/ASCII.h"
-#include "plutonic/stack.h"
-#include "risc-v/register.h"
 
 .global be32_to_cpu
 .global cpu_to_be32
@@ -19,6 +16,9 @@
 # swap lower 4 bytes: big endian to low endian
 # in: a0
 # out: a0
+.type be32_to_cpu, @function
+.type cpu_to_be32, @function
+.type swap32, @function
 be32_to_cpu:
 cpu_to_be32:
 swap32:

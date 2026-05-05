@@ -63,7 +63,7 @@ run: Makefile
 	cd kernel && make run
 
 debug:
-	$(GDB) entry -ex "target remote :1234"
+	cd kernel && make debug
 
 gdb:
 	cd kernel && make gdb

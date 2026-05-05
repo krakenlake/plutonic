@@ -158,7 +158,7 @@ gdb: Makefile $(BUILD)/$(NAME).elf
 	$(GDB) $(BUILD)/$(NAME).elf
 
 debug:
-	$(GDB) entry -ex "target remote :1234"
+	$(GDB) $(BUILD)/$(NAME).elf -ex "target remote :1234"
 
 devicetree:
 	qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) -machine dumpdtb=$(BUILD)/qemu.dtb

@@ -10,7 +10,7 @@
 #include "plutonic/types.h"
 #include "plutonic/print.h"
 #include "plutonic/error.h"
-#include "libpltnc/byteorder.h"
+#include "libpltnc/bitwise.h"
 
 struct fdt_header *dtb;
 

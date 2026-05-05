@@ -102,11 +102,11 @@ CONFIG = config
 BUILDROOT = ../build
 BUILD = $(BUILDROOT)/$(TARGET)/kernel
 RELEASE = ../release/$(TARGET)
-SRC_S = $(wildcard ./*.S)
-SRC_C = $(wildcard ./*.c)
+SRC_S = $(wildcard ./src/*.S)
+SRC_C = $(wildcard ./src/*.c)
 SRC = $(SRC_S) $(SRC_C)
-OBJ_S = $(SRC_S:./%.S=$(BUILD)/%.o)
-OBJ_C = $(SRC_C:./%.c=$(BUILD)/%.o)
+OBJ_S = $(SRC_S:./src/%.S=$(BUILD)/%.o)
+OBJ_C = $(SRC_C:./src/%.c=$(BUILD)/%.o)
 OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
@@ -135,10 +135,10 @@ linker/link.ld.in:
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp $(CONFIG)/config.$(TARGET).h $@
 
-$(BUILD)/%.o: %.S Makefile $(BUILD)/config.h
+$(BUILD)/%.o: src/%.S Makefile $(BUILD)/config.h
 	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
-$(BUILD)/%.o: %.c Makefile $(BUILD)/config.h
+$(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
 	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a:

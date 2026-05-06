@@ -42,7 +42,7 @@ scan_load_quad:
 scan_load_byte:
 	# continue byte-wise if there was a 0x00 byte in t1
 	lb		t1, 0(a0)
-	beqz	t1, scan_done
+	beqz	t1, scan_done			# done scanning if termination found
 	addi	a0, a0, 1
 	j		scan_check_align
 scan_advance_quad:

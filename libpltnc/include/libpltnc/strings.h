@@ -8,7 +8,8 @@
 #define LIBPLTNC_STRINGS_H
 
 #ifndef __ASSEMBLER__
-	extern char* strchain(char *str1, char *str2);
+	extern u64		strlen(char *str);
+	extern char*	strchain(char *str1, char *str2);
 #endif
 
 #endif /* LIBPLTNC_STRINGS_H */

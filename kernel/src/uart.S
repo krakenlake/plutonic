@@ -135,27 +135,23 @@ uart_output_string_done:
 # in: char (ASCII) in a0
 uart_output_char:
 	# save a0 and a1 over SBI calls
-	addi	sp, sp, -16
-	STORE	a0, 0(sp)
-	STORE	a1, 8(sp)
+	addi	sp, sp, -32
+	STORE	ra, 0(sp)
+	STORE	a0, 8(sp)
+	STORE	a1, 16(sp)
 	# print CR first if we have an LF to print
 	li		t0, ASCII_LF
 	bne		a0, t0,uart_output_char_skip_CR
-	# call SBI
 	li		a0, ASCII_CR
-	li		a7, SBI_EXT_DBCN
-	li		a6, EID_sbi_debug_console_write_byte
-	ecall
-	LOAD	a0, 0(sp)
+	jal		sbi_debug_console_write_byte
+	LOAD	a0, 8(sp)
 uart_output_char_skip_CR:
-	# call SBI
-	li		a7, SBI_EXT_DBCN
-	li		a6, EID_sbi_debug_console_write_byte
-	ecall
+	jal		sbi_debug_console_write_byte
 	# restore a0, a1
-	LOAD	a0, 0(sp)
-	LOAD	a1, 8(sp)
-	addi	sp, sp, 16
+	LOAD	ra, 0(sp)
+	LOAD	a0, 8(sp)
+	LOAD	a1, 16(sp)
+	addi	sp, sp, 32
 	ret
 .size uart_output_char, .-uart_output_char
 

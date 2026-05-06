@@ -51,8 +51,3 @@ scan_done:
 	ret
 .size strlen, .-strlen
 
-
-.align 8
-check_zero_consts:
-	.quad 0x0101010101010101
-	.quad 0x8080808080808080

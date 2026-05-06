@@ -4,9 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_UART_H
-#define PLUTONIC_UART_H
-
+#pragma once
 
 #ifdef HW_QEMU
 	#define UART_BASE		0x10000000
@@ -35,7 +33,3 @@
 #ifndef __ASSEMBLER__
 	void uart_output_char(char c);
 #endif
-
-
-
-#endif /* PLUTONIC_UART_H */

@@ -4,10 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef LIBPLTNC_BITWISE_H
-#define LIBPLTNC_BITWISE_H
-
-
+#pragma once
 #include "libpltnc/types.h"
 
 #define LIBPLTNC_BITWISE_CONST1	0x0101010101010101
@@ -17,6 +14,3 @@
 	u32 swap32(u32 val);
 	u64 has_zero_byte(u64 val);
 #endif
-
-
-#endif /* LIBPLTNC_BITWISE_H */

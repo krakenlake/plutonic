@@ -3,10 +3,7 @@
 // Config for QEMU RV64G
 //
 // ******************************************************************
-
-
-#ifndef LIBPLTNC_CONFIG_H
-#define LIBPLTNC_CONFIG_H
+#pragma once
 
 // hardware
 #define HW_QEMU
@@ -20,5 +17,3 @@
 
 // size of character input buffer in bytes
 #define BUFFER_SIZE			80
-
-#endif /* LIBPLTNC_CONFIG_H */

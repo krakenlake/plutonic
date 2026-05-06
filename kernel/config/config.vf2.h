@@ -3,10 +3,7 @@
 // Config for StarFive VisionFive 2 board (RV64GC CPU)
 //
 // ******************************************************************
-
-
-#ifndef PLUTONIC_CONFIG_H
-#define PLUTONIC_CONFIG_H
+#pragma once
 
 // hardware
 #define HW_VF2
@@ -25,5 +22,3 @@
 
 // size of character input buffer in bytes
 #define BUFFER_SIZE			80
-
-#endif /* PLUTONIC_CONFIG_H */

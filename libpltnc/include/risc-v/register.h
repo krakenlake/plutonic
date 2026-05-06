@@ -4,8 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef LIBPLTNC_REGISTER_H
-#define LIBPLTNC_REGISTER_H
+#pragma once
 #include "config.h"
 
 /*
@@ -39,6 +38,3 @@
 #endif
 #define FLEN_BYTES				(FLEN/8)
 #define NUM_FLOAT_REGISTERS		32
-
-
-#endif /* LIBPLTNC_REGISTER_H */

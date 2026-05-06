@@ -4,10 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_PRINT_H
-#define PLUTONIC_PRINT_H
-
-
+#pragma once
 #include "plutonic/types.h"
 
 #ifndef __ASSEMBLER__
@@ -17,6 +14,3 @@
 	extern void print_hex(u64 val);
 	extern void print_newline(void);
 #endif
-
-
-#endif /* PLUTONIC_PRINT_H */

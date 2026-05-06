@@ -4,10 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_LOG_H
-#define PLUTONIC_LOG_H
-
-
+#pragma once
 #include "plutonic/types.h"
 
 #define	LOG_EMERG	0
@@ -31,6 +28,3 @@
 	int skip_message(int level);
 	char* begin_logline(int level);
 #endif
-
-
-#endif /* PLUTONIC_LOG_H */

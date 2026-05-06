@@ -4,8 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_REGISTER_H
-#define PLUTONIC_REGISTER_H
+#pragma once
 #include "config.h"
 
 
@@ -85,6 +84,3 @@
 #define SCAUSE_RESERVED_17				17
 #define SCAUSE_SOFTWARE_CHECK			18
 #define SCAUSE_HARDWARE_ERROR			19
-
-
-#endif /* PLUTONIC_REGISTER_H */

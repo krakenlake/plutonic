@@ -3,10 +3,7 @@
 // Config for StarFive VisionFive 2 board (RV64GC CPU)
 //
 // ******************************************************************
-
-
-#ifndef LIBPLTNC_CONFIG_H
-#define LIBPLTNC_CONFIG_H
+#pragma once
 
 // hardware
 #define HW_VF2
@@ -19,5 +16,3 @@
 
 // size of character input buffer in bytes
 #define BUFFER_SIZE			80
-
-#endif /* LIBPLTNC_CONFIG_H */

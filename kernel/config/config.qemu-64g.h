@@ -3,10 +3,7 @@
 // Config for QEMU RV64G
 //
 // ******************************************************************
-
-
-#ifndef PLUTONIC_CONFIG_H
-#define PLUTONIC_CONFIG_H
+#pragma once
 
 // hardware
 #define HW_QEMU
@@ -20,5 +17,3 @@
 
 // size of character input buffer in bytes
 #define BUFFER_SIZE			80
-
-#endif /* PLUTONIC_CONFIG_H */

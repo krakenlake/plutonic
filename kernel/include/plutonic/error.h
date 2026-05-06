@@ -4,10 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_ERROR_H
-#define PLUTONIC_ERROR_H
-
-
+#pragma once
 #include "plutonic/types.h"
 
 #define ERR_OK					0
@@ -18,6 +15,3 @@
 #ifndef __ASSEMBLER__
 	extern u64 throw_error(u64 error_code);
 #endif
-
-
-#endif /* PLUTONIC_ERROR_H */

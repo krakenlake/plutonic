@@ -4,10 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_DTB_H
-#define PLUTONIC_DTB_H
-
-
+#pragma once
 #include "plutonic/types.h"
 
 #define		FDT_HEADER_MAGIC	0xd00dfeed
@@ -43,6 +40,3 @@
 	long print_dtb(void);
 
 #endif
-
-
-#endif /* PLUTONIC_DTB_H */

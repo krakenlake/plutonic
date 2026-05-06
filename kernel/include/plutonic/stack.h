@@ -4,9 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_STACK_H
-#define PLUTONIC_STACK_H
-
+#pragma once
 #include "config.h"
 #include "risc-v/register.h"
 
@@ -254,4 +252,3 @@
 	POP_ALL_INT_REGISTERS						\
 	;
 
-#endif /* PLUTONIC_STACK_H */

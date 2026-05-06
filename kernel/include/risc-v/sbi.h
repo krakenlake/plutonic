@@ -4,8 +4,7 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#ifndef PLUTONIC_SBI_H
-#define PLUTONIC_SBI_H
+#pragma once
 
 /*
  * based on:
@@ -79,7 +78,3 @@
 #define SBI_EXT_MPXY	0x4D505859
 
 #define SBI_EXT_DBTR	0x44425452
-
-
-
-#endif /* PLUTONIC_SBI_H */

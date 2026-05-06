@@ -28,6 +28,13 @@
 /*
  * Base extension
  */
+SBI_CALL(sbi_get_spec_version, EID_BASE)
+SBI_CALL(sbi_get_impl_id, EID_BASE)
+SBI_CALL(sbi_get_impl_version, EID_BASE)
+SBI_CALL(sbi_probe_extension, EID_BASE)
+SBI_CALL(sbi_get_mvendorid, EID_BASE)
+SBI_CALL(sbi_get_marchid, EID_BASE)
+SBI_CALL(sbi_get_mimpid, EID_BASE)
 
 /*
  * Debug console extension

@@ -5,7 +5,7 @@
  *
  */
 #include "config.h"
-#include "librv64strings/strings.h"
+#include "libpltnc/strings.h"
 
 .global check_zero_consts
 

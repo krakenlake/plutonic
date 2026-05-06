@@ -112,7 +112,6 @@ OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
 LIBS = $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
-LIBS += $(BUILDROOT)/$(TARGET)/librv64strings/librv64strings.a
 
 # dependencies
 -include $(DEP)

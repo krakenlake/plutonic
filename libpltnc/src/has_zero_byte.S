@@ -5,7 +5,7 @@
  *
  */
 #include "config.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 
 .global has_zero_byte
 

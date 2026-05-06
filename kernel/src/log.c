@@ -12,7 +12,7 @@
 #include "plutonic/stack.h"
 #include "plutonic/console.h"
 #include "plutonic/ASCII.h"
-#include "librv64strings/strings.h"
+#include "libpltnc/strings.h"
 
 
  char *loglevel_string[8] = {

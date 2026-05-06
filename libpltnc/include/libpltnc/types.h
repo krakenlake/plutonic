@@ -9,4 +9,5 @@
 #ifndef __ASSEMBLER__
 	typedef unsigned int	u32;
 	typedef unsigned long	u64;
+	typedef u64				size_t;
 #endif

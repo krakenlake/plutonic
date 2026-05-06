@@ -86,6 +86,7 @@ PLUTONIC_CFLAGS ?= $(CFLAGS)
 PLUTONIC_CFLAGS += -mcmodel=medany
 PLUTONIC_CFLAGS += -I"../kernel/include"
 PLUTONIC_CFLAGS += -I"../libpltnc/include"
+PLUTONIC_CFLAGS += -I"../librv64strings/include"
 
 # LDFLAGS
 PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
@@ -110,6 +111,9 @@ OBJ_C = $(SRC_C:./src/%.c=$(BUILD)/%.o)
 OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
+LIBS = $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
+LIBS += $(BUILDROOT)/$(TARGET)/librv64strings/librv64strings.a
+
 # dependencies
 -include $(DEP)
 
@@ -124,8 +128,8 @@ $(BUILD) $(RELEASE):
 $(BUILD)/$(NAME).img: $(BUILD) $(BUILD)/$(NAME).elf
 	$(OBJCOPY) $(BUILD)/$(NAME).elf -O binary $@
 
-$(BUILD)/$(NAME).elf: Makefile $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a $(OBJ) $(BUILD)/link.ld
-	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
+$(BUILD)/$(NAME).elf: Makefile $(LIBS) $(OBJ) $(BUILD)/link.ld
+	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
 
 $(BUILD)/link.ld: Makefile $(CONFIG)/link.ld.in $(BUILD)
 	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $(CONFIG)/link.ld.in > $@ 
@@ -140,6 +144,9 @@ $(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
 	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a:
+	cd ../libpltnc && make TARGET=$(TARGET)
+
+$(BUILDROOT)/$(TARGET)/librv64strings/librv64strings.a:
 	cd ../libpltnc && make TARGET=$(TARGET)
 
 $(RELEASE)/plutonic-$(TARGET).img: $(BUILD)/$(NAME).img

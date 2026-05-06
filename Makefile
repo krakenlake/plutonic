@@ -52,14 +52,17 @@ CFLAGS += -g
 
 export PLUTONIC_CFLAGS = $(CFLAGS)
 export LIBPLTNC_CFLAGS = $(CFLAGS)
+export LIBRV64STRINGS_CFLAGS = $(CFLAGS)
 
 # targets
 all:
 	cd libpltnc && make
+	cd librv64strings && make
 	cd kernel && make
 
 run: Makefile
 	cd libpltnc && make
+	cd librv64strings && make
 	cd kernel && make run
 
 debug:
@@ -70,6 +73,7 @@ gdb:
 
 release: Makefile
 	cd libpltnc && make release
+	cd librv64strings && make release
 	cd kernel && make release
 
 devicetree: Makefile

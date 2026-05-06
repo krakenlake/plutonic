@@ -6,7 +6,6 @@
  */
 #include "config.h"
 #include "risc-v/register.h"
-#include "libpltnc/bitwise.h"
 
 .global strlen
 

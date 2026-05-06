@@ -7,8 +7,8 @@
 #include "config.h"
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"
-#include "risc-v/register.h"
-#include "risc-v/sbi.h"
+#include "riscv/register.h"
+#include "riscv/sbi.h"
 #include "plutonic/stack.h"
 
 .global uart_init

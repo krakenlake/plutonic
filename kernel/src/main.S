@@ -11,7 +11,7 @@
 #include "plutonic/log.h"
 #include "plutonic/stack.h"
 #include "plutonic/console.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 
 .global start
 

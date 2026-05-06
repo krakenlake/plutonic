@@ -5,7 +5,7 @@
  *
  */
 #include "config.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 #include "plutonic/stack.h"
 
 .global get_int_register_name_by_index

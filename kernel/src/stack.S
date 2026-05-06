@@ -7,7 +7,7 @@
 #include "config.h"
 #include "plutonic/ASCII.h"
 #include "plutonic/stack.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 #include "plutonic/log.h"
 
 .global log_saved_int_registers

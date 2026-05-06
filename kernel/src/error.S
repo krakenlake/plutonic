@@ -7,7 +7,7 @@
 
 #include "config.h"
 #include "plutonic/error.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 #include "plutonic/log.h"
 
 .global throw_error

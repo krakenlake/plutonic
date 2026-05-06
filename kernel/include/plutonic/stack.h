@@ -6,7 +6,7 @@
  */
 #pragma once
 #include "config.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 
 #ifndef __ASSEMBLER__
 	void log_saved_int_registers(void);

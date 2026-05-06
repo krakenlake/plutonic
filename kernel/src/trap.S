@@ -5,7 +5,7 @@
  *
  */
 #include "config.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 #include "plutonic/trap.h"
 #include "plutonic/stack.h"
 #include "plutonic/log.h"

@@ -1,11 +1,11 @@
 /*
- * libpltnc - RISC-V library
+ * librv64strings - RISC-V strings library
  *
  * Copyright (C) 2026 krakenlake
  *
  */
 #include "config.h"
-#include "risc-v/register.h"
+#include "riscv/register.h"
 
 .global strlen
 

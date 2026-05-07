@@ -120,23 +120,23 @@ $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(l
 
 
 # targets
-this: $(BUILD)/$(NAME).img Makefile
+this: $(BUILD)/$(NAME).img
 	@ls -ln $<
 
 $(BUILD) $(RELEASE):
 	mkdir -p $@
 
-$(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf $(BUILD) 
+$(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf $(BUILD) Makefile
 	$(OBJCOPY) $< -O binary $@
 
-$(BUILD)/$(NAME).elf: Makefile $(LIBS) $(OBJ) $(BUILD)/link.ld
+$(BUILD)/$(NAME).elf: $(BUILD) Makefile $(LIBS) $(OBJ) $(BUILD)/link.ld
 	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
 
 $(BUILD)/link.ld: $(CONFIG)/link.ld.in $(BUILD) Makefile 
 	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $< > $@ 
 
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
-	cp $< $@
+	cp -p $(CONFIG)/config.$(TARGET).h $@
 
 $(BUILD)/%.o: src/%.S Makefile $(BUILD)/config.h
 	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@

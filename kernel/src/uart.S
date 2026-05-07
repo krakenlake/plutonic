@@ -9,7 +9,6 @@
 #include "plutonic/ASCII.h"
 #include "plutonic/stack.h"
 #include "riscv/register.h"
-#include "libsbicall/sbicall.h"
 
 .global uart_init
 .global uart_wait_get_char
@@ -145,10 +144,20 @@ uart_output_char:
 	li		t0, ASCII_LF
 	bne		a0, t0,uart_output_char_skip_CR
 	li		a0, ASCII_CR
+
+	# todo: clean this up
+	PUSH_ALL_INT_REGISTERS
 	jal		sbi_debug_console_write_byte
+	POP_ALL_INT_REGISTERS	
+	
 	mv		a0, s1
 uart_output_char_skip_CR:
+
+	# todo: clean this up
+	PUSH_ALL_INT_REGISTERS
 	jal		sbi_debug_console_write_byte
+	POP_ALL_INT_REGISTERS	
+
 	# restore a0, a1
 	LOAD	ra, 0(sp)
 	LOAD	s1, 8(sp)

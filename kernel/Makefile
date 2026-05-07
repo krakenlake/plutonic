@@ -85,8 +85,6 @@ PLUTONIC_CFLAGS ?= $(CFLAGS)
 # needed to access memory beyond 0x7fffffff
 PLUTONIC_CFLAGS += -mcmodel=medany
 PLUTONIC_CFLAGS += -I"../kernel/include"
-PLUTONIC_CFLAGS += -I"../libpltnc/include"
-PLUTONIC_CFLAGS += -I"../libsbicall/include"
 
 # LDFLAGS
 PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
@@ -111,9 +109,11 @@ OBJ_C = $(SRC_C:./src/%.c=$(BUILD)/%.o)
 OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
+# libs
 LIBDIRS = $(wildcard ../lib*)
 LIBNAMES =  $(LIBDIRS:../lib%=lib%)
 $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
+$(foreach libname,$(LIBNAMES),$(eval PLUTONIC_CFLAGS+= -I../$(libname)/include))
 
 # dependencies
 -include $(DEP)
@@ -156,7 +156,7 @@ release: Makefile $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).img
 clean:
 	rm -fr $(BUILD)
 
-run: Makefile $(BUILD)/$(NAME).img
+run: Makefile $(LIBS) $(BUILD)/$(NAME).img
 	$(RUN)
 
 gdb: $(BUILD)/$(NAME).elf Makefile

@@ -47,6 +47,9 @@ start:
 	#-------------------- startup message
 	la		a0, string_startup
 	jal		console_out
+	li		a0, LOG_INFO
+	la		a1, string_booting
+	jal		log
 
 	#-------------------- IRQ setup
 	# set up trap vector
@@ -62,6 +65,9 @@ start:
 	csrs	sie, t0
 	# enable S-mode irqs again
 	csrsi	sstatus, SSTATUS_SIE
+
+	#-------------------- print info about hardware
+	jal		log_sbiinfo
 
 	#-------------------- print dtb
 	la		t0, dtb
@@ -83,9 +89,9 @@ dtb_done:
 	# check BREAKPOINT exception
 #	ebreak
 	# check FAULT_LOAD exception
-#	ld		t1, 0(t0)
+#	ld		t1, 0(zero)
 	# check FAULT_STORE exception
-	sd 		t1, 0(t0)
+#	sd 		t1, 0(zero)
 
 	li		s1, 0
 # fall through from above
@@ -133,6 +139,8 @@ string_startup:
 	.asciz "\n\n"
 .size string_startup, .-string_startup
 
+string_booting:
+	.asciz "booting..."
 
 string_dtb_error:
 	.asciz "returned to main with error code "

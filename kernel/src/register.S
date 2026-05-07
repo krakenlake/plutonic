@@ -10,8 +10,6 @@
 
 .global get_int_register_name_by_index
 .global get_float_register_name_by_index
-.global get_int_register_index_by_name
-.global get_float_register_index_by_name
 
 .text
 
@@ -49,30 +47,6 @@ get_register_name_by_index_found:
 	mv		a0, a1
 	ret
 .size get_register_name_by_index, .-get_register_name_by_index
-
-
-# return index of int register given by name
-# in: a0 = string ptr to start of name
-# in: a1 = string ptr to end of name (last char; no 0-termination expected)
-# out: a0 = index number of int register (-1 if error)
-get_int_register_index_by_name:
-	la		a2, int_register_names
-	li		a3, NUM_INT_REGISTERS
-	j 		get_register_index_by_name
-.size get_int_register_index_by_name, .-get_int_register_index_by_name
-
-
-#ifdef DISASS_RVF
-	# return index of float register given by name
-	# in: a0 = string ptr to start of name
-	# in: a1 = string ptr to end of name (last char; no 0-termination expected)
-	# out: a0 = index number of float register (-1 if error)
-	get_float_register_index_by_name:
-		la		a2, float_register_names
-		li		a3, NUM_FLOAT_REGISTERS
-		j 		get_register_index_by_name
-	.size get_float_register_index_by_name, .-get_float_register_index_by_name
-#endif /* DISASS_RVF */
 
 
 # return index of register given by name
@@ -127,15 +101,15 @@ get_register_index_by_name_done:
 
 .section .rodata
 
-
+.align 8
 int_register_names:
 	.string "zero", "ra",  "sp",  "gp", "tp", "t0", "t1", "t2"
-	.string "fp",	"s1",  "a0",  "a1", "a2", "a3", "a4", "a5"		# x8 = fp
+	.string "fp",	"s1",  "a0",  "a1", "a2", "a3", "a4", "a5"
 	.string "a6",	"a7",  "s2",  "s3", "s4", "s5", "s6", "s7"
 	.string "s8",	"s9", "s10", "s11", "t3", "t4", "t5", "t6"
 .size int_register_names, .-int_register_names
 
-
+.align 8
 float_register_names:
 	.string	 "f0",	"f1",  "f2",  "f3",	 "f4",	"f5",  "f6",  "f7"
 	.string	 "f8",	"f9", "f10", "f11", "f12", "f13", "f14", "f15"

@@ -64,7 +64,7 @@
 /*
  * Debug console extension
  */
-#define EID_EXT_DBCN						0x4442434E
+#define EID_DBCN							0x4442434E
 #define FID_sbi_debug_console_write			0
 #define FID_sbi_debug_console_read			1
 #define FID_sbi_debug_console_write_byte	2
@@ -78,3 +78,25 @@
 #define EID_MPXY	0x4D505859
 
 #define EID_DBTR	0x44425452
+
+
+#ifndef __ASSEMBLER__
+	# include "libsbi/types.h"
+
+	struct sbiret {
+		u64 error;			// a0
+		u64 val;			// a1
+	};
+
+	struct sbiret sbi_get_spec_version(void);
+	struct sbiret sbi_get_impl_id(void);
+	struct sbiret sbi_get_impl_version(void);
+	struct sbiret sbi_probe_extension(u64 extension_id);
+	struct sbiret sbi_get_mvendorid(void);
+	struct sbiret sbi_get_marchid(void);
+	struct sbiret sbi_get_mimpid(void);
+
+	struct sbiret sbi_debug_console_write(char c);
+	struct sbiret sbi_debug_console_read(char c);
+	struct sbiret sbi_debug_console_write_byte(char c);
+#endif

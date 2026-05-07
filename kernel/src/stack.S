@@ -18,12 +18,11 @@
 
 
 log_saved_int_registers:
-	addi	sp, sp, -(XLEN_BYTES*1)	
+	addi	sp, sp, -(XLEN_BYTES*1)
 	STORE	ra, 0(sp)
 	la		a0, get_int_register_name_by_index
-	li		a1, 1
-	li		a2, 31
-	
+	li		a1, 1							# index of first reg
+	li		a2, NUM_INT_REGISTERS-1			# index of last reg
 	# set a3 to the address of ra in the current stack frame
 	# (XLEN_BYTES are also added to compensate for the pushing ra on entry here)
 	addi	a3, sp, XLEN_BYTES + STK_FRAME_SIZE_FLOAT + STK_OFF_RA
@@ -39,9 +38,9 @@ log_saved_float_registers:
 	addi	sp, sp, -(XLEN_BYTES*1)	
 	STORE	ra, 0(sp)
 	la		a0, get_float_register_name_by_index
-	li		a1, 0
-	li		a2, 31 
-	addi	a3, sp,  XLEN_BYTES						# compensate for ra pushed on entry
+	li		a1, 0							# index of first reg
+	li		a2, NUM_FLOAT_REGISTERS-1		# index of last reg
+	addi	a3, sp,  XLEN_BYTES				# compensate for ra pushed on entry
 	li		a4, FLEN_BYTES
 	jal		log_saved_registers
 	LOAD	ra, 0(sp)

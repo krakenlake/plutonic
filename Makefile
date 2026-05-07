@@ -1,4 +1,4 @@
-.PHONY: default kernel all run debug release clean  
+.PHONY: default all run debug release clean  
 
 default: all
 
@@ -54,16 +54,11 @@ export PLUTONIC_CFLAGS = $(CFLAGS)
 export LIBPLTNC_CFLAGS = $(CFLAGS)
 export LIBSBICALL_CFLAGS = $(CFLAGS)
 
-LIBDIRS = $(wildcard ./lib*)
-LIBNAMES =  $(LIBDIRS:./lib%=lib%)
-$(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
-.PHONY: $(LIBS)
-
 # targets
-all: Makefile $(LIBS) kernel
-
-$(LIBS) kernel:
-	cd $(notdir $(basename $@)) && make
+all: Makefile
+	cd libpltnc && make
+	cd libsbicall && make
+	cd kernel && make
 
 run: Makefile
 	cd kernel && make run
@@ -75,6 +70,8 @@ gdb: Makefile
 	cd kernel && make gdb
 
 release: Makefile
+	cd libpltnc && make release
+	cd libsbicall && make release
 	cd kernel && make release
 
 devicetree: Makefile

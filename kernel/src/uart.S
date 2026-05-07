@@ -8,7 +8,7 @@
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"
 #include "riscv/register.h"
-#include "riscv/sbi.h"
+#include "libsbicall/sbi.h"
 #include "plutonic/stack.h"
 
 .global uart_init
@@ -122,6 +122,7 @@ uart_output_string_loop:
 	lb		a0, 0(a1)
 	beqz	a0, uart_output_string_done
 	jal		uart_output_char
+	# todo: do not expect a1 to be preserved
 	addi	a1, a1, 1
 	j		uart_output_string_loop
 uart_output_string_done:
@@ -136,6 +137,7 @@ uart_output_string_done:
 uart_output_char:
 	# save a0 and a1 over SBI calls
 	addi	sp, sp, -32
+	# todo: a1/a0 handling uart_output_string
 	STORE	ra, 0(sp)
 	STORE	a0, 8(sp)
 	STORE	a1, 16(sp)

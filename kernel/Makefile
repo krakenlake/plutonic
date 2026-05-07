@@ -86,7 +86,7 @@ PLUTONIC_CFLAGS ?= $(CFLAGS)
 PLUTONIC_CFLAGS += -mcmodel=medany
 PLUTONIC_CFLAGS += -I"../kernel/include"
 PLUTONIC_CFLAGS += -I"../libpltnc/include"
-PLUTONIC_CFLAGS += -I"../librv64strings/include"
+PLUTONIC_CFLAGS += -I"../libsbicall/include"
 
 # LDFLAGS
 PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
@@ -112,6 +112,7 @@ OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
 LIBS = $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
+LIBS += $(BUILDROOT)/$(TARGET)/libsbicall/libsbicall.a
 
 # dependencies
 -include $(DEP)

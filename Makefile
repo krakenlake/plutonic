@@ -1,4 +1,4 @@
-.PHONY: default all run debug release clean  
+.PHONY: default kernel all run debug release clean  
 
 default: all
 
@@ -54,21 +54,16 @@ export PLUTONIC_CFLAGS = $(CFLAGS)
 export LIBPLTNC_CFLAGS = $(CFLAGS)
 export LIBSBICALL_CFLAGS = $(CFLAGS)
 
-#LIBDIRS = $(wildcard ./lib*)
-#LIBNAMES =  $(LIBDIRS:./lib%=lib%)
-
-
 LIBDIRS = $(wildcard ./lib*)
 LIBNAMES =  $(LIBDIRS:./lib%=lib%)
 $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
 .PHONY: $(LIBS)
 
 # targets
-all: Makefile $(LIBS)
-	cd kernel && make
+all: Makefile $(LIBS) kernel
 
-$(LIBS):
-	cd $(notdir $(basename $@)) && make TARGET=$(TARGET) release
+$(LIBS) kernel:
+	cd $(notdir $(basename $@)) && make
 
 run: Makefile
 	cd kernel && make run

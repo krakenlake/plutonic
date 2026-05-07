@@ -54,12 +54,21 @@ export PLUTONIC_CFLAGS = $(CFLAGS)
 export LIBPLTNC_CFLAGS = $(CFLAGS)
 export LIBSBICALL_CFLAGS = $(CFLAGS)
 
+#LIBDIRS = $(wildcard ./lib*)
+#LIBNAMES =  $(LIBDIRS:./lib%=lib%)
+
+
+LIBDIRS = $(wildcard ./lib*)
+LIBNAMES =  $(LIBDIRS:./lib%=lib%)
+$(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
+.PHONY: $(LIBS)
 
 # targets
-all: Makefile
-	cd libpltnc && make
-	cd libsbicall && make
+all: Makefile $(LIBS)
 	cd kernel && make
+
+$(LIBS):
+	cd $(notdir $(basename $@)) && make TARGET=$(TARGET) release
 
 run: Makefile
 	cd kernel && make run
@@ -71,8 +80,6 @@ gdb: Makefile
 	cd kernel && make gdb
 
 release: Makefile
-	cd libpltnc && make release
-	cd libsbicall && make release
 	cd kernel && make release
 
 devicetree: Makefile
@@ -87,4 +94,3 @@ devtools-mac:
 	brew install riscv64-elf-gdb
 	brew install riscv64-elf-binutils
 	brew install qemu
-

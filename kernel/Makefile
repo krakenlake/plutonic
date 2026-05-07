@@ -111,8 +111,9 @@ OBJ_C = $(SRC_C:./src/%.c=$(BUILD)/%.o)
 OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
-LIBS = $(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a
-LIBS += $(BUILDROOT)/$(TARGET)/libsbicall/libsbicall.a
+LIBDIRS = $(wildcard ../lib*)
+LIBS =  $(LIBDIRS:../lib%=lib%)
+$(foreach libname,$(LIBS),$(eval LIBFILES+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
 
 # dependencies
 -include $(DEP)
@@ -129,7 +130,7 @@ $(BUILD)/$(NAME).img: $(BUILD) $(BUILD)/$(NAME).elf
 	$(OBJCOPY) $(BUILD)/$(NAME).elf -O binary $@
 
 $(BUILD)/$(NAME).elf: Makefile $(LIBS) $(OBJ) $(BUILD)/link.ld
-	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
+	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBFILES)
 
 $(BUILD)/link.ld: Makefile $(CONFIG)/link.ld.in $(BUILD)
 	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $(CONFIG)/link.ld.in > $@ 
@@ -143,11 +144,8 @@ $(BUILD)/%.o: src/%.S Makefile $(BUILD)/config.h
 $(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
 	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
-$(BUILDROOT)/$(TARGET)/libpltnc/libpltnc.a:
-	cd ../libpltnc && make TARGET=$(TARGET)
-
-$(BUILDROOT)/$(TARGET)/librv64strings/librv64strings.a:
-	cd ../libpltnc && make TARGET=$(TARGET)
+$(LIBS):
+	cd ../$@ && make TARGET=$(TARGET)
 
 $(RELEASE)/plutonic-$(TARGET).img: $(BUILD)/$(NAME).img
 	cp $(BUILD)/$(NAME).img $@

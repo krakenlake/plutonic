@@ -54,17 +54,12 @@ export PLUTONIC_CFLAGS = $(CFLAGS)
 export LIBPLTNC_CFLAGS = $(CFLAGS)
 export LIBSBICALL_CFLAGS = $(CFLAGS)
 
-LIBS = libpltnc libsbicall
 
 # targets
 all:
-	cd libpltnc && make
-	cd libsbicall && make
 	cd kernel && make
 
 run: Makefile
-	cd libpltnc && make
-	cd libsbicall && make
 	cd kernel && make run
 
 debug:
@@ -74,8 +69,6 @@ gdb:
 	cd kernel && make gdb
 
 release: Makefile
-	cd libpltnc && make release
-	cd libsbicall && make release
 	cd kernel && make release
 
 devicetree: Makefile

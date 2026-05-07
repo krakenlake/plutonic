@@ -98,7 +98,7 @@ PLUTONIC_CPPFLAGS += -DRAM_START=$(RAM_START)
 PLUTONIC_CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
 
 # names
-NAME = plutonic
+NAME = $(notdir $(shell pwd))
 CONFIG = config
 BUILDROOT = ../build
 BUILD = $(BUILDROOT)/$(TARGET)/kernel
@@ -112,31 +112,31 @@ OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
 LIBDIRS = $(wildcard ../lib*)
-LIBS =  $(LIBDIRS:../lib%=lib%)
-$(foreach libname,$(LIBS),$(eval LIBFILES+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
+LIBNAMES =  $(LIBDIRS:../lib%=lib%)
+$(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
 
 # dependencies
 -include $(DEP)
 
 
 # targets
-this: Makefile $(BUILD)/$(NAME).img
-	@ls -ln $(BUILD)/$(NAME).img
+this: $(BUILD)/$(NAME).img Makefile
+	@ls -ln $<
 
 $(BUILD) $(RELEASE):
 	mkdir -p $@
 
-$(BUILD)/$(NAME).img: $(BUILD) $(BUILD)/$(NAME).elf
-	$(OBJCOPY) $(BUILD)/$(NAME).elf -O binary $@
+$(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf $(BUILD) 
+	$(OBJCOPY) $< -O binary $@
 
 $(BUILD)/$(NAME).elf: Makefile $(LIBS) $(OBJ) $(BUILD)/link.ld
-	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBFILES)
+	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
 
-$(BUILD)/link.ld: Makefile $(CONFIG)/link.ld.in $(BUILD)
-	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $(CONFIG)/link.ld.in > $@ 
+$(BUILD)/link.ld: $(CONFIG)/link.ld.in $(BUILD) Makefile 
+	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $< > $@ 
 
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
-	cp $(CONFIG)/config.$(TARGET).h $@
+	cp $< $@
 
 $(BUILD)/%.o: src/%.S Makefile $(BUILD)/config.h
 	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
@@ -145,10 +145,10 @@ $(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
 	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
 
 $(LIBS):
-	cd ../$@ && make TARGET=$(TARGET)
+	cd ../$(notdir $(basename $@)) && make TARGET=$(TARGET)
 
 $(RELEASE)/plutonic-$(TARGET).img: $(BUILD)/$(NAME).img
-	cp $(BUILD)/$(NAME).img $@
+	cp $< $@
 	@ls -ln $@
 
 release: Makefile $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).img
@@ -159,8 +159,8 @@ clean:
 run: Makefile $(BUILD)/$(NAME).img
 	$(RUN)
 
-gdb: Makefile $(BUILD)/$(NAME).elf
-	$(GDB) $(BUILD)/$(NAME).elf
+gdb: $(BUILD)/$(NAME).elf Makefile
+	$(GDB) $<
 
 debug:
 	$(GDB) $(BUILD)/$(NAME).elf -ex "target remote :1234"

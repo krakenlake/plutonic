@@ -56,19 +56,23 @@ export LIBSBICALL_CFLAGS = $(CFLAGS)
 
 
 # targets
-all:
+all: Makefile
+	cd libpltnc && make
+	cd libsbicall && make
 	cd kernel && make
 
 run: Makefile
 	cd kernel && make run
 
-debug:
+debug: Makefile
 	cd kernel && make debug
 
-gdb:
+gdb: Makefile
 	cd kernel && make gdb
 
 release: Makefile
+	cd libpltnc && make release
+	cd libsbicall && make release
 	cd kernel && make release
 
 devicetree: Makefile

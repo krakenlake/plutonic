@@ -7,9 +7,9 @@
 #include "config.h"
 #include "plutonic/drivers/uart/ns16550.h"
 #include "plutonic/ASCII.h"
-#include "riscv/register.h"
-#include "libsbicall/sbi.h"
 #include "plutonic/stack.h"
+#include "riscv/register.h"
+#include "libsbicall/sbicall.h"
 
 .global uart_init
 .global uart_wait_get_char
@@ -115,19 +115,20 @@ uart_getline_done:
 # output zero-terminated string
 # in: string ptr in a0
 uart_output_string:
-	addi	sp, sp, -(XLEN_BYTES*1)	
+	addi	sp, sp, -(XLEN_BYTES*2)	
 	STORE	ra, 0(sp)
-	mv		a1, a0
+	STORE	s1, 8(sp)
+	mv		s1, a0
 uart_output_string_loop:
-	lb		a0, 0(a1)
+	lb		a0, 0(s1)
 	beqz	a0, uart_output_string_done
 	jal		uart_output_char
-	# todo: do not expect a1 to be preserved
-	addi	a1, a1, 1
+	addi	s1, s1, 1
 	j		uart_output_string_loop
 uart_output_string_done:
 	LOAD	ra, 0(sp)
-	addi	sp, sp, (XLEN_BYTES*1)
+	LOAD	s1, 8(sp)
+	addi	sp, sp, (XLEN_BYTES*2)
 	ret
 .size uart_output_string, .-uart_output_string
 
@@ -136,24 +137,22 @@ uart_output_string_done:
 # in: char (ASCII) in a0
 uart_output_char:
 	# save a0 and a1 over SBI calls
-	addi	sp, sp, -32
-	# todo: a1/a0 handling uart_output_string
+	addi	sp, sp, -16
 	STORE	ra, 0(sp)
-	STORE	a0, 8(sp)
-	STORE	a1, 16(sp)
+	STORE	s1, 8(sp)
+	mv		s1, a0
 	# print CR first if we have an LF to print
 	li		t0, ASCII_LF
 	bne		a0, t0,uart_output_char_skip_CR
 	li		a0, ASCII_CR
 	jal		sbi_debug_console_write_byte
-	LOAD	a0, 8(sp)
+	mv		a0, s1
 uart_output_char_skip_CR:
 	jal		sbi_debug_console_write_byte
 	# restore a0, a1
 	LOAD	ra, 0(sp)
-	LOAD	a0, 8(sp)
-	LOAD	a1, 16(sp)
-	addi	sp, sp, 32
+	LOAD	s1, 8(sp)
+	addi	sp, sp, 16
 	ret
 .size uart_output_char, .-uart_output_char
 

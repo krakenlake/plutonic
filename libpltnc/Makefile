@@ -59,8 +59,8 @@ LIBPLTNC_DEP		= $(LIBPLTNC_OBJ:%.o=%.d)
 
 
 # targets
-this: Makefile $(LIBPLTNC_BUILD)/$(LIBPLTNC_NAME).a
-	@ls -ln $(LIBPLTNC_BUILD)/$(LIBPLTNC_NAME).a
+this: $(LIBPLTNC_BUILD)/$(LIBPLTNC_NAME).a Makefile
+	@ls -ln $<
 
 $(LIBPLTNC_BUILD) $(LIBPLTNC_RELEASE):
 	mkdir -p $@
@@ -69,8 +69,8 @@ $(LIBPLTNC_BUILD)/$(LIBPLTNC_NAME).a: $(LIBPLTNC_BUILD) $(LIBPLTNC_OBJ) Makefile
 	$(LIBPLTNC_AR) r $@ $(LIBPLTNC_BUILD)/*.o
 	$(LIBPLTNC_RANLIB) $@
 
-$(LIBPLTNC_BUILD)/config.h: $(LIBPLTNC_BUILD) $(LIBPLTNC_CONFIG)/config.$(LIBPLTNC_TARGET).h
-	cp $(LIBPLTNC_CONFIG)/config.$(LIBPLTNC_TARGET).h $@
+$(LIBPLTNC_BUILD)/config.h: $(LIBPLTNC_CONFIG)/config.$(LIBPLTNC_TARGET).h
+	cp -p $(LIBPLTNC_CONFIG)/config.$(LIBPLTNC_TARGET).h $@
 
 $(LIBPLTNC_BUILD)/%.o: ./src/%.S Makefile $(LIBPLTNC_BUILD)/config.h
 	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -I$(LIBPLTNC_BUILD) -Iinclude -MMD -c $< -o $@

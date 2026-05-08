@@ -32,8 +32,17 @@
 /*
  * Legacy extension
  */
-#define SBI_EID_LEGACY					0
-#define SBI_FID_sbi_console_putchar		1
+#define SBI_EID_LEGACY							0
+#define SBI_FID_sbi_set_timer					0
+#define SBI_FID_sbi_console_putchar				1
+#define SBI_FID_sbi_console_getchar				2
+#define SBI_FID_sbi_clear_ipi					3
+#define SBI_FID_sbi_send_ipi					4
+#define SBI_FID_sbi_remote_fence_i				5
+#define SBI_FID_sbi_remote_sfence_vma			6
+#define SBI_FID_sbi_remote_sfence_vma_asid		7
+#define SBI_FID_sbi_shutdown					8
+
 
 /*
  * Base extension
@@ -48,6 +57,7 @@
 #define SBI_FID_sbi_get_mimpid			6
 
 #define SBI_EID_TIME	0x54494D45
+
 
 #define SBI_EID_IPI		0x735049
 
@@ -87,6 +97,15 @@
 		u64 error;			// a0
 		u64 val;			// a1
 	};
+
+	struct sbiret sbi_set_timer(u64 stime_value);
+	struct sbiret sbi_console_putchar(char c);
+	struct sbiret sbi_console_getchar(void);
+	struct sbiret sbi_clear_ipi(void);
+	struct sbiret sbi_send_ipi(u64 hart_mask);
+	struct sbiret sbi_remote_fence_i(u64 hart_mask);
+	struct sbiret sbi_remote_sfence_vma(u64 hart_mask, u64 start, u64 size);
+	struct sbiret sbi_remote_sfence_vma_asid(u64 hart_mask, u64 start, u64 size, u64 asid);
 
 	struct sbiret sbi_get_spec_version(void);
 	struct sbiret sbi_get_impl_id(void);

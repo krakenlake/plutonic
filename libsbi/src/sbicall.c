@@ -28,8 +28,46 @@ struct sbiret sbi_call(u64 arg0, u64 arg1, u64 arg2, u64 arg3, u64 arg4, u64 arg
 	return (struct sbiret){.error = a0, .val = a1};
 }
 
+
 /*
- * Base extension
+ * LEGACY extension
+ */
+
+struct sbiret sbi_set_timer(u64 stime_value) {
+	return sbi_call(stime_value, 0, 0, 0, 0, 0, SBI_FID_sbi_set_timer, SBI_EID_LEGACY);
+}
+
+struct sbiret sbi_console_putchar(char c) {
+	return sbi_call(c, 0, 0, 0, 0, 0, SBI_FID_sbi_console_putchar, SBI_EID_LEGACY);
+}
+
+struct sbiret sbi_console_getchar(void) {
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_console_getchar, SBI_EID_LEGACY);
+}
+
+struct sbiret sbi_clear_ipi(void) {
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_clear_ipi, SBI_EID_LEGACY);
+}
+
+struct sbiret sbi_send_ipi(u64 hart_mask) {
+	return sbi_call(hart_mask, 0, 0, 0, 0, 0, SBI_FID_sbi_send_ipi, SBI_EID_LEGACY);
+}
+
+struct sbiret sbi_remote_fence_i(u64 hart_mask) {
+	return sbi_call(hart_mask, 0, 0, 0, 0, 0, SBI_FID_sbi_remote_fence_i, SBI_EID_LEGACY);
+}
+
+struct sbiret sbi_remote_sfence_vma(u64 hart_mask, u64 start, u64 size) {
+	return sbi_call(hart_mask, start, size, 0, 0, 0, SBI_FID_sbi_remote_sfence_vma, SBI_EID_LEGACY);
+}
+
+struct sbiret sbi_remote_sfence_vma_asid(u64 hart_mask, u64 start, u64 size, u64 asid) {
+	return sbi_call(hart_mask, start, size, asid, 0, 0, SBI_FID_sbi_remote_sfence_vma_asid, SBI_EID_LEGACY);
+}
+
+
+/*
+ * BASE extension
  */
 
 struct sbiret sbi_get_spec_version(void) {
@@ -61,7 +99,7 @@ struct sbiret sbi_get_mimpid(void) {
 }
 
 /*
- * Debug console extension
+ * DBCN console extension
  */
 
 struct sbiret sbi_debug_console_write(char c) {

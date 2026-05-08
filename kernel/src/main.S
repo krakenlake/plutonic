@@ -12,6 +12,7 @@
 #include "plutonic/stack.h"
 #include "plutonic/console.h"
 #include "riscv/register.h"
+#include "libsbicall/sbicall.h"
 
 .global start
 
@@ -111,6 +112,14 @@ plutonic_wait_hart:
 	wfi
 	j	plutonic_wait_hart
 .size plutonic_wait_hart, .-plutonic_wait_hart
+
+
+cold_reboot:
+	li		a0, SRST_TYPE_COLD_REBOOT
+	li		a1, 0x00000000
+	jal		sbi_system_reset
+	wfi
+	j		cold_reboot
 
 
 thread1:

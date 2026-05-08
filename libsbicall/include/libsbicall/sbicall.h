@@ -88,10 +88,26 @@
 #define FID_sbi_hart_get_status		2
 #define FID_sbi_hart_suspend		3
 
+#define HSM_STATE_STARTED			0
+#define HSM_STOPPED					1
+#define HSM_START_PENDING			2
+#define HSM_STOP_PENDING			3
+#define HSM_SUSPENDED				4
+#define HSM_SUSPEND_PENDING			5
+#define HSM_RESUME_PENDING			6
+
 /*
  * SRST extension
  */
-#define EID_SRST	0x53525354
+#define EID_SRST					0x53525354
+#define FID_sbi_system_reset		0
+
+#define SRST_TYPE_SHUTDOWN			0x00000000
+#define SRST_TYPE_COLD_REBOOT		0x00000001
+#define SRST_TYPE_WARM_REBOOT		0x00000002
+
+#define SRST_REASON_NONE			0x00000000
+#define SRST_REASON_SYSTEM_FAILURE	0x00000001
 
 /*
  * SUSP extension

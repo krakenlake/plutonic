@@ -1,5 +1,5 @@
 /*
- * plutonic - experimental RISC-V kernel
+ * libsbcall - RISC-V SBI wrapper
  *
  * Copyright (C) 2026 krakenlake
  *
@@ -91,32 +91,45 @@
 
 
 #ifndef __ASSEMBLER__
-	# include "libsbi/types.h"
 
-	struct sbiret {
-		u64 error;			// a0
-		u64 val;			// a1
+    struct sbiret {
+          long error;
+          union {
+              long value;
+              unsigned long uvalue;
+          };
 	};
 
-	struct sbiret sbi_call(u64 arg0, u64 arg1, u64 arg2, u64 arg3, u64 arg4, u64 arg5, u64 fid, u64 eid);
+	long sbicall_legacy(unsigned long arg0, unsigned long arg1,
+		  unsigned long arg2, unsigned long arg3,
+		  unsigned long arg4, unsigned long arg5,
+		  long fid, long eid);
 
-	struct sbiret sbi_set_timer(u64 stime_value);
-	struct sbiret sbi_console_putchar(char c);
-	struct sbiret sbi_console_getchar(void);
-	struct sbiret sbi_clear_ipi(void);
-	struct sbiret sbi_send_ipi(u64 hart_mask);
-	struct sbiret sbi_remote_fence_i(u64 hart_mask);
-	struct sbiret sbi_remote_sfence_vma(u64 hart_mask, u64 start, u64 size);
-	struct sbiret sbi_remote_sfence_vma_asid(u64 hart_mask, u64 start, u64 size, u64 asid);
+	struct sbiret sbicall(unsigned long arg0, unsigned long arg1,
+		  unsigned long arg2, unsigned long arg3,
+		  unsigned long arg4, unsigned long arg5,
+		  long fid, long eid);
 
+		  // LEGACY extension
+	long sbi_set_timer(unsigned long stime_value);
+	long sbi_console_putchar(char c);
+	long sbi_console_getchar(void);
+	long sbi_clear_ipi(void);
+	long sbi_send_ipi(const unsigned long *hart_mask);
+	long sbi_remote_fence_i(const unsigned long *hart_mask);
+	long sbi_remote_sfence_vma(const unsigned long *hart_mask, unsigned long start, unsigned long size);
+	long sbi_remote_sfence_vma_asid(const unsigned long *hart_mask, unsigned long start, unsigned long size, unsigned long asid);
+
+	// BASE extension
 	struct sbiret sbi_get_spec_version(void);
 	struct sbiret sbi_get_impl_id(void);
 	struct sbiret sbi_get_impl_version(void);
-	struct sbiret sbi_probe_extension(u64 extension_id);
+	struct sbiret sbi_probe_extension(long extension_id);
 	struct sbiret sbi_get_mvendorid(void);
 	struct sbiret sbi_get_marchid(void);
 	struct sbiret sbi_get_mimpid(void);
 
+	// DBCN extension
 	struct sbiret sbi_debug_console_write(char c);
 	struct sbiret sbi_debug_console_read(char c);
 	struct sbiret sbi_debug_console_write_byte(char c);

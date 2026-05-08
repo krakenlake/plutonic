@@ -13,7 +13,7 @@
 #include "plutonic/console.h"
 #include "plutonic/ASCII.h"
 #include "plutonic/error.h"
-#include "libsbi/sbicall.h"
+#include "libsbicall/sbicall.h"
 #include "libpltnc/strings.h"
 
 
@@ -123,31 +123,31 @@ char* begin_logline(int level)
  */
 long log_sbiinfo(void)
 {
-	log_hex(LOG_DEBUG, "SBI spec version:", sbi_get_spec_version().val );
-	log_hex(LOG_DEBUG, "SBI implementation ID:", sbi_get_impl_id().val );
-	log_hex(LOG_DEBUG, "SBI implementation version:", sbi_get_impl_version().val );
+	log_hex(LOG_DEBUG, "SBI spec version:", sbi_get_spec_version().value );
+	log_hex(LOG_DEBUG, "SBI implementation ID:", sbi_get_impl_id().value );
+	log_hex(LOG_DEBUG, "SBI implementation version:", sbi_get_impl_version().value );
 
 	log_no_newline(LOG_DEBUG, "SBI extensions:");
-	(sbi_probe_extension(SBI_EID_LEGACY)).val ? console_out(" LEGACY") : 0 ;
-	(sbi_probe_extension(SBI_EID_BASE)).val ? console_out(" BASE") : 0 ;
-	(sbi_probe_extension(SBI_EID_TIME)).val ? console_out(" TIME") : 0 ;
-	(sbi_probe_extension(SBI_EID_IPI)).val ? console_out(" IPI") : 0 ;
-	(sbi_probe_extension(SBI_EID_RFENCE)).val ? console_out(" RFENCE") : 0 ;
-	(sbi_probe_extension(SBI_EID_HSM)).val ? console_out(" HSM") : 0 ;
-	(sbi_probe_extension(SBI_EID_SRST)).val ? console_out(" SRST") : 0 ;
-	(sbi_probe_extension(SBI_EID_SUSP)).val ? console_out(" SUSP") : 0 ;
-	(sbi_probe_extension(SBI_EID_PMU)).val ? console_out(" PMU") : 0 ;
-	(sbi_probe_extension(SBI_EID_DBCN)).val ? console_out(" SBCN") : 0 ;
-	(sbi_probe_extension(SBI_EID_STA)).val ? console_out(" STA") : 0 ;
-	(sbi_probe_extension(SBI_EID_NACL)).val ? console_out(" NACL") : 0 ;
-	(sbi_probe_extension(SBI_EID_FWFT)).val ? console_out(" FWFT") : 0 ;
-	(sbi_probe_extension(SBI_EID_DBTR)).val ? console_out(" DBTR") : 0 ;
-	(sbi_probe_extension(SBI_EID_MPXY)).val ? console_out(" MPXY") : 0 ;
+	(sbi_probe_extension(SBI_EID_LEGACY)).value ? console_out(" LEGACY") : 0 ;
+	(sbi_probe_extension(SBI_EID_BASE)).value ? console_out(" BASE") : 0 ;
+	(sbi_probe_extension(SBI_EID_TIME)).value ? console_out(" TIME") : 0 ;
+	(sbi_probe_extension(SBI_EID_IPI)).value ? console_out(" IPI") : 0 ;
+	(sbi_probe_extension(SBI_EID_RFENCE)).value ? console_out(" RFENCE") : 0 ;
+	(sbi_probe_extension(SBI_EID_HSM)).value ? console_out(" HSM") : 0 ;
+	(sbi_probe_extension(SBI_EID_SRST)).value ? console_out(" SRST") : 0 ;
+	(sbi_probe_extension(SBI_EID_SUSP)).value ? console_out(" SUSP") : 0 ;
+	(sbi_probe_extension(SBI_EID_PMU)).value ? console_out(" PMU") : 0 ;
+	(sbi_probe_extension(SBI_EID_DBCN)).value ? console_out(" SBCN") : 0 ;
+	(sbi_probe_extension(SBI_EID_STA)).value ? console_out(" STA") : 0 ;
+	(sbi_probe_extension(SBI_EID_NACL)).value ? console_out(" NACL") : 0 ;
+	(sbi_probe_extension(SBI_EID_FWFT)).value ? console_out(" FWFT") : 0 ;
+	(sbi_probe_extension(SBI_EID_DBTR)).value ? console_out(" DBTR") : 0 ;
+	(sbi_probe_extension(SBI_EID_MPXY)).value ? console_out(" MPXY") : 0 ;
 	print_newline();
 
-	log_hex(LOG_DEBUG, "SBI mvendorid:", sbi_get_mvendorid().val );
-	log_hex(LOG_DEBUG, "SBI marchid:", sbi_get_marchid().val );
-	log_hex(LOG_DEBUG, "SBI mimpid:", sbi_get_mimpid().val );
+	log_hex(LOG_DEBUG, "SBI mvendorid:", sbi_get_mvendorid().value );
+	log_hex(LOG_DEBUG, "SBI marchid:", sbi_get_marchid().value );
+	log_hex(LOG_DEBUG, "SBI mimpid:", sbi_get_mimpid().value );
 
 	return ERR_OK;
 }

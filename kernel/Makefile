@@ -1,11 +1,15 @@
-.PHONY: default release clean run debug device-tree
+.PHONY: default release clean debug run device-tree
 
 default: this
 
+PLUTONIC_VERSION = 0.0.2
+
+
 DEBUG ?= -DDEBUG
 
-
 ifeq ($(TARGET), qemu-64g)
+	QEMU ?= /usr/local/bin/qemu-system-riscv$(TARGET_XLEN)
+	QEMU_HARTS			= 4
 	QEMU_BIOS			= default
 	QEMU_FLAGS			= -machine virt
 # cpu type and extensions
@@ -23,7 +27,6 @@ ifeq ($(TARGET), qemu-64g)
 #	QEMU_FLAGS			+= -device virtio-vga
 # framebuffer device
 #	QEMU_FLAGS			+= -vga none -device ramfb
-	QEMU_FLAGS			+= -kernel $(BUILD)/$(NAME).img
 	FLASH_START			= 0x80200000
 	RAM_START			= 0x80020000
 	FLASH_SIZE			= 64K
@@ -53,8 +56,6 @@ endef
 
 endif
 
-QEMU_HARTS			= 4
-RUN					= qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) 
 
 # CFLAGS
 CFLAGS = -DDEBUG
@@ -114,6 +115,7 @@ LIBDIRS = $(wildcard ../lib*)
 LIBNAMES =  $(LIBDIRS:../lib%=lib%)
 $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
 $(foreach libname,$(LIBNAMES),$(eval PLUTONIC_CFLAGS+= -I../$(libname)/include))
+.PHONY: $(LIBS)
 
 # dependencies
 -include $(DEP)
@@ -126,7 +128,7 @@ this: $(BUILD)/$(NAME).img
 $(BUILD) $(RELEASE):
 	mkdir -p $@
 
-$(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf $(BUILD) Makefile
+$(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf 
 	$(OBJCOPY) $< -O binary $@
 
 $(BUILD)/$(NAME).elf: $(BUILD) Makefile $(LIBS) $(OBJ) $(BUILD)/link.ld
@@ -147,19 +149,19 @@ $(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
 $(LIBS):
 	cd ../$(notdir $(basename $@)) && make TARGET=$(TARGET)
 
-$(RELEASE)/plutonic-$(TARGET).img: $(BUILD)/$(NAME).img
+$(RELEASE)/plutonic$(PLUTONIC_VERSION)-$(TARGET).img: $(BUILD)/$(NAME).img
 	cp $< $@
 	@ls -ln $@
 
-release: Makefile $(RELEASE) $(RELEASE)/$(NAME)-$(TARGET).img
+release: Makefile $(RELEASE) $(RELEASE)/plutonic$(PLUTONIC_VERSION)-$(TARGET).img
 
 clean:
 	rm -fr $(BUILD)
 
-run: Makefile $(LIBS) $(BUILD)/$(NAME).img
-	$(RUN)
+run: $(BUILD)/$(NAME).img Makefile
+	$(QEMU) $(QEMU_FLAGS) -kernel $<
 
-gdb: $(BUILD)/$(NAME).elf Makefile
+disass: $(BUILD)/$(NAME).elf Makefile
 	$(GDB) $<
 
 debug:

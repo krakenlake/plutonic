@@ -2,8 +2,6 @@
 
 default: all
 
-export PLUTONIC_VERSION = 0.0.2
-
 export TARGET ?= qemu-64g
 #export TARGET ?= vf2
 
@@ -24,6 +22,7 @@ export OBJCOPY	= $(TOOLBIN)/riscv64-elf-objcopy
 export OBJDUMP	= $(TOOLBIN)/riscv64-elf-objdump
 export STRIP	= $(TOOLBIN)/riscv64-elf-strip
 export GDB		= $(TOOLBIN)/riscv64-elf-gdb
+export QEMU		= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
 
 # flags
 CFLAGS = -DDEBUG
@@ -72,7 +71,7 @@ run: Makefile
 debug: Makefile
 	cd kernel && make debug
 
-gdb: Makefile
+disass: Makefile
 	cd kernel && make gdb
 
 release: Makefile

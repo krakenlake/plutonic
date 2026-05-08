@@ -82,7 +82,11 @@
 /*
  * HSM extension
  */
-#define EID_HSM		0x48534D
+#define EID_HSM						0x48534D
+#define FID_sbi_hart_start			0
+#define FID_sbi_hart_stop			1
+#define FID_sbi_hart_get_status		2
+#define FID_sbi_hart_suspend		3
 
 /*
  * SRST extension

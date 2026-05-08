@@ -12,7 +12,9 @@
  * TIME extension
  */
 
-struct sbiret sbi_set_timer(unsigned long stime_value) {
-	return sbicall(stime_value, 0, 0, 0, 0, 0, FID_sbi_set_timer, EID_TIME);
+struct sbiret sbi_set_timer(unsigned long stime_value)
+{
+	return sbicall(stime_value, 0, 0, 0, 0, 0,
+		FID_sbi_set_timer, EID_TIME);
 }
 

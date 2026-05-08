@@ -12,30 +12,37 @@
  * BASE extension
  */
 
-struct sbiret sbi_get_spec_version(void) {
+struct sbiret sbi_get_spec_version(void)
+{
 	return sbicall(0, 0, 0, 0, 0, 0, FID_sbi_get_spec_version, EID_BASE);
 }
 
-struct sbiret sbi_get_impl_id(void) {
+struct sbiret sbi_get_impl_id(void)
+{
 	return sbicall(0, 0, 0, 0, 0, 0, FID_sbi_get_impl_id, EID_BASE);
 }
 
-struct sbiret sbi_get_impl_version(void) {
+struct sbiret sbi_get_impl_version(void)
+{
 	return sbicall(0, 0, 0, 0, 0, 0, FID_sbi_get_impl_version, EID_BASE);
 }
 
-struct sbiret sbi_probe_extension(long extension_id) {
+struct sbiret sbi_probe_extension(long extension_id)
+{
 	return sbicall(extension_id, 0, 0, 0, 0, 0, FID_sbi_probe_extension, EID_BASE);
 }
 
-struct sbiret sbi_get_mvendorid(void) {
+struct sbiret sbi_get_mvendorid(void)
+{
 	return sbicall(0, 0, 0, 0, 0, 0, FID_sbi_get_mvendorid, EID_BASE);
 }
 
-struct sbiret sbi_get_marchid(void) {
+struct sbiret sbi_get_marchid(void)
+{
 	return sbicall(0, 0, 0, 0, 0, 0, FID_sbi_get_marchid, EID_BASE);
 }
 
-struct sbiret sbi_get_mimpid(void) {
+struct sbiret sbi_get_mimpid(void)
+{
 	return sbicall(0, 0, 0, 0, 0, 0, FID_sbi_get_mimpid, EID_BASE);
 }

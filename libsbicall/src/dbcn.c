@@ -1,5 +1,5 @@
 /*
- * libsbcall - RISC-V SBI wrapper
+ * libsbicall - RISC-V SBI wrapper
  *
  * Copyright (C) 2026 krakenlake
  *
@@ -13,11 +13,11 @@
  */
 
 struct sbiret sbi_debug_console_write(char c) {
-	return sbicall(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_write, SBI_EID_DBCN);
+	return sbicall(c, 0, 0, 0, 0, 0, FID_sbi_debug_console_write, EID_DBCN);
 }
 struct sbiret sbi_debug_console_read(char c) {
-	return sbicall(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_read, SBI_EID_DBCN);
+	return sbicall(c, 0, 0, 0, 0, 0, FID_sbi_debug_console_read, EID_DBCN);
 }
 struct sbiret sbi_debug_console_write_byte(char c) {
-	return sbicall(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_write_byte, SBI_EID_DBCN);
+	return sbicall(c, 0, 0, 0, 0, 0, FID_sbi_debug_console_write_byte, EID_DBCN);
 }

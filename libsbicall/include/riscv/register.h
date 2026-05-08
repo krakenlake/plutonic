@@ -1,5 +1,5 @@
 /*
- * libsbcall - RISC-V SBI wrapper
+ * libsbicall - RISC-V SBI wrapper
  *
  * Copyright (C) 2026 krakenlake
  *

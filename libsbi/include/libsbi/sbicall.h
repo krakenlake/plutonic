@@ -32,52 +32,52 @@
 /*
  * Legacy extension
  */
-#define EID_LEGACY					0
-#define FID_sbi_console_putchar		1
+#define SBI_EID_LEGACY					0
+#define SBI_FID_sbi_console_putchar		1
 
 /*
  * Base extension
  */
-#define EID_BASE					0x10
-#define FID_sbi_get_spec_version	0
-#define FID_sbi_get_impl_id			1
-#define FID_sbi_get_impl_version	2
-#define FID_sbi_probe_extension		3
-#define FID_sbi_get_mvendorid		4
-#define FID_sbi_get_marchid			5
-#define FID_sbi_get_mimpid			6
+#define SBI_EID_BASE					0x10
+#define SBI_FID_sbi_get_spec_version	0
+#define SBI_FID_sbi_get_impl_id			1
+#define SBI_FID_sbi_get_impl_version	2
+#define SBI_FID_sbi_probe_extension		3
+#define SBI_FID_sbi_get_mvendorid		4
+#define SBI_FID_sbi_get_marchid			5
+#define SBI_FID_sbi_get_mimpid			6
 
-#define EID_TIME	0x54494D45
+#define SBI_EID_TIME	0x54494D45
 
-#define EID_IPI		0x735049
+#define SBI_EID_IPI		0x735049
 
-#define EID_RFENCE	0x52464E43
+#define SBI_EID_RFENCE	0x52464E43
 
-#define EID_HSM		0x48534D
+#define SBI_EID_HSM		0x48534D
 
-#define EID_SRST	0x53525354
+#define SBI_EID_SRST	0x53525354
 
-#define EID_SUSP	0x53555350
+#define SBI_EID_SUSP	0x53555350
 
-#define EID_PMU		0x504D55
+#define SBI_EID_PMU		0x504D55
 
 /*
  * Debug console extension
  */
-#define EID_DBCN							0x4442434E
-#define FID_sbi_debug_console_write			0
-#define FID_sbi_debug_console_read			1
-#define FID_sbi_debug_console_write_byte	2
+#define SBI_EID_DBCN							0x4442434E
+#define SBI_FID_sbi_debug_console_write			0
+#define SBI_FID_sbi_debug_console_read			1
+#define SBI_FID_sbi_debug_console_write_byte	2
 
-#define EID_STA		0x535441
+#define SBI_EID_STA		0x535441
 
-#define EID_NACL	0x4E41434C
+#define SBI_EID_NACL	0x4E41434C
 
-#define EID_FWFT	0x46574654
+#define SBI_EID_FWFT	0x46574654
 
-#define EID_MPXY	0x4D505859
+#define SBI_EID_MPXY	0x4D505859
 
-#define EID_DBTR	0x44425452
+#define SBI_EID_DBTR	0x44425452
 
 
 #ifndef __ASSEMBLER__

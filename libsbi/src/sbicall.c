@@ -33,31 +33,31 @@ struct sbiret sbi_call(u64 arg0, u64 arg1, u64 arg2, u64 arg3, u64 arg4, u64 arg
  */
 
 struct sbiret sbi_get_spec_version(void) {
-	return sbi_call(0, 0, 0, 0, 0, 0, FID_sbi_get_spec_version, EID_BASE);
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_get_spec_version, SBI_EID_BASE);
 }
 
 struct sbiret sbi_get_impl_id(void) {
-	return sbi_call(0, 0, 0, 0, 0, 0, FID_sbi_get_impl_id, EID_BASE);
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_get_impl_id, SBI_EID_BASE);
 }
 
 struct sbiret sbi_get_impl_version(void) {
-	return sbi_call(0, 0, 0, 0, 0, 0, FID_sbi_get_impl_version, EID_BASE);
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_get_impl_version, SBI_EID_BASE);
 }
 
 struct sbiret sbi_probe_extension(u64 extension_id) {
-	return sbi_call(extension_id, 0, 0, 0, 0, 0, FID_sbi_probe_extension, EID_BASE);
+	return sbi_call(extension_id, 0, 0, 0, 0, 0, SBI_FID_sbi_probe_extension, SBI_EID_BASE);
 }
 
 struct sbiret sbi_get_mvendorid(void) {
-	return sbi_call(0, 0, 0, 0, 0, 0, FID_sbi_get_mvendorid, EID_BASE);
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_get_mvendorid, SBI_EID_BASE);
 }
 
 struct sbiret sbi_get_marchid(void) {
-	return sbi_call(0, 0, 0, 0, 0, 0, FID_sbi_get_marchid, EID_BASE);
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_get_marchid, SBI_EID_BASE);
 }
 
 struct sbiret sbi_get_mimpid(void) {
-	return sbi_call(0, 0, 0, 0, 0, 0, FID_sbi_get_mimpid, EID_BASE);
+	return sbi_call(0, 0, 0, 0, 0, 0, SBI_FID_sbi_get_mimpid, SBI_EID_BASE);
 }
 
 /*
@@ -65,11 +65,11 @@ struct sbiret sbi_get_mimpid(void) {
  */
 
 struct sbiret sbi_debug_console_write(char c) {
-	return sbi_call(c, 0, 0, 0, 0, 0, FID_sbi_debug_console_write, EID_DBCN);
+	return sbi_call(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_write, SBI_EID_DBCN);
 }
 struct sbiret sbi_debug_console_read(char c) {
-	return sbi_call(c, 0, 0, 0, 0, 0, FID_sbi_debug_console_read, EID_DBCN);
+	return sbi_call(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_read, SBI_EID_DBCN);
 }
 struct sbiret sbi_debug_console_write_byte(char c) {
-	return sbi_call(c, 0, 0, 0, 0, 0, FID_sbi_debug_console_write_byte, EID_DBCN);
+	return sbi_call(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_write_byte, SBI_EID_DBCN);
 }

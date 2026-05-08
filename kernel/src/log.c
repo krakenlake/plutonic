@@ -128,21 +128,21 @@ long log_sbiinfo(void)
 	log_hex(LOG_DEBUG, "SBI implementation version:", sbi_get_impl_version().val );
 
 	log_no_newline(LOG_DEBUG, "SBI extensions:");
-	(sbi_probe_extension(EID_LEGACY)).val ? console_out(" LEGACY") : 0 ;
-	(sbi_probe_extension(EID_BASE)).val ? console_out(" BASE") : 0 ;
-	(sbi_probe_extension(EID_TIME)).val ? console_out(" TIME") : 0 ;
-	(sbi_probe_extension(EID_IPI)).val ? console_out(" IPI") : 0 ;
-	(sbi_probe_extension(EID_RFENCE)).val ? console_out(" RFENCE") : 0 ;
-	(sbi_probe_extension(EID_HSM)).val ? console_out(" HSM") : 0 ;
-	(sbi_probe_extension(EID_SRST)).val ? console_out(" SRST") : 0 ;
-	(sbi_probe_extension(EID_SUSP)).val ? console_out(" SUSP") : 0 ;
-	(sbi_probe_extension(EID_PMU)).val ? console_out(" PMU") : 0 ;
-	(sbi_probe_extension(EID_DBCN)).val ? console_out(" SBCN") : 0 ;
-	(sbi_probe_extension(EID_STA)).val ? console_out(" STA") : 0 ;
-	(sbi_probe_extension(EID_NACL)).val ? console_out(" NACL") : 0 ;
-	(sbi_probe_extension(EID_FWFT)).val ? console_out(" FWFT") : 0 ;
-	(sbi_probe_extension(EID_DBTR)).val ? console_out(" DBTR") : 0 ;
-	(sbi_probe_extension(EID_MPXY)).val ? console_out(" MPXY") : 0 ;
+	(sbi_probe_extension(SBI_EID_LEGACY)).val ? console_out(" LEGACY") : 0 ;
+	(sbi_probe_extension(SBI_EID_BASE)).val ? console_out(" BASE") : 0 ;
+	(sbi_probe_extension(SBI_EID_TIME)).val ? console_out(" TIME") : 0 ;
+	(sbi_probe_extension(SBI_EID_IPI)).val ? console_out(" IPI") : 0 ;
+	(sbi_probe_extension(SBI_EID_RFENCE)).val ? console_out(" RFENCE") : 0 ;
+	(sbi_probe_extension(SBI_EID_HSM)).val ? console_out(" HSM") : 0 ;
+	(sbi_probe_extension(SBI_EID_SRST)).val ? console_out(" SRST") : 0 ;
+	(sbi_probe_extension(SBI_EID_SUSP)).val ? console_out(" SUSP") : 0 ;
+	(sbi_probe_extension(SBI_EID_PMU)).val ? console_out(" PMU") : 0 ;
+	(sbi_probe_extension(SBI_EID_DBCN)).val ? console_out(" SBCN") : 0 ;
+	(sbi_probe_extension(SBI_EID_STA)).val ? console_out(" STA") : 0 ;
+	(sbi_probe_extension(SBI_EID_NACL)).val ? console_out(" NACL") : 0 ;
+	(sbi_probe_extension(SBI_EID_FWFT)).val ? console_out(" FWFT") : 0 ;
+	(sbi_probe_extension(SBI_EID_DBTR)).val ? console_out(" DBTR") : 0 ;
+	(sbi_probe_extension(SBI_EID_MPXY)).val ? console_out(" MPXY") : 0 ;
 	print_newline();
 
 	log_hex(LOG_DEBUG, "SBI mvendorid:", sbi_get_mvendorid().val );

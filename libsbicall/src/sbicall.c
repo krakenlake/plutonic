@@ -40,9 +40,9 @@ long sbicall_legacy(unsigned long arg0, unsigned long arg1,
  * other extensions use this
  */
 struct sbiret sbicall(unsigned long arg0, unsigned long arg1, 
-		unsigned long arg2, unsigned long arg3,
-		unsigned long arg4, unsigned long arg5,
-		long fid, long eid) 
+						unsigned long arg2, unsigned long arg3,
+						unsigned long arg4, unsigned long arg5,
+						long fid, long eid) 
 {
 	register unsigned long a0 __asm__("a0") = arg0;
 	register unsigned long a1 __asm__("a1") = arg1;

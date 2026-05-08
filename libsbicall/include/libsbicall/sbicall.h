@@ -69,7 +69,15 @@
 /*
  * RFENCE extension
  */
-#define EID_RFENCE	0x52464E43
+#define EID_RFENCE							0x52464E43
+#define FID_sbi_remote_fence_i				0
+#define FID_sbi_remote_sfence_vma			1
+#define FID_sbi_remote_sfence_vma_asid		2
+#define FID_sbi_remote_hfence_gvma_vmid		3
+#define FID_sbi_remote_hfence_gvma			4
+#define FID_sbi_remote_hfence_vvma_asid		5
+#define FID_sbi_remote_hfence_vvma			6
+
 
 /*
  * HSM extension

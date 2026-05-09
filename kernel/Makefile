@@ -67,7 +67,7 @@ endif
 
 # tools
 TOOLBIN	?= /usr/local/bin
-GCC_INC	= /usr/local/Cellar/riscv-gnu-toolchain/main/riscv64-unknown-elf/include
+GCC_INC	?= /usr/local/Cellar/riscv-gnu-toolchain/main/riscv64-unknown-elf/include
 CC		= $(TOOLBIN)/riscv64-elf-gcc
 CPP		= $(TOOLBIN)/riscv64-elf-cpp
 LD		= $(TOOLBIN)/riscv64-elf-ld
@@ -109,7 +109,6 @@ CFLAGS += -g
 PLUTONIC_CFLAGS ?= $(CFLAGS)
 # needed to access memory beyond 0x7fffffff
 PLUTONIC_CFLAGS += -mcmodel=medany
-PLUTONIC_CFLAGS += -I"../kernel/include"
 
 # LDFLAGS
 PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
@@ -138,8 +137,10 @@ DEP = $(OBJ:%.o=%.d)
 LIBDIRS = $(wildcard ../lib*)
 LIBNAMES =  $(LIBDIRS:../lib%=lib%)
 $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
-$(foreach libname,$(LIBNAMES),$(eval PLUTONIC_CFLAGS+= -I../$(libname)/include))
+$(foreach libname,$(LIBNAMES),$(eval LIBINCLUDES+= -I../$(libname)/include))
 .PHONY: $(LIBS)
+
+INCLUDES = -Iinclude $(LIBINCLUDES) -I$(BUILD) -I$(GCC_INC)
 
 # dependencies
 -include $(DEP)
@@ -165,10 +166,10 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp -p $(CONFIG)/config.$(TARGET).h $@
 
 $(BUILD)/%.o: src/%.S Makefile $(BUILD)/config.h
-	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -I$(GCC_INC) -MMD -c $< -o $@
+	$(CC) $(PLUTONIC_CFLAGS) $(INCLUDES) -MMD -c $< -o $@
 
 $(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
-	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -I$(GCC_INC) -MMD -c $< -o $@
+	$(CC) $(PLUTONIC_CFLAGS) $(INCLUDES) -MMD -c $< -o $@
 
 $(LIBS):
 	cd ../$(notdir $(basename $@)) && make TARGET=$(TARGET)

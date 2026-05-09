@@ -8,7 +8,7 @@
 #include "plutonic/error.h"
 #include "plutonic/drivers/uart/ns16550.h"
 
-long console_out(char *str)
+long console_out(const char *str)
 {
 	while (*str != 0) uart_output_char(*str++);
 

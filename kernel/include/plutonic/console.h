@@ -6,5 +6,5 @@
  */
 #pragma once
 #ifndef __ASSEMBLER__
-	long console_out(char *str);
+	long console_out(const char *str);
 #endif

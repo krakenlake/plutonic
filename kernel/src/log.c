@@ -127,22 +127,13 @@ long log_sbiinfo(void)
 	log_hex(LOG_DEBUG, "SBI implementation ID:", sbi_get_impl_id().value );
 	log_hex(LOG_DEBUG, "SBI implementation version:", sbi_get_impl_version().value );
 
-	log_no_newline(LOG_DEBUG, "SBI extensions:");
-	(sbi_probe_extension(SBI_EID_LEGACY)).value ? console_out(" LEGACY") : 0 ;
-	(sbi_probe_extension(SBI_EID_BASE)).value ? console_out(" BASE") : 0 ;
-	(sbi_probe_extension(SBI_EID_TIME)).value ? console_out(" TIME") : 0 ;
-	(sbi_probe_extension(SBI_EID_IPI)).value ? console_out(" IPI") : 0 ;
-	(sbi_probe_extension(SBI_EID_RFENCE)).value ? console_out(" RFENCE") : 0 ;
-	(sbi_probe_extension(SBI_EID_HSM)).value ? console_out(" HSM") : 0 ;
-	(sbi_probe_extension(SBI_EID_SRST)).value ? console_out(" SRST") : 0 ;
-	(sbi_probe_extension(SBI_EID_SUSP)).value ? console_out(" SUSP") : 0 ;
-	(sbi_probe_extension(SBI_EID_PMU)).value ? console_out(" PMU") : 0 ;
-	(sbi_probe_extension(SBI_EID_DBCN)).value ? console_out(" SBCN") : 0 ;
-	(sbi_probe_extension(SBI_EID_STA)).value ? console_out(" STA") : 0 ;
-	(sbi_probe_extension(SBI_EID_NACL)).value ? console_out(" NACL") : 0 ;
-	(sbi_probe_extension(SBI_EID_FWFT)).value ? console_out(" FWFT") : 0 ;
-	(sbi_probe_extension(SBI_EID_DBTR)).value ? console_out(" DBTR") : 0 ;
-	(sbi_probe_extension(SBI_EID_MPXY)).value ? console_out(" MPXY") : 0 ;
+	log_no_newline(LOG_DEBUG, "SBI extensions: ");
+	for (int i=0; i < sbi_num_extensions; i++) {
+		if ((sbi_probe_extension(sbi_extensions[i].eid)).value != 0) {
+			console_out(sbi_extensions[i].name);
+			print_char(' ');
+		}
+	}
 	print_newline();
 
 	log_hex(LOG_DEBUG, "SBI mvendorid:", sbi_get_mvendorid().value );

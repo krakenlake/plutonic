@@ -9,12 +9,7 @@
 #include "libsbicall/sbicall.h"
 
 
-struct sbi_extension {
-	char name[8];
-	unsigned int eid;
-};
-
-struct sbi_extension sbi_extensions[] = {
+const struct sbi_extension sbi_extensions[] = {
 	{"BASE", SBI_EID_BASE},
 	{"LEGACY", SBI_EID_LEGACY},
 	{"TIME", SBI_EID_TIME},
@@ -33,6 +28,8 @@ struct sbi_extension sbi_extensions[] = {
 	{"DBTR", SBI_EID_DBTR},
 	{"MPXY", SBI_EID_MPXY}
 };
+
+const int	sbi_num_extensions = sizeof(sbi_extensions) / sizeof(struct sbi_extension);
 
 /*
  * LEGACY extensions differ from rest

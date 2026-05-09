@@ -199,12 +199,20 @@
 
 #ifndef __ASSEMBLER__
 
-    struct sbiret {
-          long error;
-          union {
-              long value;
-              unsigned long uvalue;
-          };
+	struct sbi_extension {
+		char name[8];
+		unsigned int eid;
+	};
+
+	extern const struct sbi_extension sbi_extensions[];
+	extern const int sbi_num_extensions;
+
+	struct sbiret {
+		long error;
+		union {
+			long value;
+			unsigned long uvalue;
+		};
 	};
 
 	long sbicall_legacy(unsigned long arg0, unsigned long arg1,

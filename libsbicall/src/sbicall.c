@@ -9,6 +9,31 @@
 #include "libsbicall/sbicall.h"
 
 
+struct sbi_extension {
+	char name[8];
+	unsigned int eid;
+};
+
+struct sbi_extension sbi_extensions[] = {
+	{"BASE", SBI_EID_BASE},
+	{"LEGACY", SBI_EID_LEGACY},
+	{"TIME", SBI_EID_TIME},
+	{"IPI", SBI_EID_IPI},
+	{"RFENCE", SBI_EID_RFENCE},
+	{"HSM", SBI_EID_HSM},
+	{"SRST", SBI_EID_SRST},
+	{"PMU", SBI_EID_PMU},
+	{"DBCN", SBI_EID_DBCN},
+	{"SUSP", SBI_EID_SUSP},
+	{"CPPC", SBI_EID_CPPC},
+	{"NACL", SBI_EID_NACL},
+	{"STA", SBI_EID_STA},
+	{"SSE", SBI_EID_SSE},
+	{"FWFT", SBI_EID_FWFT},
+	{"DBTR", SBI_EID_DBTR},
+	{"MPXY", SBI_EID_MPXY}
+};
+
 /*
  * LEGACY extensions differ from rest
  */

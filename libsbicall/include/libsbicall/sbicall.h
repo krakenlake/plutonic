@@ -11,7 +11,6 @@
  * RISC-V Supervisor Binary Interface Specification
  * Version v3.0, 2025-07-16: Ratified
  */
-
 #define SBI_SUCCESS					0
 #define SBI_ERR_FAILED				-1
 #define SBI_ERR_NOT_SUPPORTED		-2
@@ -28,6 +27,7 @@
 #define SBI_ERR_IO					-13
 #define SBI_ERR_DENIED_LOCKED		-14
 
+
 /*
  * BASE extension
  */
@@ -39,6 +39,7 @@
 #define SBI_FID_sbi_get_mvendorid		4
 #define SBI_FID_sbi_get_marchid			5
 #define SBI_FID_sbi_get_mimpid			6
+
 
 /*
  * LEGACY extensions
@@ -54,20 +55,23 @@
 #define SBI_FID_legacy_sbi_remote_sfence_vma_asid	7
 #define SBI_FID_legacy_sbi_shutdown					8
 
+
 /*
  * TIME extension
  */
 #define SBI_EID_TIME				0x54494D45
 #define SBI_FID_sbi_set_timer		0
 
+
 /*
- * IPI extension
+ * IPI (Inter-Processor Interrupts) extension
  */
 #define SBI_EID_IPI					0x735049
 #define SBI_FID_sbi_send_ipi		0
 
+
 /*
- * RFENCE extension
+ * RFNC (RFENCE) extension
  */
 #define SBI_EID_RFENCE							0x52464E43
 #define SBI_FID_sbi_remote_fence_i				0
@@ -80,7 +84,7 @@
 
 
 /*
- * HSM extension
+ * HSM (Hart State Management) extension
  */
 #define SBI_EID_HSM						0x48534D
 #define SBI_FID_sbi_hart_start			0
@@ -97,7 +101,7 @@
 #define SBI_HSM_RESUME_PENDING			6
 
 /*
- * SRST extension
+ * SRST (System Reset) extension
  */
 #define SBI_EID_SRST					0x53525354
 #define SBI_FID_sbi_system_reset		0
@@ -109,13 +113,9 @@
 #define SBI_SRST_REASON_NONE			0x00000000
 #define SBI_SRST_REASON_SYSTEM_FAILURE	0x00000001
 
-/*
- * SUSP extension
- */
-#define SBI_EID_SUSP	0x53555350
 
 /*
- * PMU extension
+ * PMU (Performance Monitoring Unit) extension
  */
 #define SBI_EID_PMU		0x504D55
 
@@ -138,40 +138,63 @@
 #define SBI_PMU_HW_REF_CPU_CYCLES			10
 
 
-
-
 /*
- * DBCN extension
+ * DBCN (Debug Console) extension
  */
 #define SBI_EID_DBCN							0x4442434E
 #define SBI_FID_sbi_debug_console_write			0
 #define SBI_FID_sbi_debug_console_read			1
 #define SBI_FID_sbi_debug_console_write_byte	2
 
-/*
- * STA extension
- */
-#define SBI_EID_STA		0x535441
 
 /*
- * NACL extension
+ * SUSP (System Suspend) extension
+ */
+#define SBI_EID_SUSP	0x53555350
+
+
+/*
+ * CPPC (Collaborative Processor Performance Control) extension
+ */
+#define SBI_EID_CPPC	0x43505043
+
+
+/*
+ * NACL (Nested Acceleration) extension
  */
 #define SBI_EID_NACL	0x4E41434C
 
+
 /*
- * FWFT extension
+ * STA (Steal-time Accounting) extension
+ */
+#define SBI_EID_STA		0x535441
+
+
+/*
+ * SSE (Supervisor Software Events) extension
+ */
+#define SBI_EID_SSE		0x535345
+
+
+/*
+ * FWFT (SBI Firmware Features) extension
  */
 #define SBI_EID_FWFT	0x46574654
 
+
 /*
- * MPXY extension
+ * DBTR (Debug Triggers) extension
+ */
+#define SBI_EID_DBTR	0x44425452
+
+
+/*
+ * MPXY (Message Proxy) extension
  */
 #define SBI_EID_MPXY	0x4D505859
 
-/*
- * DBTR extension
- */
-#define SBI_EID_DBTR	0x44425452
+
 
 
 #ifndef __ASSEMBLER__

@@ -4,8 +4,17 @@ default: this
 
 PLUTONIC_VERSION = 0.0.2
 
-
 DEBUG ?= -DDEBUG
+
+TARGET ?= qemu-64g
+#TARGET ?= vf2
+
+TARGET_XLEN ?= 64
+
+# output directories
+BUILDROOT	?= build
+RELEASE		?= release
+
 
 ifeq ($(TARGET), qemu-64g)
 	QEMU ?= /usr/local/bin/qemu-system-riscv$(TARGET_XLEN)
@@ -51,10 +60,23 @@ define VF2_RUN_MSG
 	StarFive # go 44000000
 
 endef
-	export VF2_RUN_MSG 
+	VF2_RUN_MSG 
 	RUN			= @echo "$$VF2_RUN_MSG"
 
 endif
+
+# tools
+TOOLBIN	?= /usr/local/bin
+CC		= $(TOOLBIN)/riscv64-elf-gcc
+CPP		= $(TOOLBIN)/riscv64-elf-cpp
+LD		= $(TOOLBIN)/riscv64-elf-ld
+AR		= $(TOOLBIN)/riscv64-elf-ar
+RANLIB	= $(TOOLBIN)/riscv64-elf-ranlib
+OBJCOPY	= $(TOOLBIN)/riscv64-elf-objcopy
+OBJDUMP	= $(TOOLBIN)/riscv64-elf-objdump
+STRIP	= $(TOOLBIN)/riscv64-elf-strip
+GDB		= $(TOOLBIN)/riscv64-elf-gdb
+QEMU	= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
 
 
 # CFLAGS

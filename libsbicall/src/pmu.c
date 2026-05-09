@@ -31,8 +31,8 @@ struct sbiret sbi_pmu_counter_config_matching(unsigned long counter_idx_base,
 										uint64_t event_data)
 {
 	return sbicall(counter_idx_base, counter_idx_mask, config_flags, 
-				event_idx, event_data, 0,
-				SBI_FID_sbi_pmu_counter_config_matching, SBI_EID_PMU);
+		event_idx, event_data, 0,
+		SBI_FID_sbi_pmu_counter_config_matching, SBI_EID_PMU);
 }
 
 struct sbiret sbi_pmu_counter_start(unsigned long counter_idx_base,
@@ -41,17 +41,16 @@ struct sbiret sbi_pmu_counter_start(unsigned long counter_idx_base,
 								uint64_t initial_value)
 {
 	return sbicall(counter_idx_base, counter_idx_mask, start_flags, 
-				initial_value, 0, 0,
-				SBI_FID_sbi_pmu_counter_start, SBI_EID_PMU);
+		initial_value, 0, 0,
+		SBI_FID_sbi_pmu_counter_start, SBI_EID_PMU);
 }
 
 struct sbiret sbi_pmu_counter_stop(unsigned long counter_idx_base,
 							unsigned long counter_idx_mask,
 							unsigned long stop_flags)
 {
-	return sbicall(counter_idx_base, counter_idx_mask, stop_flags, 
-				0, 0, 0,
-				SBI_FID_sbi_pmu_counter_stop, SBI_EID_PMU);
+	return sbicall(counter_idx_base, counter_idx_mask, stop_flags, 0, 0, 0,
+		SBI_FID_sbi_pmu_counter_stop, SBI_EID_PMU);
 }
 
 struct sbiret sbi_pmu_counter_fw_read(unsigned long counter_idx)

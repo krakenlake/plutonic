@@ -115,7 +115,7 @@ plutonic_wait_hart:
 
 
 cold_reboot:
-	li		a0, SRST_TYPE_COLD_REBOOT
+	li		a0, SBI_SRST_TYPE_COLD_REBOOT
 	li		a1, 0x00000000
 	jal		sbi_system_reset
 	wfi

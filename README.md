@@ -42,6 +42,8 @@ https://github.com/yhzhang0128/egos-2000
 
 https://github.com/eyengin/xv6-riscv-unmatched/tree/unmatched
 
+https://github.com/AuroBreeze/FrostVistaOS
+
 https://popovicu.com/posts/writing-an-operating-system-kernel-from-scratch/
 
 https://popovicu.com/posts/risc-v-sbi-and-full-boot-process/

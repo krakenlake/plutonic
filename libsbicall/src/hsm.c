@@ -30,7 +30,7 @@ struct sbiret sbi_hart_get_status(unsigned long hartid)
 	return sbicall(hartid, 0, 0, 0, 0, 0, SBI_FID_sbi_hart_get_status, SBI_EID_HSM);
 }
 
-struct sbiret sbi_hart_suspend(unsigned int suspend_type,
+struct sbiret sbi_hart_suspend(uint32_t suspend_type,
 							unsigned long resume_addr,
 							unsigned long opaque)
 {

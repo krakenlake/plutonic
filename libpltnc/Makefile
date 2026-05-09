@@ -11,6 +11,7 @@ LIBPLTNC_TARGET_XLEN ?= 64
 
 # tools
 LIBPLTNC_TOOLBIN	?= /usr/local/bin
+LIBPLTNC_GCC_INC	= /usr/local/Cellar/riscv-gnu-toolchain/main/riscv64-unknown-elf/include
 LIBPLTNC_CC			?= $(LIBPLTNC_TOOLBIN)/riscv64-elf-gcc
 LIBPLTNC_CPP		?= $(LIBPLTNC_TOOLBIN)/riscv64-elf-cpp
 LIBPLTNC_AR			?= $(LIBPLTNC_TOOLBIN)/riscv64-elf-ar
@@ -73,10 +74,10 @@ $(LIBPLTNC_BUILD)/config.h: $(LIBPLTNC_CONFIG)/config.$(LIBPLTNC_TARGET).h
 	cp -p $(LIBPLTNC_CONFIG)/config.$(LIBPLTNC_TARGET).h $@
 
 $(LIBPLTNC_BUILD)/%.o: ./src/%.S Makefile $(LIBPLTNC_BUILD)/config.h
-	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -I$(LIBPLTNC_BUILD) -Iinclude -MMD -c $< -o $@
+	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -I$(LIBPLTNC_BUILD) -Iinclude -I$(LIBPLTNC_GCC_INC) -MMD -c $< -o $@
 
 $(LIBPLTNC_BUILD)/%.o: ./src/%.c Makefile $(LIBPLTNC_BUILD)/config.h
-	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -I$(LIBPLTNC_BUILD) -Iinclude -MMD -c $< -o $@
+	$(LIBPLTNC_CC) $(LIBPLTNC_CFLAGS) -I$(LIBPLTNC_BUILD) -Iinclude -I$(LIBPLTNC_GCC_INC) -MMD -c $< -o $@
 
 $(LIBPLTNC_RELEASE)/$(LIBPLTNC_NAME)-$(LIBPLTNC_TARGET).a: $(LIBPLTNC_BUILD)/$(LIBPLTNC_NAME).a
 	cp $< $@

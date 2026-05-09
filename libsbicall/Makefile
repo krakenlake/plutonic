@@ -15,6 +15,7 @@ LIBSBICALL_CC		?= $(LIBSBICALL_TOOLBIN)/riscv64-elf-gcc
 LIBSBICALL_CPP		?= $(LIBSBICALL_TOOLBIN)/riscv64-elf-cpp
 LIBSBICALL_AR		?= $(LIBSBICALL_TOOLBIN)/riscv64-elf-ar
 LIBSBICALL_RANLIB	?= $(LIBSBICALL_TOOLBIN)/riscv64-elf-ranlib
+LIBSBICALL_GCC_INC	?= /usr/local/Cellar/riscv-gnu-toolchain/main/riscv64-unknown-elf/include
 
 # CFLAGS
 CFLAGS = -march=rv$(LIBSBICALL_TARGET_XLEN)g
@@ -37,7 +38,7 @@ CFLAGS += -nostartfiles
 CFLAGS += -O2
 # add debug symbols
 CFLAGS += -g
-LIBSBICALL_CFLAGS ?= $(CFLAGS)
+LIBSBICALL_CFLAGS ?= $(CFLAGS) 
 
 # names
 LIBSBICALL_NAME			= $(notdir $(shell pwd))
@@ -73,10 +74,10 @@ $(LIBSBICALL_BUILD)/config.h: $(LIBSBICALL_CONFIG)/config.$(LIBSBICALL_TARGET).h
 	cp -p $(LIBSBICALL_CONFIG)/config.$(LIBSBICALL_TARGET).h $@
 
 $(LIBSBICALL_BUILD)/%.o: ./src/%.S Makefile $(LIBSBICALL_BUILD)/config.h
-	$(LIBSBICALL_CC) $(LIBSBICALL_CFLAGS) -I$(LIBSBICALL_BUILD) -Iinclude -MMD -c $< -o $@
+	$(LIBSBICALL_CC) $(LIBSBICALL_CFLAGS) -I$(LIBSBICALL_BUILD) -Iinclude -I$(LIBSBICALL_GCC_INC) -MMD -c $< -o $@
 
 $(LIBSBICALL_BUILD)/%.o: ./src/%.c Makefile $(LIBSBICALL_BUILD)/config.h
-	$(LIBSBICALL_CC) $(LIBSBICALL_CFLAGS) -I$(LIBSBICALL_BUILD) -Iinclude -MMD -c $< -o $@
+	$(LIBSBICALL_CC) $(LIBSBICALL_CFLAGS) -I$(LIBSBICALL_BUILD) -Iinclude -I$(LIBSBICALL_GCC_INC) -MMD -c $< -o $@
 
 $(LIBSBICALL_RELEASE)/$(LIBSBICALL_NAME)-$(LIBSBICALL_TARGET).a: $(LIBSBICALL_BUILD)/$(LIBSBICALL_NAME).a
 	cp $< $@

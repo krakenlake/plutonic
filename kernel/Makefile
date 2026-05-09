@@ -67,6 +67,7 @@ endif
 
 # tools
 TOOLBIN	?= /usr/local/bin
+GCC_INC	= /usr/local/Cellar/riscv-gnu-toolchain/main/riscv64-unknown-elf/include
 CC		= $(TOOLBIN)/riscv64-elf-gcc
 CPP		= $(TOOLBIN)/riscv64-elf-cpp
 LD		= $(TOOLBIN)/riscv64-elf-ld
@@ -77,6 +78,7 @@ OBJDUMP	= $(TOOLBIN)/riscv64-elf-objdump
 STRIP	= $(TOOLBIN)/riscv64-elf-strip
 GDB		= $(TOOLBIN)/riscv64-elf-gdb
 QEMU	= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
+
 
 
 # CFLAGS
@@ -163,10 +165,10 @@ $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
 	cp -p $(CONFIG)/config.$(TARGET).h $@
 
 $(BUILD)/%.o: src/%.S Makefile $(BUILD)/config.h
-	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -I$(GCC_INC) -MMD -c $< -o $@
 
 $(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
-	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -MMD -c $< -o $@
+	$(CC) $(PLUTONIC_CFLAGS) -I"$(BUILD)" -I$(GCC_INC) -MMD -c $< -o $@
 
 $(LIBS):
 	cd ../$(notdir $(basename $@)) && make TARGET=$(TARGET)

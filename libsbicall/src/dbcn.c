@@ -12,17 +12,21 @@
  * DBCN console extension
  */
 
-struct sbiret sbi_debug_console_write(char c)
+struct sbiret sbi_debug_console_write(unsigned long num_bytes,
+									unsigned long base_addr_lo,
+									unsigned long base_addr_hi)
 {
-	return sbicall(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_write, SBI_EID_DBCN);
+	return sbicall(num_bytes, base_addr_lo, base_addr_hi, 0, 0, 0, SBI_FID_sbi_debug_console_write, SBI_EID_DBCN);
 }
 
-struct sbiret sbi_debug_console_read(char c)
+struct sbiret sbi_debug_console_read(unsigned long num_bytes,
+									unsigned long base_addr_lo,
+									unsigned long base_addr_hi)
 {
-	return sbicall(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_read, SBI_EID_DBCN);
+	return sbicall(num_bytes, base_addr_lo, base_addr_hi, 0, 0, 0, SBI_FID_sbi_debug_console_read, SBI_EID_DBCN);
 }
 
-struct sbiret sbi_debug_console_write_byte(char c)
+struct sbiret sbi_debug_console_write_byte(uint8_t byte)
 {
-	return sbicall(c, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_write_byte, SBI_EID_DBCN);
+	return sbicall(byte, 0, 0, 0, 0, 0, SBI_FID_sbi_debug_console_write_byte, SBI_EID_DBCN);
 }

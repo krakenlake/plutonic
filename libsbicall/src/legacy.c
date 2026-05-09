@@ -12,13 +12,13 @@
  * LEGACY extensions
  */
 
-long legacy_sbi_set_timer(unsigned long stime_value)
+long legacy_sbi_set_timer(uint64_t stime_value)
 {
 	return sbicall_legacy(stime_value, 0, 0, 0, 0, 0, 
 		SBI_FID_legacy_sbi_set_timer, SBI_EID_LEGACY);
 }
 
-long legacy_sbi_console_putchar(char c)
+long legacy_sbi_console_putchar(int c)
 {
 	return sbicall_legacy(c, 0, 0, 0, 0, 0, 
 		SBI_FID_legacy_sbi_console_putchar, SBI_EID_LEGACY);

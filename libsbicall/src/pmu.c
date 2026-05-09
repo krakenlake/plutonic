@@ -28,7 +28,7 @@ struct sbiret sbi_pmu_counter_config_matching(unsigned long counter_idx_base,
 										unsigned long counter_idx_mask,
 										unsigned long config_flags,
 										unsigned long event_idx,
-										unsigned long event_data)
+										uint64_t event_data)
 {
 	return sbicall(counter_idx_base, counter_idx_mask, config_flags, 
 				event_idx, event_data, 0,
@@ -38,7 +38,7 @@ struct sbiret sbi_pmu_counter_config_matching(unsigned long counter_idx_base,
 struct sbiret sbi_pmu_counter_start(unsigned long counter_idx_base,
 								unsigned long counter_idx_mask,
 								unsigned long start_flags,
-								unsigned long initial_value)
+								uint64_t initial_value)
 {
 	return sbicall(counter_idx_base, counter_idx_mask, start_flags, 
 				initial_value, 0, 0,

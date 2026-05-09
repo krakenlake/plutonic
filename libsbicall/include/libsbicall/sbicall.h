@@ -9,6 +9,9 @@
  */
 #pragma once
 
+#include <stdint.h>
+
+
 /*
  * Standard SBI Errors
  */
@@ -422,14 +425,14 @@
 
 	/* ecalls */
 	long sbicall_legacy(unsigned long arg0, unsigned long arg1,
-			unsigned long arg2, unsigned long arg3,
-			unsigned long arg4, unsigned long arg5,
-			long fid, long eid);
+					unsigned long arg2, unsigned long arg3,
+					unsigned long arg4, unsigned long arg5,
+					long fid, long eid);
 
 	struct sbiret sbicall(unsigned long arg0, unsigned long arg1,
-			unsigned long arg2, unsigned long arg3,
-			unsigned long arg4, unsigned long arg5,
-			long fid, long eid);
+					unsigned long arg2, unsigned long arg3,
+					unsigned long arg4, unsigned long arg5,
+					long fid, long eid);
 
 	/* BASE */
 	struct sbiret sbi_get_spec_version(void);
@@ -441,27 +444,27 @@
 	struct sbiret sbi_get_mimpid(void);
 
 	/* LEGACY */
-	long legacy_sbi_set_timer(unsigned long stime_value);
-	long legacy_sbi_console_putchar(char c);
+	long legacy_sbi_set_timer(uint64_t stime_value);
+	long legacy_sbi_console_putchar(int c);
 	long legacy_sbi_console_getchar(void);
 	long legacy_sbi_clear_ipi(void);
 	long legacy_sbi_send_ipi(const unsigned long *hart_mask);
 	long legacy_sbi_remote_fence_i(const unsigned long *hart_mask);
-	long legacy_sbi_remote_sfence_vma(const unsigned long *hart_mask,
-			unsigned long start, unsigned long size);
+	long legacy_sbi_remote_sfence_vma(const unsigned long *hart_mask, 
+		unsigned long start, unsigned long size);
 	long legacy_sbi_remote_sfence_vma_asid(const unsigned long *hart_mask,
-			unsigned long start, unsigned long size, unsigned long asid);
+		unsigned long start, unsigned long size, unsigned long asid);
 
 	/* TIME */
-	struct sbiret sbi_set_timer(unsigned long stime_value);
+	struct sbiret sbi_set_timer(uint64_t stime_value);
 
 	/* IPI */
 	struct sbiret sbi_send_ipi(unsigned long hart_mask,
-			unsigned long hart_mask_base);
+		unsigned long hart_mask_base);
 
 	/* RFNC */
 	struct sbiret sbi_remote_fence_i(unsigned long hart_mask,
-			unsigned long hart_mask_base);
+		unsigned long hart_mask_base);
 	
 	
 	
@@ -481,9 +484,11 @@
 	
 	
 			/* DBCN extension */
-	struct sbiret sbi_debug_console_write(char c);
-	struct sbiret sbi_debug_console_read(char c);
-	struct sbiret sbi_debug_console_write_byte(char c);
+	struct sbiret sbi_debug_console_write(unsigned long num_bytes,
+		unsigned long base_addr_lo, unsigned long base_addr_hi);
+	struct sbiret sbi_debug_console_read(unsigned long num_bytes,
+		unsigned long base_addr_lo, unsigned long base_addr_hi);
+	struct sbiret sbi_debug_console_write_byte(uint8_t byte);
 
 	/* PMU */
 

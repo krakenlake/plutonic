@@ -29,14 +29,14 @@ const struct sbi_extension sbi_extensions[] = {
 	{"MPXY", SBI_EID_MPXY}
 };
 
-const int	sbi_num_extensions = sizeof(sbi_extensions) / sizeof(struct sbi_extension);
+const int sbi_num_extensions = sizeof(sbi_extensions) / sizeof(struct sbi_extension);
 
 /*
  * LEGACY extensions differ from rest
  */
 long sbicall_legacy(unsigned long arg0, unsigned long arg1,
 		unsigned long arg2, unsigned long arg3,
-		unsigned long arg4,unsigned long arg5,
+		unsigned long arg4, unsigned long arg5,
 		long fid, long eid) 
 {
 	register unsigned long a0 __asm__("a0") = arg0;

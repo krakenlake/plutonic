@@ -18,6 +18,8 @@ This is my experimental kernel tinkering project and currently not doing anythin
 - catching and printing exceptions
 - full register dumps
 - checking for device tree
+- libsbicall for SBI calls
+- SBI extensions probing and printing
 
 ## Targets
 - RV64G (short for RV64IMAFD_Zicsr_Zifencei)

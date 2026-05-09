@@ -9,8 +9,6 @@
  */
 #pragma once
 
-#include <stdint.h>
-
 
 /*
  * Standard SBI Errors
@@ -404,6 +402,8 @@
  * C forward declarations
  */
 #ifndef __ASSEMBLER__
+	#include <stdint.h>
+
 
 	/* extensions bookkeeping */
 	struct sbi_extension {

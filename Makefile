@@ -3,8 +3,8 @@
 default: all
 
 # output directories
-export BUILDROOT	?= build
-export RELEASE		?= release
+BUILDROOT	?= build
+RELEASE		?= release
 
 
 LIBDIRS = $(wildcard ./lib*)

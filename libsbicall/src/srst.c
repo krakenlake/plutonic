@@ -9,13 +9,13 @@
 
 
 /*
- * TIME extension
+ * SRST extension
  */
 
 struct sbiret sbi_system_reset(unsigned int reset_type, 
 							unsigned int reset_reason)
 {
 	return sbicall(reset_type, reset_reason, 0, 0, 0, 0,
-		SBI_FID_sbi_system_reset, SBI_EID_TIME);
+		SBI_FID_sbi_system_reset, SBI_EID_SRST);
 }
 

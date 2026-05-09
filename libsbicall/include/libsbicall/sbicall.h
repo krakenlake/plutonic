@@ -431,7 +431,16 @@
 			unsigned long arg4, unsigned long arg5,
 			long fid, long eid);
 
-	/* LEGACY extension */
+	/* BASE */
+	struct sbiret sbi_get_spec_version(void);
+	struct sbiret sbi_get_impl_id(void);
+	struct sbiret sbi_get_impl_version(void);
+	struct sbiret sbi_probe_extension(long extension_id);
+	struct sbiret sbi_get_mvendorid(void);
+	struct sbiret sbi_get_marchid(void);
+	struct sbiret sbi_get_mimpid(void);
+
+	/* LEGACY */
 	long legacy_sbi_set_timer(unsigned long stime_value);
 	long legacy_sbi_console_putchar(char c);
 	long legacy_sbi_console_getchar(void);
@@ -443,19 +452,35 @@
 	long legacy_sbi_remote_sfence_vma_asid(const unsigned long *hart_mask,
 			unsigned long start, unsigned long size, unsigned long asid);
 
-	/* BASE extension */
-	struct sbiret sbi_get_spec_version(void);
-	struct sbiret sbi_get_impl_id(void);
-	struct sbiret sbi_get_impl_version(void);
-	struct sbiret sbi_probe_extension(long extension_id);
-	struct sbiret sbi_get_mvendorid(void);
-	struct sbiret sbi_get_marchid(void);
-	struct sbiret sbi_get_mimpid(void);
+	/* TIME */
+	struct sbiret sbi_set_timer(unsigned long stime_value);
 
 	/* IPI */
+	struct sbiret sbi_send_ipi(unsigned long hart_mask,
+			unsigned long hart_mask_base);
 
-
-	/* DBCN extension */
+	/* RFNC */
+	struct sbiret sbi_remote_fence_i(unsigned long hart_mask,
+			unsigned long hart_mask_base);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+			/* DBCN extension */
 	struct sbiret sbi_debug_console_write(char c);
 	struct sbiret sbi_debug_console_read(char c);
 	struct sbiret sbi_debug_console_write_byte(char c);

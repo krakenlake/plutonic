@@ -34,7 +34,7 @@ const int sbi_num_extensions = sizeof(sbi_extensions) / sizeof(struct sbi_extens
 /*
  * LEGACY extensions differ from rest
  */
-long sbicall_legacy(unsigned long arg0, unsigned long arg1,
+inline long sbicall_legacy(unsigned long arg0, unsigned long arg1,
 		unsigned long arg2, unsigned long arg3,
 		unsigned long arg4, unsigned long arg5,
 		long fid, long eid) 
@@ -61,7 +61,7 @@ long sbicall_legacy(unsigned long arg0, unsigned long arg1,
 /*
  * other extensions use this
  */
-struct sbiret sbicall(unsigned long arg0, unsigned long arg1, 
+inline struct sbiret sbicall(unsigned long arg0, unsigned long arg1, 
 						unsigned long arg2, unsigned long arg3,
 						unsigned long arg4, unsigned long arg5,
 						long fid, long eid) 

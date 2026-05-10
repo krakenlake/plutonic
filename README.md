@@ -26,6 +26,8 @@ This is my experimental kernel tinkering project and currently not doing anythin
 
 ## Requirements
 - riscv64 GNU toolchain for building
+- https://github.com/krakenlake/libpltnc
+- https://github.com/krakenlake/libsbicall
 - QEMU or other hardware to run the kernel
 
 ## Current design decisions

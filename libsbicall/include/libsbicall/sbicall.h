@@ -35,6 +35,7 @@
  */
 #define SBI_EID_BASE					0x10
 
+/* Functions */
 #define SBI_FID_sbi_get_spec_version	0
 #define SBI_FID_sbi_get_impl_id			1
 #define SBI_FID_sbi_get_impl_version	2
@@ -49,6 +50,7 @@
  */
 #define SBI_EID_LEGACY								0
 
+/* Functions */
 #define SBI_FID_legacy_sbi_set_timer				0
 #define SBI_FID_legacy_sbi_console_putchar			1
 #define SBI_FID_legacy_sbi_console_getchar			2
@@ -65,6 +67,7 @@
  */
 #define SBI_EID_TIME				0x54494D45
 
+/* Functions */
 #define SBI_FID_sbi_set_timer		0
 
 
@@ -73,6 +76,7 @@
  */
 #define SBI_EID_IPI					0x735049
 
+/* Functions */
 #define SBI_FID_sbi_send_ipi		0
 
 
@@ -81,6 +85,7 @@
  */
 #define SBI_EID_RFENCE							0x52464E43
 
+/* Functions */
 #define SBI_FID_sbi_remote_fence_i				0
 #define SBI_FID_sbi_remote_sfence_vma			1
 #define SBI_FID_sbi_remote_sfence_vma_asid		2
@@ -95,11 +100,13 @@
  */
 #define SBI_EID_HSM						0x48534D
 
+/* Functions */
 #define SBI_FID_sbi_hart_start			0
 #define SBI_FID_sbi_hart_stop			1
 #define SBI_FID_sbi_hart_get_status		2
 #define SBI_FID_sbi_hart_suspend		3
 
+/* HSM Hart States */
 #define SBI_HSM_STATE_STARTED			0
 #define SBI_HSM_STOPPED					1
 #define SBI_HSM_START_PENDING			2
@@ -113,12 +120,15 @@
  */
 #define SBI_EID_SRST					0x53525354
 
+/* Functions */
 #define SBI_FID_sbi_system_reset		0
 
+/* SRST System Reset Types */
 #define SBI_SRST_TYPE_SHUTDOWN			0x00000000
 #define SBI_SRST_TYPE_COLD_REBOOT		0x00000001
 #define SBI_SRST_TYPE_WARM_REBOOT		0x00000002
 
+/* SRST System Reset Reasons */
 #define SBI_SRST_REASON_NONE			0x00000000
 #define SBI_SRST_REASON_SYSTEM_FAILURE	0x00000001
 
@@ -128,6 +138,7 @@
  */
 #define SBI_EID_PMU						0x504D55
 
+/* Functions */
 #define SBI_FID_sbi_pmu_num_counters			0
 #define SBI_FID_sbi_pmu_counter_get_info		1
 #define SBI_FID_sbi_pmu_counter_config_matching	2
@@ -227,6 +238,7 @@
  */
 #define SBI_EID_DBCN							0x4442434E
 
+/* Functions */
 #define SBI_FID_sbi_debug_console_write			0
 #define SBI_FID_sbi_debug_console_read			1
 #define SBI_FID_sbi_debug_console_write_byte	2
@@ -237,6 +249,7 @@
  */
 #define SBI_EID_SUSP	0x53555350
 
+/* Functions */
 #define SBI_FID_sbi_system_suspend	0
 
 /* SUSP System Sleep Types */
@@ -248,6 +261,7 @@
  */
 #define SBI_EID_CPPC	0x43505043
 
+/* Functions */
 #define SBI_FID_sbi_cppc_probe		0
 #define SBI_FID_sbi_cppc_read		1
 #define SBI_FID_sbi_cppc_read_hi	2
@@ -283,11 +297,13 @@
  */
 #define SBI_EID_NACL	0x4E41434C
 
-#define SBI_FID_sbi_nacl_probe_feature		0
-#define SBI_FID_sbi_nacl_set_shmem			1
-#define SBI_FID_sbi_nacl_sync_csr			2
-#define SBI_FID_sbi_nacl_sync_hfence		3
-#define SBI_FID_sbi_nacl_sync_sret			4
+/* Functions */
+#define SBI_FID_sbi_nacl_probe_feature	0
+#define SBI_FID_sbi_nacl_set_shmem		1
+#define SBI_FID_sbi_nacl_sync_csr		2
+#define SBI_FID_sbi_nacl_sync_hfence	3
+#define SBI_FID_sbi_nacl_sync_sret		
+
 
 /* Nested acceleration features */
 #define SBI_NACL_FEAT_SYNC_CSR		0x00000000
@@ -301,6 +317,7 @@
  */
 #define SBI_EID_STA		0x535441
 
+/* Functions */
 #define SBI_FID_sbi_steal_time_set_shmem	0
 
 
@@ -309,6 +326,7 @@
  */
 #define SBI_EID_SSE		0x535345
 
+/* Functions */
 #define SBI_FID_sbi_sse_read_attrs		0
 #define SBI_FID_sbi_sse_write_attrs		1
 #define SBI_FID_sbi_sse_register		2
@@ -337,6 +355,7 @@
  */
 #define SBI_EID_FWFT	0x46574654
 
+/* Functions */
 #define SBI_FID_sbi_fwft_set	0
 #define SBI_FID_sbi_fwft_get	1
 
@@ -353,6 +372,7 @@
  */
 #define SBI_EID_DBTR	0x44425452
 
+/* Functions */
 #define SBI_FID_sbi_debug_num_triggers			0
 #define SBI_FID_sbi_debug_set_shmem				1
 #define SBI_FID_sbi_debug_read_triggers			2
@@ -367,6 +387,7 @@
  */
 #define SBI_EID_MPXY	0x4D505859
 
+/* Functions */
 #define SBI_FID_sbi_mpxy_get_shmem_size					0
 #define SBI_FID_sbi_mpxy_set_shmem						1
 #define SBI_FID_sbi_mpxy_get_channel_ids				2
@@ -402,8 +423,9 @@
  * C forward declarations
  */
 #ifndef __ASSEMBLER__
-	#include <stdint.h>
 
+	/* C99 types like uint64_t are defined here */
+	#include <stdint.h>
 
 	/* extensions bookkeeping */
 	struct sbi_extension {

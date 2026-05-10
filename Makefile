@@ -123,7 +123,7 @@ PLUTONIC_CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
 NAME = $(notdir $(shell pwd))
 CONFIG = config
 BUILDROOT = ../build
-BUILD = $(BUILDROOT)/$(TARGET)/kernel
+BUILD = $(BUILDROOT)/$(TARGET)/plutonic
 RELEASE = ../release/$(TARGET)
 SRC_S = $(wildcard ./src/*.S)
 SRC_C = $(wildcard ./src/*.c)

@@ -25,7 +25,7 @@ debug: Makefile
 	cd kernel && make debug
 
 disass: Makefile
-	cd kernel && make gdb
+	cd kernel && make disass
 
 release: Makefile
 	cd kernel && make release

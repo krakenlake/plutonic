@@ -83,7 +83,7 @@
 /*
  * RFNC (RFENCE) extension
  */
-#define SBI_EID_RFENCE							0x52464E43
+#define SBI_EID_RFNC							0x52464E43
 
 /* Functions */
 #define SBI_FID_sbi_remote_fence_i				0

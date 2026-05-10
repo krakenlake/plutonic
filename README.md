@@ -13,12 +13,12 @@ This is my experimental kernel tinkering project and currently not doing anythin
 - console output via OpenSBI
 - printing a banner
 - setting up a timer IRQ
-- waiting for IRQ loop
+- waiting for timer IRQ in wfi loop
 - printing debug output
 - catching and printing exceptions
 - full register dumps
 - checking for device tree
-- libsbicall for SBI calls
+- libsbicall for SBI calls (https://github.com/krakenlake/libsbicall)
 - SBI extensions probing and printing
 
 ## Targets

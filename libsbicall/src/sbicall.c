@@ -14,7 +14,7 @@ const struct sbi_extension sbi_extensions[] = {
 	{"LEGACY", SBI_EID_LEGACY},
 	{"TIME", SBI_EID_TIME},
 	{"IPI", SBI_EID_IPI},
-	{"RFENCE", SBI_EID_RFENCE},
+	{"RFNC", SBI_EID_RFNC},
 	{"HSM", SBI_EID_HSM},
 	{"SRST", SBI_EID_SRST},
 	{"PMU", SBI_EID_PMU},

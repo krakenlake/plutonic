@@ -302,8 +302,7 @@
 #define SBI_FID_sbi_nacl_set_shmem		1
 #define SBI_FID_sbi_nacl_sync_csr		2
 #define SBI_FID_sbi_nacl_sync_hfence	3
-#define SBI_FID_sbi_nacl_sync_sret		
-
+#define SBI_FID_sbi_nacl_sync_sret		4
 
 /* Nested acceleration features */
 #define SBI_NACL_FEAT_SYNC_CSR		0x00000000

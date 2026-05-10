@@ -1,6 +1,4 @@
-.PHONY: default release clean debug run device-tree
-
-default: this
+.PHONY: this release clean debug run device-tree
 
 PLUTONIC_VERSION = 0.0.2
 
@@ -82,7 +80,7 @@ QEMU	= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
 
 
 # CFLAGS
-CFLAGS = -DDEBUG
+CFLAGS = $(DEBUG)
 CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 # target platform
 CFLAGS += -march=rv$(TARGET_XLEN)g
@@ -105,10 +103,10 @@ CFLAGS += -fno-omit-frame-pointer
 CFLAGS += -O2
 # add debug symbols
 CFLAGS += -g
+# needed to access memory beyond 0x7fffffff
+CFLAGS += -mcmodel=medany
 
 PLUTONIC_CFLAGS ?= $(CFLAGS)
-# needed to access memory beyond 0x7fffffff
-PLUTONIC_CFLAGS += -mcmodel=medany
 
 # LDFLAGS
 PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
@@ -134,8 +132,9 @@ OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
 # libs
-LIBDIRS = $(wildcard ../lib*)
-LIBNAMES =  $(LIBDIRS:../lib%=lib%)
+#LIBDIRS = $(wildcard ../lib*)
+#LIBNAMES =  $(LIBDIRS:../lib%=lib%)
+LIBNAMES = libpltnc libsbicall
 $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
 $(foreach libname,$(LIBNAMES),$(eval LIBINCLUDES+= -I../$(libname)/include))
 .PHONY: $(LIBS)
@@ -147,7 +146,7 @@ INCLUDES = -Iinclude $(LIBINCLUDES) -I$(BUILD) -I$(GCC_INC)
 
 
 # targets
-this: $(BUILD)/$(NAME).img
+this $(NAME): $(BUILD)/$(NAME).img
 	@ls -ln $<
 
 $(BUILD) $(RELEASE):
@@ -193,7 +192,7 @@ debug:
 	$(GDB) $(BUILD)/$(NAME).elf -ex "target remote :1234"
 
 devicetree:
-	qemu-system-riscv$(TARGET_XLEN) $(QEMU_FLAGS) -machine dumpdtb=$(BUILD)/qemu.dtb
+	$(QEMU) $(QEMU_FLAGS) -machine dumpdtb=$(BUILD)/qemu.dtb
 	dtc -I dtb -O dts $(BUILD)/qemu.dtb -o $(BUILD)/qemu-device-tree.dts
 	less $(BUILD)/qemu-device-tree.dts
 

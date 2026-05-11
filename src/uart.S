@@ -9,6 +9,7 @@
 #include "plutonic/ASCII.h"
 #include "plutonic/stack.h"
 #include "riscv/register.h"
+#include "libsbicall/sbicall.h"
 
 .global uart_init
 .global uart_wait_get_char
@@ -53,64 +54,6 @@ uart_get_char_wait:
 .size uart_wait_get_char, .-uart_wait_get_char
 
 
-# get a line of input from UART until RETURN is hit
-# out: buffer start in a0
-uart_getline:
-	addi	sp, sp, -(XLEN_BYTES*3)
-	STORE	s1, 0(sp)
-	STORE	s0, (XLEN_BYTES*1)(sp)
-	STORE	ra, (XLEN_BYTES*2)(sp)
-	jal		uart_clear_buffer
-	la		s0, uart_input_buffer
-	mv		s1, s0								# save a copy in s1 for later
-uart_get_char:
-	jal		uart_wait_get_char
-	# is DELETE?
-	li		t0, ASCII_DELETE
-	beq		a0, t0, uart_input_is_delete
-	# char is not DELETE
-	# check if end of input buffer is reached
-	la		t0, uart_input_buffer
-	addi	t0, t0, BUFFER_SIZE
-	# do not process input further when buffer is full
-	# (only possible user action when buffer is full will be to hit DELETE)
-	bge		s0, t0, uart_get_char
-	sb		a0, 0(s0)							# store byte in input buffer
-	addi	s0, s0, 1							# inc buffer ptr
-	j		uart_continue_not_delete
-uart_input_is_delete:
-	# TODO: if the previous key transmitted more than 1 byte, this does 
-	# not work properly 
-	beq		s0, s1, uart_get_char				# ignore at beginning of line
-	addi	s0, s0, -1
-	# ASCII output
-	li		a0, ASCII_BACKSPACE
-	jal		uart_output_char
-	li		a0, ' '
-	jal		uart_output_char
-	li		a0, ASCII_BACKSPACE
-	jal		uart_output_char
-	j		uart_get_char  
-uart_continue_not_delete:
-	# output char in a0
-	jal		uart_output_char
-	li		t0, ASCII_CR
-	beq		a0, t0, uart_getline_done
-	j		uart_get_char
-uart_getline_done:
-	# print LF to follow read CR
-	li a0, ASCII_LF
-	jal uart_output_char
-	# return buffer address
-	mv		a0, s1
-	LOAD	s1, 0(sp)
-	LOAD	s0, (XLEN_BYTES*1)(sp)
-	LOAD	ra, (XLEN_BYTES*2)(sp)
-	addi	sp, sp, (XLEN_BYTES*3)
-	ret
-.size uart_getline, .-uart_getline
-
-
 # output zero-terminated string
 # in: string ptr in a0
 uart_output_string:
@@ -136,32 +79,27 @@ uart_output_string_done:
 # in: char (ASCII) in a0
 uart_output_char:
 	# save a0 and a1 over SBI calls
-	addi	sp, sp, -16
+	addi	sp, sp, -(XLEN_BYTES*2)
 	STORE	ra, 0(sp)
 	STORE	s1, 8(sp)
+	# save char
 	mv		s1, a0
+	# prepare ecall parameters
+	li		a7, SBI_EID_DBCN
+	li		a6, SBI_FID_sbi_debug_console_write_byte
 	# print CR first if we have an LF to print
 	li		t0, ASCII_LF
-	bne		a0, t0,uart_output_char_skip_CR
+	bne		a0, t0, uart_output_char_skip_CR
 	li		a0, ASCII_CR
-
-	# todo: clean this up
-	PUSH_ALL_INT_REGISTERS
-	jal		sbi_debug_console_write_byte
-	POP_ALL_INT_REGISTERS	
-	
+	# call SBI
+	ecall
 	mv		a0, s1
 uart_output_char_skip_CR:
-
-	# todo: clean this up
-	PUSH_ALL_INT_REGISTERS
-	jal		sbi_debug_console_write_byte
-	POP_ALL_INT_REGISTERS	
-
-	# restore a0, a1
+	# call SBI
+	ecall
 	LOAD	ra, 0(sp)
 	LOAD	s1, 8(sp)
-	addi	sp, sp, 16
+	addi	sp, sp, (XLEN_BYTES*2)	
 	ret
 .size uart_output_char, .-uart_output_char
 

@@ -55,7 +55,8 @@ log_saved_float_registers:
 # in: a2 = last register index
 # in: a3 = stack frame base addr
 log_saved_registers:
-	addi	sp, sp, -(XLEN_BYTES*9)
+#ret
+	addi	sp, sp, -(XLEN_BYTES*10)
 	STORE	s0, 0(sp)
 	STORE	s1, (XLEN_BYTES*1)(sp)
 	STORE	s2, (XLEN_BYTES*2)(sp)
@@ -93,13 +94,16 @@ log_saved_registers_len_loop:
 	j		log_saved_registers_len_loop
 log_saved_registers_len_done:
 	# length now in t1, print spaces if register name is shorter than 6
-	li		t2, 6						
+	li		t2, 6
 	sub 	a5, t2, t1
 	# print spaces
-	li		a0, ' '
 log_saved_registers_space_loop:
 	beqz	a5, log_saved_registers_skip_space
+	li		a0, ' '
+	# todo: a5 is NOT SAVE across jal!!!
+	STORE	a5, (XLEN_BYTES*9)(sp)
 	jal		print_char
+	LOAD	a5, (XLEN_BYTES*9)(sp)
 	addi	a5, a5, -1
 	j 		log_saved_registers_space_loop
 log_saved_registers_skip_space:
@@ -131,7 +135,7 @@ log_saved_registers_done:
 	LOAD	s6, (XLEN_BYTES*6)(sp)
 	LOAD	s7, (XLEN_BYTES*7)(sp)
 	LOAD	ra, (XLEN_BYTES*8)(sp)
-	addi	sp, sp, (XLEN_BYTES*9)
+	addi	sp, sp, (XLEN_BYTES*10)
 	ret
 
 .size log_saved_registers, .-log_saved_registers

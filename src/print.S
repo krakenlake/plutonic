@@ -42,18 +42,18 @@ print_newline:
 # in: a0 = value to print
 print_hex:
 	addi	sp, sp, -(XLEN_BYTES*2)
-	STORE	s0, 0(sp)
+	STORE	s1, 0(sp)
 	STORE	ra, (XLEN_BYTES*1)(sp)
 	# print "0x"
-	mv		s0, a0						# save a0 for later
+	mv		s1, a0						# save a0 for later
 	li		a0, '0'
 	jal		print_char
 	li		a0, 'x'
 	jal		print_char
-	mv		a0, s0						# restore a0
+	mv		a0, s1						# restore a0
 	# print value
 	jal		print_hex_raw
-	LOAD	s0, 0(sp)
+	LOAD	s1, 0(sp)
 	LOAD	ra, (XLEN_BYTES*1)(sp)
 	addi	sp, sp, (XLEN_BYTES*2)
 	ret
@@ -96,18 +96,18 @@ print_hex_new_decimal:
 # in: byte value in a0
 print_hex_byte:
 	addi	sp, sp, -(XLEN_BYTES*2)
-	STORE	s0, 0(sp)
+	STORE	s1, 0(sp)
 	STORE	ra, (XLEN_BYTES*1)(sp)
 	li		t0, 15
 	bgt		a0, t0, print_hex_byte_two_digits
 	# print a leading zero if necessary
-	mv		s0, a0						# save a0 for later
+	mv		s1, a0						# save a0 for later
 	li		a0, '0'
 	jal		print_char
-	mv		a0, s0						# restore a0
+	mv		a0, s1						# restore a0
 print_hex_byte_two_digits:
 	jal		print_hex_raw
-	LOAD	s0, 0(sp)
+	LOAD	s1, 0(sp)
 	LOAD	ra, (XLEN_BYTES*1)(sp)
 	addi	sp, sp, (XLEN_BYTES*2)
 	ret
@@ -121,9 +121,9 @@ print_hex_byte_two_digits:
 print_hex_fixed_width:
 	addi	sp, sp, -(XLEN_BYTES*3)
 	STORE	s1, 0(sp)
-	STORE	s0, (XLEN_BYTES*1)(sp)
+	STORE	s2, (XLEN_BYTES*1)(sp)
 	STORE	ra, (XLEN_BYTES*2)(sp)
-	mv		s0, a0
+	mv		s2, a0
 	mv		s1, a1
 	beqz	a2, print_hex_fixed_width_loop
 	li		a0, '0'
@@ -133,12 +133,12 @@ print_hex_fixed_width:
 print_hex_fixed_width_loop:	
 	addi	s1, s1, -1
 	slli	t0, s1, 3					# t0 = a1 * 3
-	srl		a0, s0, t0  				# shift byte of interest to lowest byte
+	srl		a0, s2, t0  				# shift byte of interest to lowest byte
 	and		a0, a0, 0xff 				# mask low order byte and print
 	call	print_hex_byte
 	bnez	s1, print_hex_fixed_width_loop
 	LOAD	s1, 0(sp)
-	LOAD	s0, (XLEN_BYTES*1)(sp)
+	LOAD	s2, (XLEN_BYTES*1)(sp)
 	LOAD	ra, (XLEN_BYTES*2)(sp)
 	addi	sp, sp, (XLEN_BYTES*3)
 	ret
@@ -194,15 +194,15 @@ print_string:
 print_decimal:
 	addi	sp, sp, -(XLEN_BYTES*3)
 	STORE	s1, 0(sp)
-	STORE	s0, (XLEN_BYTES*1)(sp)
+	STORE	s2, (XLEN_BYTES*1)(sp)
 	STORE	ra, (XLEN_BYTES*2)(sp)
 	beqz	a0, print_decimal_zero
 	# save a0
 	mv		s1, a0
 	# terminate buffer at the end
-	la		s0, out_buf
-	addi	s0, s0, (OUT_BUFFER_SIZE-1)
-	sb		zero, 0(s0)
+	la		s2, out_buf
+	addi	s2, s2, (OUT_BUFFER_SIZE-1)
+	sb		zero, 0(s2)
 	# invert if negative
 	bgtz	s1, print_decimal_skip_invert
 	neg		a0, a0
@@ -210,14 +210,14 @@ print_decimal_skip_invert:
 	# write ASCII digits to buffer backward starting at the end
 print_decimal_loop:
 	# dec buffer ptr
-	addi	s0, s0, -1
+	addi	s2, s2, -1
 	li		t1, 10
 	# a0 = quotient, t1 = divisor
 	rem		a1, a0, t1					# a1 = a0 / t1
 	div		a0, a0, t1					# a0 = a0 % t1
 	# output digit as ASCII to buffer
 	addi	t0, a1, 48
-	sb		t0, 0(s0)
+	sb		t0, 0(s2)
 	# repeat
 	bnez	a0, print_decimal_loop
 	# print minus if negative
@@ -226,7 +226,7 @@ print_decimal_loop:
 	jal		print_char
 print_decimal_skip_minus:
 	# output buffer, starting at last written location
-	mv		a0, s0
+	mv		a0, s2
 	jal		print_string
 	j		print_decimal_done
 print_decimal_zero:
@@ -234,7 +234,7 @@ print_decimal_zero:
 	jal		print_char
 print_decimal_done:
 	LOAD	s1, 0(sp)
-	LOAD	s0, (XLEN_BYTES*1)(sp)
+	LOAD	s2, (XLEN_BYTES*1)(sp)
 	LOAD	ra, (XLEN_BYTES*2)(sp)
 	addi	sp, sp, (XLEN_BYTES*3)
 	ret

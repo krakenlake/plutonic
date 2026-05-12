@@ -15,12 +15,13 @@
 .text
 
 
-# log an error, remove last stack frame and return to calling function
+# log an error, reset stack and jump to main
 # in: a0 = error code
 # out: a0 = error code
 throw_error:
-	ld		ra,-8(fp) 
-	mv		sp, fp
+#	ld		ra,-8(fp) 
+#	mv		sp, fp
+	la		sp, _estack
 
 	addi	sp, sp, -(XLEN_BYTES*3)
 	STORE	ra, 0(sp)
@@ -36,10 +37,12 @@ throw_error:
 	jal		print_newline
 
 	LOAD	ra, 0(sp)
-	LOAD	a0, (XLEN_BYTES*1)(sp)
-	LOAD	a1, (XLEN_BYTES*2)(sp)
-	addi	sp, sp, (XLEN_BYTES*3)
-	ret
+#	LOAD	a0, (XLEN_BYTES*1)(sp)
+#	LOAD	a1, (XLEN_BYTES*2)(sp)
+	la		sp, _estack
+#	ret
+	j		main_wfi_loop
+	
 .size throw_error, .-throw_error	
 
 

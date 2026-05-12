@@ -98,7 +98,7 @@ CFLAGS += -ffreestanding
 # no crt0
 CFLAGS += -nostartfiles
 # we need frame pointers for stack unwinding(?)
-CFLAGS += -fno-omit-frame-pointer
+#CFLAGS += -fno-omit-frame-pointer
 # optimisation
 CFLAGS += -O2
 # add debug symbols

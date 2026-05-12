@@ -15,6 +15,7 @@
 #include "libsbicall/sbicall.h"
 
 .global start
+.global main_wfi_loop
 
 
 .section .init
@@ -96,7 +97,7 @@ dtb_done:
 
 	li		s1, 0
 # fall through from above
-forever:
+main_wfi_loop:
 	wfi
 
 	# check that s1 will be preserved in the loop
@@ -104,7 +105,7 @@ forever:
 
 	LOG_ALL_REGISTERS
 
-	j		forever
+	j		main_wfi_loop
 .size start, .-start
 
 

@@ -1,5 +1,8 @@
 .PHONY: this release clean debug run device-tree
 
+default: this
+
+
 PLUTONIC_VERSION = 0.0.2
 
 DEBUG ?= -DDEBUG
@@ -8,10 +11,6 @@ TARGET ?= qemu-64g
 #TARGET ?= vf2
 
 TARGET_XLEN ?= 64
-
-# output directories
-BUILDROOT	?= build
-RELEASE		?= release
 
 
 ifeq ($(TARGET), qemu-64g)
@@ -120,11 +119,12 @@ PLUTONIC_CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
 # names
 NAME = $(notdir $(shell pwd))
 CONFIG = config
+SRCDIR = src
 BUILDROOT = ../build
-BUILD = $(BUILDROOT)/$(TARGET)/plutonic
+BUILD = $(BUILDROOT)/$(TARGET)/$(NAME)
 RELEASE = ../release/$(TARGET)
-SRC_S = $(wildcard ./src/*.S)
-SRC_C = $(wildcard ./src/*.c)
+SRC_S = $(wildcard ./src/*.S) $(wildcard ./src/**/*.S)
+SRC_C = $(wildcard ./src/*.c) $(wildcard ./src/**/*.c)
 SRC = $(SRC_S) $(SRC_C)
 OBJ_S = $(SRC_S:./src/%.S=$(BUILD)/%.o)
 OBJ_C = $(SRC_C:./src/%.c=$(BUILD)/%.o)
@@ -132,8 +132,6 @@ OBJ = $(OBJ_S) $(OBJ_C)
 DEP = $(OBJ:%.o=%.d)
 
 # libs
-#LIBDIRS = $(wildcard ../lib*)
-#LIBNAMES =  $(LIBDIRS:../lib%=lib%)
 LIBNAMES = libpltnc libsbicall
 $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(libname).a))
 $(foreach libname,$(LIBNAMES),$(eval LIBINCLUDES+= -I../$(libname)/include))
@@ -141,33 +139,38 @@ $(foreach libname,$(LIBNAMES),$(eval LIBINCLUDES+= -I../$(libname)/include))
 
 INCLUDES = -Iinclude $(LIBINCLUDES) -I$(BUILD) -I$(GCC_INC)
 
+SRCDIRS = $(shell find $(SRCDIR) -type d)
+BUILDDIRS = $(SRCDIRS:src%=$(BUILD)%)
+
+
 # dependencies
 -include $(DEP)
 
 
 # targets
-this $(NAME): $(BUILD)/$(NAME).img
+
+default: $(BUILD)/$(NAME).img
 	@ls -ln $<
 
-$(BUILD) $(RELEASE):
+$(BUILDDIRS) $(RELEASE):
 	mkdir -p $@
 
-$(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf 
+$(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf
 	$(OBJCOPY) $< -O binary $@
 
-$(BUILD)/$(NAME).elf: $(BUILD) Makefile $(LIBS) $(OBJ) $(BUILD)/link.ld
+$(BUILD)/$(NAME).elf: $(LIBS) Makefile $(BUILDDIRS) $(BUILD)/link.ld $(BUILD)/config.h $(OBJ)
 	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
 
-$(BUILD)/link.ld: $(CONFIG)/link.ld.in $(BUILD) Makefile 
+$(BUILD)/link.ld: $(CONFIG)/link.ld.in Makefile
 	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $< > $@ 
 
-$(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h
+$(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h Makefile
 	cp -p $(CONFIG)/config.$(TARGET).h $@
 
-$(BUILD)/%.o: src/%.S Makefile $(BUILD)/config.h
+$(BUILD)/%.o: $(SRCDIR)/%.S Makefile
 	$(CC) $(PLUTONIC_CFLAGS) $(INCLUDES) -MMD -c $< -o $@
 
-$(BUILD)/%.o: src/%.c Makefile $(BUILD)/config.h
+$(BUILD)/%.o: $(SRCDIR)/%.c Makefile
 	$(CC) $(PLUTONIC_CFLAGS) $(INCLUDES) -MMD -c $< -o $@
 
 $(LIBS):

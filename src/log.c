@@ -14,7 +14,7 @@
 #include "plutonic/ASCII.h"
 #include "plutonic/error.h"
 #include "libsbicall/sbicall.h"
-#include "libpltnc/strings.h"
+#include "libpltnc/plt_strings.h"
 
 
  char *loglevel_string[8] = {
@@ -44,8 +44,8 @@ void log(int level, char *msg)
 	char *p;
 	if (skip_message(level)) return;
 	p = begin_logline(level);
-	p = strchain(p, msg);
-	p = strchain(p, str_LF);
+	p = plt_strchain(p, msg);
+	p = plt_strchain(p, str_LF);
 	console_out(log_buf);
 }
 
@@ -58,7 +58,7 @@ void log_no_newline(int level, char *msg)
 	char *p;
 	if (skip_message(level)) return;
 	p = begin_logline(level);
-	p = strchain(p, msg);
+	p = plt_strchain(p, msg);
 	console_out(log_buf);
 }
 
@@ -71,7 +71,7 @@ void log_hex(int level, char *msg, u64 val)
 	char *p;
 	if (skip_message(level)) return;
 	p = begin_logline(level);
-	p = strchain(p, msg);
+	p = plt_strchain(p, msg);
 	console_out(log_buf);
 	print_hex(val);
 	print_newline();
@@ -86,9 +86,9 @@ void log_str(int level, char *msg, char *c)
 	char *p;
 	if (skip_message(level)) return;
 	p = begin_logline(level);
-	p = strchain(p, msg);
-	p = strchain(p, c);
-	p = strchain(p, str_LF);
+	p = plt_strchain(p, msg);
+	p = plt_strchain(p, c);
+	p = plt_strchain(p, str_LF);
 	console_out(log_buf);
 }
 
@@ -111,10 +111,10 @@ char* begin_logline(int level)
 	print_decimal(get_timestamp());
 	log_buf[0] = LOG_DELIM;
 	log_buf[1] = '\0';
-	p = strchain(&log_buf[1], loglevel_string[level]);
-	p = strchain(p, delim_str);
-	p = strchain(p, string_log_sender);
-	p = strchain(p, delim_str);
+	p = plt_strchain(&log_buf[1], loglevel_string[level]);
+	p = plt_strchain(p, delim_str);
+	p = plt_strchain(p, string_log_sender);
+	p = plt_strchain(p, delim_str);
 	return p;
 }
 

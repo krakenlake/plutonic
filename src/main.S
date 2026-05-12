@@ -87,13 +87,13 @@ dtb_done:
 
 	#-------------------- check exception catching
 	# check ILLEGAL_INSTRUCTION exception
-#	unimp
+	unimp
 	# check BREAKPOINT exception
-#	ebreak
+	ebreak
 	# check FAULT_LOAD exception
-#	ld		t1, 0(zero)
+	ld		t1, 0(zero)
 	# check FAULT_STORE exception
-#	sd 		t1, 0(zero)
+	sd 		t1, 0(zero)
 
 	li		s1, 0
 # fall through from above
@@ -104,6 +104,7 @@ main_wfi_loop:
 	addi	s1, s1, 1
 
 	LOG_ALL_REGISTERS
+main_brk:
 
 	j		main_wfi_loop
 .size start, .-start

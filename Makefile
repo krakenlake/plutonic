@@ -18,20 +18,13 @@ ifeq ($(TARGET), qemu-64g)
 	QEMU_HARTS			= 4
 	QEMU_BIOS			= default
 	QEMU_FLAGS			= -machine virt
-# cpu type and extensions
 	QEMU_FLAGS			+= -cpu rv$(TARGET_XLEN),pmp=false,h=true
-# number of cpus
 	QEMU_FLAGS			+= -smp $(QEMU_HARTS)
-# turn debugging port on
 	QEMU_FLAGS			+= -gdb tcp::1234
-# boot via SBI
 	QEMU_FLAGS			+= -bios $(QEMU_BIOS)
-# serial device
 	QEMU_FLAGS			+= -serial stdio
-# display
 	QEMU_FLAGS			+= -display none
 #	QEMU_FLAGS			+= -device virtio-vga
-# framebuffer device
 #	QEMU_FLAGS			+= -vga none -device ramfb
 	FLASH_START			= 0x80200000
 	RAM_START			= 0x80020000
@@ -75,7 +68,6 @@ OBJDUMP	= $(TOOLBIN)/riscv64-elf-objdump
 STRIP	= $(TOOLBIN)/riscv64-elf-strip
 GDB		= $(TOOLBIN)/riscv64-elf-gdb
 QEMU	= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
-
 
 
 # CFLAGS

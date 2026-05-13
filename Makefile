@@ -1,6 +1,6 @@
-.PHONY: this release clean debug run device-tree
+.PHONY: plutonic release clean debug run device-tree
 
-default: this
+default: plutonic
 
 
 PLUTONIC_VERSION = 0.0.2
@@ -141,7 +141,7 @@ BUILDDIRS = $(SRCDIRS:src%=$(BUILD)%)
 
 # targets
 
-default: $(BUILD)/$(NAME).img
+plutonic: $(BUILD)/$(NAME).img
 	@ls -ln $<
 
 $(BUILDDIRS) $(RELEASE):

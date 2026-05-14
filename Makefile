@@ -57,16 +57,15 @@ endif
 
 # tools
 TOOLBIN	?= /usr/local/bin
-GCC_INC	?= /usr/local/Cellar/riscv-gnu-toolchain/main/riscv64-unknown-elf/include
-CC		= $(TOOLBIN)/riscv64-elf-gcc
-CPP		= $(TOOLBIN)/riscv64-elf-cpp
-LD		= $(TOOLBIN)/riscv64-elf-ld
-AR		= $(TOOLBIN)/riscv64-elf-ar
-RANLIB	= $(TOOLBIN)/riscv64-elf-ranlib
-OBJCOPY	= $(TOOLBIN)/riscv64-elf-objcopy
-OBJDUMP	= $(TOOLBIN)/riscv64-elf-objdump
-STRIP	= $(TOOLBIN)/riscv64-elf-strip
-GDB		= $(TOOLBIN)/riscv64-elf-gdb
+CC		= $(TOOLBIN)/riscv64-unknown-elf-gcc
+CPP		= $(TOOLBIN)/riscv64-unknown-elf-cpp
+LD		= $(TOOLBIN)/riscv64-unknown-elf-ld
+AR		= $(TOOLBIN)/riscv64-unknown-elf-ar
+RANLIB	= $(TOOLBIN)/riscv64-unknown-elf-ranlib
+OBJCOPY	= $(TOOLBIN)/riscv64-unknown-elf-objcopy
+OBJDUMP	= $(TOOLBIN)/riscv64-unknown-elf-objdump
+STRIP	= $(TOOLBIN)/riscv64-unknown-elf-strip
+GDB		= $(TOOLBIN)/riscv64-unknown-elf-gdb
 QEMU	= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
 
 
@@ -129,7 +128,7 @@ $(foreach libname,$(LIBNAMES),$(eval LIBS+=$(BUILDROOT)/$(TARGET)/$(libname)/$(l
 $(foreach libname,$(LIBNAMES),$(eval LIBINCLUDES+= -I../$(libname)/include))
 .PHONY: $(LIBS)
 
-INCLUDES = -Iinclude $(LIBINCLUDES) -I$(BUILD) -I$(GCC_INC)
+INCLUDES = -Iinclude $(LIBINCLUDES) -I$(BUILD)
 
 SRCDIRS = $(shell find $(SRCDIR) -type d)
 BUILDDIRS = $(SRCDIRS:src%=$(BUILD)%)

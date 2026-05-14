@@ -84,7 +84,7 @@ CFLAGS += -fPIC
 CFLAGS += -fPIE
 # gcc must not try to replace anything with built-in stuff
 CFLAGS += -fno-builtin
-CFLAGS += -ffreestanding
+#CFLAGS += -ffreestanding
 # no crt0
 CFLAGS += -nostartfiles
 # we need frame pointers for stack unwinding(?)
@@ -150,7 +150,8 @@ $(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf
 	$(OBJCOPY) $< -O binary $@
 
 $(BUILD)/$(NAME).elf: $(LIBS) Makefile $(BUILDDIRS) $(BUILD)/link.ld $(BUILD)/config.h $(OBJ)
-	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
+#	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
+	$(CC) $(CFLAGS) -T $(BUILD)/link.ld -o $@ $(OBJ) $(LIBS)
 
 $(BUILD)/link.ld: $(CONFIG)/link.ld.in Makefile
 	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $< > $@ 

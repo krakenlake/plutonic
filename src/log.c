@@ -4,7 +4,8 @@
  * Copyright (C) 2026 krakenlake
  *
  */
-#include "config.h"
+
+ #include "config.h"
 #include "plutonic/log.h"
 #include "plutonic/print.h"
 #include "plutonic/time.h"
@@ -38,9 +39,22 @@ char	str_LF[2] = {ASCII_LF, '\0'};
 /*
  *  check if message shall be printed at current loglevel 
  */
-inline int skip_message(int level)
+inline int log_skip_message(int level)
 {
 	return (level < 0 || level > LOG_DEBUG || level > kernel_log_level);
+}
+
+
+/*
+ *  generate beginning of each log line 
+ */
+inline int log_begin_line(const int level)
+{
+	int n = snprintf(log_buf, LOG_BUF_SIZE, "%ld:%s:%s:", 
+						get_timestamp(), 
+						loglevel_string[level], 
+						log_sender);
+	return n;
 }
 
 
@@ -49,11 +63,8 @@ inline int skip_message(int level)
  */
 void log(const int level, const char *format, ...)
 {
-	if (skip_message(level)) return;
-	int n = snprintf(log_buf, LOG_BUF_SIZE, "%ld%c%s%c%s%c",
-						get_timestamp(), LOG_DELIM, 
-						loglevel_string[level], LOG_DELIM,
-						log_sender, LOG_DELIM);
+	if (log_skip_message(level)) return;
+	int n = log_begin_line(level);
 	va_list args;
 	va_start(args, format);
 	vsnprintf(log_buf + n, LOG_BUF_SIZE, format, args);
@@ -68,11 +79,8 @@ void log(const int level, const char *format, ...)
  */
 void log_no_newline(const int level, const char *format, ...)
 {
-	if (skip_message(level)) return;
-	int n = snprintf(log_buf, LOG_BUF_SIZE, "%ld%c%s%c%s%c",
-						get_timestamp(), LOG_DELIM, 
-						loglevel_string[level], LOG_DELIM,
-						log_sender, LOG_DELIM);
+	if (log_skip_message(level)) return;
+	int n = log_begin_line(level);
 	va_list args;
 	va_start(args, format);
 	vsnprintf(log_buf + n, LOG_BUF_SIZE, format, args);

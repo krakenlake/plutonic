@@ -17,8 +17,6 @@
 #define	LOG_INFO	6
 #define	LOG_DEBUG	7
 
-#define LOG_DELIM	':'
-
 #define LOG_BUF_SIZE	1024
 
 #ifndef __ASSEMBLER__

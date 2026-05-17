@@ -15,9 +15,10 @@
 #include "plutonic/error.h"
 #include "libsbicall/sbicall.h"
 #include "libpltnc/plt_strings.h"
+#include <stdio.h>
+#include <string.h>
 
-
- char *loglevel_string[8] = {
+ char *loglevel_string[] = {
 	"EMERGENCY",
 	"ALERT",
 	"CRITICAL",
@@ -28,69 +29,10 @@
 	"DEBUG"
  };
 
-
+char	log_buf[LOG_BUF_SIZE];
 int		kernel_log_level = LOG_DEBUG;			// gobal kernel log level (default)
-char	*string_log_sender = "kernel\0";		// global kernel sender ID
-char	delim_str[2] = {LOG_DELIM, '\0'};
+char	*log_sender = "kernel\0";				// global kernel sender ID
 char	str_LF[2] = {ASCII_LF, '\0'};
-char	log_buf[1024];
-
-
-/*
- * standard/default log function
- */
-void log(int level, char *msg)
-{
-	char *p;
-	if (skip_message(level)) return;
-	p = begin_logline(level);
-	p = plt_strchain(p, msg);
-	p = plt_strchain(p, str_LF);
-	console_out(log_buf);
-}
-
-
-/*
- * log function that does not print newline at the end
- */
-void log_no_newline(int level, char *msg)
-{
-	char *p;
-	if (skip_message(level)) return;
-	p = begin_logline(level);
-	p = plt_strchain(p, msg);
-	console_out(log_buf);
-}
-
-
-/*
- * log a string and print hex value after that 
- */
-void log_hex(int level, char *msg, u64 val)
-{
-	char *p;
-	if (skip_message(level)) return;
-	p = begin_logline(level);
-	p = plt_strchain(p, msg);
-	console_out(log_buf);
-	print_hex(val);
-	print_newline();
-}
-
-
-/*
- * log a string and print another string after that
- */
-void log_str(int level, char *msg, char *c)
-{
-	char *p;
-	if (skip_message(level)) return;
-	p = begin_logline(level);
-	p = plt_strchain(p, msg);
-	p = plt_strchain(p, c);
-	p = plt_strchain(p, str_LF);
-	console_out(log_buf);
-}
 
 
 /*
@@ -103,42 +45,63 @@ inline int skip_message(int level)
 
 
 /*
- *  prepare prefix of logline in buffer 
+ * standard/default log function
  */
-char* begin_logline(int level)
+void log(const int level, const char *format, ...)
 {
-	char *p;
-	print_decimal(get_timestamp());
-	log_buf[0] = LOG_DELIM;
-	log_buf[1] = '\0';
-	p = plt_strchain(&log_buf[1], loglevel_string[level]);
-	p = plt_strchain(p, delim_str);
-	p = plt_strchain(p, string_log_sender);
-	p = plt_strchain(p, delim_str);
-	return p;
+	if (skip_message(level)) return;
+	int n = snprintf(log_buf, LOG_BUF_SIZE, "%ld%c%s%c%s%c",
+						get_timestamp(), LOG_DELIM, 
+						loglevel_string[level], LOG_DELIM,
+						log_sender, LOG_DELIM);
+	va_list args;
+	va_start(args, format);
+	vsnprintf(log_buf + n, LOG_BUF_SIZE, format, args);
+	va_end(args);
+	console_out(log_buf);
+	console_out(str_LF);
 }
+
+
+/*
+ * log function that does not print newline at the end
+ */
+void log_no_newline(const int level, const char *format, ...)
+{
+	if (skip_message(level)) return;
+	int n = snprintf(log_buf, LOG_BUF_SIZE, "%ld%c%s%c%s%c",
+						get_timestamp(), LOG_DELIM, 
+						loglevel_string[level], LOG_DELIM,
+						log_sender, LOG_DELIM);
+	va_list args;
+	va_start(args, format);
+	vsnprintf(log_buf + n, LOG_BUF_SIZE, format, args);
+	va_end(args);
+	console_out(log_buf);
+}
+
 
 /*
  *  log info obtained from SBI 
  */
 long log_sbiinfo(void)
 {
-	log_hex(LOG_DEBUG, "SBI spec version:", sbi_get_spec_version().value );
-	log_hex(LOG_DEBUG, "SBI implementation ID:", sbi_get_impl_id().value );
-	log_hex(LOG_DEBUG, "SBI implementation version:", sbi_get_impl_version().value );
+	log(LOG_DEBUG, "SBI spec version: 0x%08x", sbi_get_spec_version().value );
+	log(LOG_DEBUG, "SBI implementation ID: 0x%08x", sbi_get_impl_id().value );
+	log(LOG_DEBUG, "SBI implementation version: 0x%08x", sbi_get_impl_version().value );
 
 	log_no_newline(LOG_DEBUG, "SBI extensions: ");
 	for (int i=0; i < sbi_num_extensions; i++) {
 		if ((sbi_probe_extension(sbi_extensions[i].eid)).value != 0) {
-			console_out(sbi_extensions[i].name);
-			print_char(' ');
+			snprintf (log_buf, LOG_BUF_SIZE, "%s ", sbi_extensions[i].name);
+			console_out(log_buf);
 		}
 	}
-	print_newline();
+	console_out(str_LF);
 
-	log_hex(LOG_DEBUG, "SBI mvendorid:", sbi_get_mvendorid().value );
-	log_hex(LOG_DEBUG, "SBI marchid:", sbi_get_marchid().value );
-	log_hex(LOG_DEBUG, "SBI mimpid:", sbi_get_mimpid().value );
+	log(LOG_DEBUG, "SBI mvendorid: 0x%08x", sbi_get_mvendorid().value );
+	log(LOG_DEBUG, "SBI marchid: 0x%08x", sbi_get_marchid().value );
+	log(LOG_DEBUG, "SBI mimpid: 0x%08x", sbi_get_mimpid().value );
 
 	return ERR_OK;
 }

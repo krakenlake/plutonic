@@ -7,6 +7,7 @@
 #pragma once
 #include "plutonic/types.h"
 
+
 #define	LOG_EMERG	0
 #define	LOG_ALERT	1
 #define	LOG_CRIT	2
@@ -18,13 +19,10 @@
 
 #define LOG_DELIM	':'
 
+#define LOG_BUF_SIZE	1024
+
 #ifndef __ASSEMBLER__
-	/* public */
-	void log(int level, char *msg);
-	void log_no_newline(int level, char *msg);
-	void log_hex(int level, char *str, u64 val);
-	void log_str(int level, char *str, char *c);
-	/* private */
-	int skip_message(int level);
-	char* begin_logline(int level);
+	#include <stdarg.h>
+	void log(const int level, const char *format, ...);
+	void log_no_newline(const int level, const char *format, ...);
 #endif

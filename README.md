@@ -50,6 +50,8 @@ https://github.com/AuroBreeze/FrostVistaOS
 
 https://popovicu.com/posts/writing-an-operating-system-kernel-from-scratch/
 
+https://popovicu.com/posts/bare-metal-programming-risc-v/
+
 https://popovicu.com/posts/risc-v-sbi-and-full-boot-process/
 
 https://github.com/popovicu/zig-time-sharing-kernel

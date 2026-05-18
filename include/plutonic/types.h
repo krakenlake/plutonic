@@ -7,8 +7,9 @@
 #pragma once
 
 #ifndef __ASSEMBLER__
-	typedef unsigned int	u32;
-	typedef unsigned long	u64;
+	#include <stdint.h>
 
-	typedef u64				size_t;
+	typedef uint32_t	u32;
+	typedef uint64_t 	u64;
+
 #endif

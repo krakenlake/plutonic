@@ -25,10 +25,10 @@ long print_dtb(void)
 	}
 
 	u32 magic_be = dtb->magic;
-	log(LOG_DEBUG, "dtb magic BIG_ENDIAN = 0x%08x", magic_be);
+	log(LOG_DEBUG, "dtb magic LITTLE_ENDIAN = 0x%08x", magic_be);
 
 	u32 magic_le = swap32(magic_be);
-	log(LOG_DEBUG, "dtb magic LITTLE_ENDIAN = 0x%08x", magic_le);
+	log(LOG_DEBUG, "dtb magic BIG_ENDIAN = 0x%08x", magic_le);
 
 	if (magic_le == FDT_HEADER_MAGIC) {
 		log(LOG_INFO, "found dtb @0x%08x", (u64)dtb);

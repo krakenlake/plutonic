@@ -7,7 +7,7 @@
 #pragma once
 #include "plutonic/types.h"
 
-#define		FDT_HEADER_MAGIC	0xd00dfeed
+#define	FDT_HEADER_MAGIC	0xd00dfeed
 
 #ifndef __ASSEMBLER__
 

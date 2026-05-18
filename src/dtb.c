@@ -24,11 +24,8 @@ long print_dtb(void)
 		return ERR_NOTFOUND;
 	}
 
-	u32 magic_be = dtb->magic;
-	log(LOG_DEBUG, "dtb magic LITTLE_ENDIAN = 0x%08x", magic_be);
-
-	u32 magic_le = swap32(magic_be);
-	log(LOG_DEBUG, "dtb magic BIG_ENDIAN = 0x%08x", magic_le);
+	u32 magic_le = swap32(dtb->magic);
+	log(LOG_DEBUG, "dtb magic LITTLE_ENDIAN = 0x%08x", magic_le);
 
 	if (magic_le == FDT_HEADER_MAGIC) {
 		log(LOG_INFO, "found dtb @0x%08x", (u64)dtb);
@@ -37,20 +34,19 @@ long print_dtb(void)
 		return ERR_CORRUPT;
 	}
 
-	u64 strings_offset = (u32)swap32(dtb->off_dt_strings);
-	u64 strings_start_addr = (u64)(dtb + strings_offset);
-	log(LOG_DEBUG, "strings section @0x%08x", strings_start_addr);
+	u64 strings_offset = (u64)swap32(dtb->off_dt_strings);
+	u64 strings_start_addr = (u64)dtb + strings_offset;
+	log(LOG_DEBUG, "strings section @0x%08x, starting with \"%s\"", strings_start_addr, strings_start_addr);
 
-	u32 struct_offset = (u32)swap32(dtb->off_dt_struct);
+	u64 struct_offset = (u64)swap32(dtb->off_dt_struct);
 	u64 struct_start_addr = (u64)dtb + struct_offset;
 	log(LOG_DEBUG, "struct section @0x%08x", struct_start_addr);
 
-	u32 mem_rsvmap_offset = (u32)swap32(dtb->off_mem_rsvmap);
-	u64 mem_rsvmap_start_addr = (u64)dtb + mem_rsvmap_offset;
+	u64 mem_rsvmap_offset = (u64)swap32(dtb->off_mem_rsvmap);
+	struct fdt_reserve_entry *mem_rsvmap_start_addr = (struct fdt_reserve_entry*)(dtb + mem_rsvmap_offset);
 	log(LOG_DEBUG, "mem_rsvmap section @0x%08x", mem_rsvmap_start_addr);
 
-	log(LOG_DEBUG, "first string = %s", (char*)strings_start_addr);
-
+	// just testing error handling
 	throw_error(ERR_DUMMY);
 
 	return ERR_OK;

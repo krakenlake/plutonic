@@ -5,11 +5,17 @@
  *
  */
 #pragma once
-#include "plutonic/types.h"
 
-#define	FDT_HEADER_MAGIC	0xd00dfeed
+#define	FDT_HEADER_MAGIC	(0xd00dfeed)
+#define FDT_BEGIN_NODE		(0x00000001)
+#define FDT_END_NODE		(0x00000002)
+#define FDT_PROP			(0x00000003)
+#define FDT_NOP				(0x00000004)
+#define FDT_END				(0x00000009)
+
 
 #ifndef __ASSEMBLER__
+	#include "plutonic/types.h"
 
 	struct fdt_header {
 		/* all BIG_ENDIAN */
@@ -27,8 +33,8 @@
 
 	struct fdt_reserve_entry {
 		/* all BIG_ENDIAN */
-		u32 address;
-		u32 size;
+		u64 address;
+		u64 size;
 	};
 
 	struct fdt_property {

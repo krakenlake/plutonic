@@ -9,9 +9,11 @@
 #include "riscv/register.h"
 
 #ifndef __ASSEMBLER__
+
 	void log_saved_int_registers(void);
 	void log_saved_float_registers(void);
-#endif
+
+	#endif
 
 /*
  * int register offsets from start of int stack frame

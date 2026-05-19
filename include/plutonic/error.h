@@ -10,9 +10,13 @@
 #define ERR_OK					0
 #define ERR_DUMMY				1
 #define ERR_NOTFOUND			2
-#define ERR_CORRUPT				3
+#define ERR_FORMAT				3
 #define ERR_SBI					4
+#define ERR_MAGIC				5
+
 
 #ifndef __ASSEMBLER__
+
 	extern u64 throw_error(u64 error_code);
-#endif
+
+	#endif

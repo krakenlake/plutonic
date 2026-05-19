@@ -15,6 +15,7 @@
 
 
 #ifndef __ASSEMBLER__
+
 	#include "plutonic/types.h"
 
 	struct fdt_header {
@@ -42,6 +43,10 @@
 		u32 len;
 		u32 nameoff;
 	};
+
+	typedef struct fdt_header fdt_header;
+	typedef struct fdt_reserve_entry fdt_reserve_entry;
+	typedef struct fdt_property fdt_property;
 
 	long print_dtb(void);
 

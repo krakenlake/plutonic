@@ -103,7 +103,7 @@ main_wfi_loop:
 	# check that s1 will be preserved in the loop
 	addi	s1, s1, 1
 
-	LOG_ALL_REGISTERS
+#	LOG_ALL_REGISTERS
 main_brk:
 
 	j		main_wfi_loop

@@ -9,6 +9,7 @@
 #include <plutonic/ASCII.h>
 #include "plutonic/trap.h"
 #include "plutonic/log.h"
+#include "plutonic/sbi.h"
 #include "plutonic/stack.h"
 #include "plutonic/console.h"
 #include "riscv/register.h"
@@ -69,7 +70,7 @@ start:
 	csrsi	sstatus, SSTATUS_SIE
 
 	#-------------------- print info about hardware
-	jal		log_sbiinfo
+	jal		print_sbi_info
 
 	#-------------------- print dtb
 	la		t0, dtb

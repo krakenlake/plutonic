@@ -26,5 +26,6 @@
 	
 	void log(const int level, const char *format, ...);
 	void log_no_newline(const int level, const char *format, ...);
+	void log_raw(const int level, const char *format, ...);
 
 #endif

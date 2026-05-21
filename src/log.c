@@ -5,7 +5,7 @@
  *
  */
 
- #include "config.h"
+#include "config.h"
 #include "plutonic/log.h"
 #include "plutonic/print.h"
 #include "plutonic/time.h"
@@ -90,26 +90,15 @@ void log_no_newline(const int level, const char *format, ...)
 
 
 /*
- *  log info obtained from SBI 
+ * log function that does not print newline at the end
  */
-long log_sbiinfo(void)
+void log_raw(const int level, const char *format, ...)
 {
-	log(LOG_DEBUG, "SBI spec version: 0x%08x", sbi_get_spec_version().value );
-	log(LOG_DEBUG, "SBI implementation ID: 0x%08x", sbi_get_impl_id().value );
-	log(LOG_DEBUG, "SBI implementation version: 0x%08x", sbi_get_impl_version().value );
-
-	log_no_newline(LOG_DEBUG, "SBI extensions: ");
-	for (int i=0; i < sbi_num_extensions; i++) {
-		if ((sbi_probe_extension(sbi_extensions[i].eid)).value != 0) {
-			snprintf (log_buf, LOG_BUF_SIZE, "%s ", sbi_extensions[i].name);
-			console_out(log_buf);
-		}
-	}
-	console_out(str_LF);
-
-	log(LOG_DEBUG, "SBI mvendorid: 0x%08x", sbi_get_mvendorid().value );
-	log(LOG_DEBUG, "SBI marchid: 0x%08x", sbi_get_marchid().value );
-	log(LOG_DEBUG, "SBI mimpid: 0x%08x", sbi_get_mimpid().value );
-
-	return ERR_OK;
+	if (log_skip_message(level)) return;
+	log_buf[0]='\0';
+	va_list args;
+	va_start(args, format);
+	vsnprintf(log_buf, LOG_BUF_SIZE, format, args);
+	va_end(args);
+	console_out(log_buf);
 }

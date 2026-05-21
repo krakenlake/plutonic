@@ -36,6 +36,7 @@ char	*log_sender = "kernel\0";				// global kernel sender ID
 char	str_LF[2] = {ASCII_LF, '\0'};
 
 
+
 /*
  *  check if message shall be printed at current loglevel 
  */
@@ -46,31 +47,15 @@ inline int log_skip_message(int level)
 
 
 /*
- *  generate beginning of each log line 
- */
-inline int log_begin_line(const int level)
-{
-	int n = snprintf(log_buf, LOG_BUF_SIZE, "%ld:%s:%s:", 
-						get_timestamp(), 
-						loglevel_string[level], 
-						log_sender);
-	return n;
-}
-
-
-/*
  * standard/default log function
  */
 void log(const int level, const char *format, ...)
 {
 	if (log_skip_message(level)) return;
-	int n = log_begin_line(level);
 	va_list args;
 	va_start(args, format);
-	vsnprintf(log_buf + n, LOG_BUF_SIZE, format, args);
+	do_log (LOG_FLAG_LINEPREFIX | LOG_FLAG_NEWLINE, level, format, args);
 	va_end(args);
-	console_out(log_buf);
-	console_out(str_LF);
 }
 
 
@@ -80,12 +65,10 @@ void log(const int level, const char *format, ...)
 void log_no_newline(const int level, const char *format, ...)
 {
 	if (log_skip_message(level)) return;
-	int n = log_begin_line(level);
 	va_list args;
 	va_start(args, format);
-	vsnprintf(log_buf + n, LOG_BUF_SIZE, format, args);
+	do_log (LOG_FLAG_LINEPREFIX, level, format, args);
 	va_end(args);
-	console_out(log_buf);
 }
 
 
@@ -95,10 +78,31 @@ void log_no_newline(const int level, const char *format, ...)
 void log_raw(const int level, const char *format, ...)
 {
 	if (log_skip_message(level)) return;
-	log_buf[0]='\0';
 	va_list args;
 	va_start(args, format);
-	vsnprintf(log_buf, LOG_BUF_SIZE, format, args);
+	do_log(LOG_FLAG_NONE, level, format, args);
 	va_end(args);
+}
+
+
+/*
+ * process log
+ */
+void do_log(const u64 flags, const int level, const char *format, va_list args)
+{
+	int n;
+
+	if (flags && LOG_FLAG_LINEPREFIX) {
+		n = snprintf(log_buf, LOG_BUF_SIZE, "[%016ld]:%s:%s:", 
+											get_timestamp(), 
+											loglevel_string[level], 
+											log_sender);
+	} else {
+		n=0;
+		log_buf[0]='\0';
+	}
+	vsnprintf(log_buf + n, LOG_BUF_SIZE-n, format, args);
 	console_out(log_buf);
+
+	if (flags & LOG_FLAG_NEWLINE) console_out(str_LF);
 }

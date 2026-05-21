@@ -19,13 +19,20 @@
 
 #define LOG_BUF_SIZE	1024
 
+#define LOG_FLAG_NONE			0
+#define LOG_FLAG_LINEPREFIX		(1 << 0)
+#define LOG_FLAG_NEWLINE		(1 << 1)
 
 #ifndef __ASSEMBLER__
 
 	#include <stdarg.h>
 	
-	void log(const int level, const char *format, ...);
-	void log_no_newline(const int level, const char *format, ...);
-	void log_raw(const int level, const char *format, ...);
+	/* public */
+	void log			(const int level, const char *format, ...);
+	void log_no_newline	(const int level, const char *format, ...);
+	void log_raw		(const int level, const char *format, ...);
+
+	/* private */
+	void do_log			(const u64 flags, const int level, const char *format, va_list args);
 
 #endif

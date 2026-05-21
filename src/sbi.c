@@ -11,9 +11,8 @@
 #include "libsbicall/sbicall.h"
 
 
-
 /*
- *  log info obtained from SBI 
+ *  print info about SBI 
  */
 long print_sbi_info(void)
 {
@@ -25,7 +24,7 @@ long print_sbi_info(void)
 	for (int i=0; i < sbi_num_extensions; i++) {
 		if ((sbi_probe_extension(sbi_extensions[i].eid)).value != 0) {
 			log_raw(LOG_DEBUG, "%s ", sbi_extensions[i].name);
-			}
+		}
 	}
 	log_raw(LOG_DEBUG, "\n");
 

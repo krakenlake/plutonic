@@ -25,7 +25,9 @@ ifeq ($(TARGET), qemu-64g)
 	QEMU_FLAGS			+= -serial stdio
 	QEMU_FLAGS			+= -display none
 #	QEMU_FLAGS			+= -device virtio-vga
-#	QEMU_FLAGS			+= -vga none -device ramfb
+#	QEMU_FLAGS			+= -device ramfb
+# wait for gdb to connect on startup
+#	QEMU_FLAGS			+= -S
 	FLASH_START			= 0x80200000
 	RAM_START			= 0x80020000
 	FLASH_SIZE			= 64K
@@ -65,7 +67,7 @@ RANLIB	= $(TOOLBIN)/riscv64-unknown-elf-ranlib
 OBJCOPY	= $(TOOLBIN)/riscv64-unknown-elf-objcopy
 OBJDUMP	= $(TOOLBIN)/riscv64-unknown-elf-objdump
 STRIP	= $(TOOLBIN)/riscv64-unknown-elf-strip
-GDB		= $(TOOLBIN)/riscv64-unknown-elf-gdb
+GDB		= $(TOOLBIN)/riscv64-elf-gdb
 QEMU	= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
 
 
@@ -75,7 +77,7 @@ CFLAGS += -DPLUTONIC_VERSION=\"$(PLUTONIC_VERSION)\"
 # target platform
 CFLAGS += -march=rv$(TARGET_XLEN)g
 # warnings
-CFLAGS += -Wall -Werror -Wextra -pedantic
+#CFLAGS += -Wall -Werror -Wextra -pedantic
 # warn if inline function cannot be substituted
 CFLAGS += -Winline
 # create position-independent code

@@ -50,6 +50,6 @@ throw_error:
 
 
 error_msg:
-	.string "ERROR: throw_error: ERROR = ";
+	.string "throw_error: ERROR = ";
 .size error_msg, .-error_msg
 

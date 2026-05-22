@@ -105,7 +105,6 @@ main_wfi_loop:
 	addi	s1, s1, 1
 
 #	LOG_ALL_REGISTERS
-main_brk:
 
 	j		main_wfi_loop
 .size start, .-start
@@ -115,6 +114,7 @@ plutonic_wait_hart:
 	wfi
 	j	plutonic_wait_hart
 .size plutonic_wait_hart, .-plutonic_wait_hart
+.size plutonic_wait_hart, .-plutonic_wait_hart
 
 
 cold_reboot:
@@ -123,6 +123,7 @@ cold_reboot:
 	jal		sbi_system_reset
 	wfi
 	j		cold_reboot
+.size cold_reboot, .-cold_reboot
 
 
 thread1:
@@ -133,6 +134,7 @@ busy_wait1:
 	addi	t0, t0, -1
 	bnez	t0, busy_wait1
 	j		thread1
+.size thread1, .-thread1
 
 
 .section .rodata

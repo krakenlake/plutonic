@@ -17,7 +17,7 @@ fdt_header *dtb;
 
 long print_dtb(void)
 {
-	log(LOG_INFO, "looking for in-memory dtb received in a1...");
+	log(LOG_INFO, "looking for in-memory dtb passed in a1");
 
 	if (dtb == 0) {
 		log(LOG_ERR, "no dtb");
@@ -28,9 +28,9 @@ long print_dtb(void)
 	log(LOG_DEBUG, "dtb magic = 0x%08x", magic_le);
 
 	if (magic_le == FDT_HEADER_MAGIC) {
-		log(LOG_INFO, "found dtb @ 0x%016lx", (u64)dtb);
+		log(LOG_INFO, "magic number 0x%08x found @ 0x%016lx", FDT_HEADER_MAGIC, (u64)dtb);
 	} else {
-		log(LOG_ERR, "dtb magic number does not match, expected 0x%08x", FDT_HEADER_MAGIC);
+		log(LOG_ERR, "dtb magic number @ 0x%016lx does not match, expected 0x%08x", (u64)dtb, FDT_HEADER_MAGIC);
 		return ERR_MAGIC;
 	}
 
@@ -56,9 +56,10 @@ long print_dtb(void)
 	log(LOG_DEBUG, "mem_rsvmap section @ 0x%016lx", mem_rsvmap_start_addr);
 	fdt_reserve_entry *p;
 	for (p = (fdt_reserve_entry *)mem_rsvmap_start_addr;  p->address && p->size !=0; p++) {
-		log(LOG_DEBUG, "reserved memory area: fdt_reserve_entry @ 0x%016lx: 0x%016lx - 0x%016lx", p, swap64(p->address), swap64(p->address) + swap64(p->size));
+		log(LOG_DEBUG, "reserved memory area: fdt_reserve_entry @ 0x%016lx: 0x%016lx - 0x%016lx", 
+						p, swap64(p->address), swap64(p->address) + swap64(p->size));
 	}
-	if (p==(fdt_reserve_entry *)mem_rsvmap_start_addr) log(LOG_DEBUG, "reserved memory area: <none>");
+	if (p==(fdt_reserve_entry *)mem_rsvmap_start_addr) log(LOG_DEBUG, "mem_rsvmap is empty");
 
 
 	// todo: just testing error handling

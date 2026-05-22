@@ -9,7 +9,6 @@
 #include "plutonic/stack.h"
 
 .global get_timestamp
-.global print_timestamp
 
 .text
 

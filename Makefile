@@ -1,4 +1,4 @@
-.PHONY: plutonic release clean debug run device-tree
+.PHONY: plutonic release clean debug run run-wait device-tree
 
 default: plutonic
 
@@ -181,6 +181,9 @@ clean:
 
 run: $(BUILD)/$(NAME).img Makefile
 	$(QEMU) $(QEMU_FLAGS) -kernel $<
+
+run-wait: $(BUILD)/$(NAME).img Makefile
+	$(QEMU) $(QEMU_FLAGS) -S -kernel $<
 
 disass: $(BUILD)/$(NAME).elf Makefile
 	$(GDB) $<

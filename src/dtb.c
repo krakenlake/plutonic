@@ -24,34 +24,35 @@ long print_dtb(void)
 		return ERR_NOTFOUND;
 	}
 
-	u64 magic_le = swap32((u32)dtb->magic);
-	log(LOG_DEBUG, "dtb magic = 0x%08x", magic_le);
+	u32 magic_le = swap32(dtb->magic);
+
+//	log(LOG_DEBUG, "dtb magic = 0x%08x", magic_le);
 
 	if (magic_le == FDT_HEADER_MAGIC) {
-		log(LOG_INFO, "magic number 0x%08x found @ 0x%016lx", FDT_HEADER_MAGIC, (u64)dtb);
+		log(LOG_INFO, "magic number 0x%08x found @ 0x%08x", FDT_HEADER_MAGIC, (u64)dtb);
 	} else {
-		log(LOG_ERR, "dtb magic number @ 0x%016lx does not match, expected 0x%08x", (u64)dtb, FDT_HEADER_MAGIC);
+		log(LOG_ERR, "dtb magic number @ 0x%08x does not match, expected 0x%08x", (u64)dtb, FDT_HEADER_MAGIC);
 		return ERR_MAGIC;
 	}
 
-	u64 boot_cpuid_phys = (u64)swap32(dtb->boot_cpuid_phys);
+	u32 boot_cpuid_phys = swap32(dtb->boot_cpuid_phys);
 	log(LOG_DEBUG, "booting on CPU %ld", boot_cpuid_phys);
 
-	u64 strings_offset = (u64)swap32(dtb->off_dt_strings);
-	u64 strings_start_addr = (u64)dtb + strings_offset;
+	u32 strings_offset = swap32(dtb->off_dt_strings);
+	u64 strings_start_addr = (u64)dtb + (u64)strings_offset;
 	u64 strings_end_addr = strings_start_addr +  (u64)swap32(dtb->size_dt_strings);
 	log(LOG_DEBUG, "strings section @ 0x%016lx-0x%016lx (%ld bytes), starting with \"%s\"", 
 					strings_start_addr, strings_end_addr, 
 					(u64)swap32(dtb->size_dt_strings), strings_start_addr);
 
-	u64 struct_offset = (u64)swap32(dtb->off_dt_struct);
-	u64 struct_start_addr = (u64)dtb + struct_offset;
+	u32 struct_offset = (u64)swap32(dtb->off_dt_struct);
+	u64 struct_start_addr = (u64)dtb + (u64)struct_offset;
 	u64 struct_end_addr = struct_start_addr +  (u64)swap32(dtb->size_dt_struct);
 	log(LOG_DEBUG, "struct section @ 0x%016lx-0x%016lx (%ld bytes)", 
 		struct_start_addr, struct_end_addr,
-		(u64)swap32(dtb->size_dt_struct));
+		swap32(dtb->size_dt_struct));
 	
-	u64 mem_rsvmap_offset = (u64)swap32(dtb->off_mem_rsvmap);
+	u32 mem_rsvmap_offset = (u64)swap32(dtb->off_mem_rsvmap);
 	u64 mem_rsvmap_start_addr = (u64)dtb + mem_rsvmap_offset;
 	log(LOG_DEBUG, "mem_rsvmap section @ 0x%016lx", mem_rsvmap_start_addr);
 	fdt_reserve_entry *p;

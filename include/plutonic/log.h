@@ -27,12 +27,8 @@
 
 	#include <stdarg.h>
 	
-	/* public */
 	void log			(const int level, const char *format, ...);
 	void log_no_newline	(const int level, const char *format, ...);
 	void log_raw		(const int level, const char *format, ...);
-
-	/* private */
-	void do_log			(const u64 flags, const int level, const char *format, va_list args);
 
 #endif

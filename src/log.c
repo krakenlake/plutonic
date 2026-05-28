@@ -19,7 +19,8 @@
 #include <stdio.h>
 #include <string.h>
 
- char *loglevel_string[] = {
+
+char *loglevel_string[] = {
 	"EMERGENCY",
 	"ALERT",
 	"CRITICAL",
@@ -30,11 +31,14 @@
 	"DEBUG"
  };
 
+
 char	log_buf[LOG_BUF_SIZE];
 int		kernel_log_level = LOG_DEBUG;			// gobal kernel log level (default)
 char	*log_sender = "kernel\0";				// global kernel sender ID
 char	str_LF[2] = {ASCII_LF, '\0'};
 
+
+static void do_log(const u64 flags, const int level, const char *format, va_list args);
 
 
 /*
@@ -88,7 +92,7 @@ void log_raw(const int level, const char *format, ...)
 /*
  * process log
  */
-void do_log(const u64 flags, const int level, const char *format, va_list args)
+static void do_log(const u64 flags, const int level, const char *format, va_list args)
 {
 	int n;
 

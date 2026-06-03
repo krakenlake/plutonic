@@ -30,8 +30,8 @@ ifeq ($(TARGET), qemu-64g)
 #	QEMU_FLAGS			+= -S
 	FLASH_START			= 0x80200000
 	RAM_START			= 0x80020000
-	FLASH_SIZE			= 64K
-	RAM_SIZE			= 32K
+	FLASH_SIZE			= 32M
+	RAM_SIZE			= 64M
 endif 
 
 ifeq ($(TARGET), vf2)
@@ -100,8 +100,10 @@ CFLAGS += -mcmodel=medany
 
 PLUTONIC_CFLAGS ?= $(CFLAGS)
 
-# LDFLAGS
-PLUTONIC_LDFLAGS ?= --no-warn-rwx-segments -m elf$(TARGET_XLEN)lriscv
+# LDFLAGS (passed through gcc via -Xlinker)
+PLUTONIC_LDFLAGS ?= -Xlinker --no-warn-rwx-segments 
+PLUTONIC_LDFLAGS += -Xlinker -m -Xlinker elf$(TARGET_XLEN)lriscv
+#PLUTONIC_LDFLAGS += -Xlinker -v
 
 # CPPFLAGS
 PLUTONIC_CPPFLAGS += -DFLASH_START=$(FLASH_START)
@@ -153,7 +155,7 @@ $(BUILD)/$(NAME).img: $(BUILD)/$(NAME).elf
 
 $(BUILD)/$(NAME).elf: $(LIBS) Makefile $(BUILDDIRS) $(BUILD)/link.ld $(BUILD)/config.h $(OBJ)
 #	$(LD) -T $(BUILD)/link.ld $(PLUTONIC_LDFLAGS) -o $@ $(OBJ) $(LIBS)
-	$(CC) $(CFLAGS) -T $(BUILD)/link.ld -o $@ $(OBJ) $(LIBS)
+	$(CC) $(CFLAGS) $(PLUTONIC_LDFLAGS) -T $(BUILD)/link.ld -o $@ $(OBJ) $(LIBS)
 
 $(BUILD)/link.ld: $(CONFIG)/link.ld.in Makefile
 	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $< > $@ 

@@ -21,7 +21,7 @@ SECTIONS{
     _etext = .;
   } >FLASH
 
-  .bss :{
+  .bss (NOLOAD) :{
     _sbss = .;
     . = ALIGN(8);
     *(.bss*)

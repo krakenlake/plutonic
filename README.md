@@ -86,6 +86,10 @@ https://github.com/plctlab/mlibc
 
 https://github.com/rsenn/dietlibc
 
+### Virtual Memory
+
+https://traxys.me/riscv_os_2.html
+
 ### Graphics
 
 https://anchorboot.org/posts/2024/04/21/vga-text-mode.html
@@ -119,5 +123,7 @@ https://devicetree-specification.readthedocs.io/en/stable/flattened-format.html
 https://projectacrn.github.io/latest/developer-guides/asm_coding_guidelines.html
 
 https://www.kernel.org/doc/html/v4.10/process/coding-style.html
+
+https://github.com/ozkl/doomgeneric
 
 </sub>

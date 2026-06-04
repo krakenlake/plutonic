@@ -1,34 +1,48 @@
 ENTRY (start);
 
 MEMORY{
-  FLASH (rx) : ORIGIN = FLASH_START, LENGTH = FLASH_SIZE
-  RAM (xrw)  : ORIGIN = RAM_START, LENGTH = RAM_SIZE
+  BOOTRAM (rw): ORIGIN = BOOTRAM_START, LENGTH = 512M
 }
-
-_estack = ORIGIN(RAM) + LENGTH(RAM);
 
 SECTIONS{
 
+  . = BOOTRAM_START;
+
   .text :{
     _stext = .;
+    *(.init);
     . = ALIGN(8);
-    *(.init)
-    . = ALIGN(8);
-    *(.text .text*)
-    . = ALIGN(8);
-    *(.rodata .rodata*)
+    *(.text .text*);
     . = ALIGN(8);
     _etext = .;
-  } >FLASH
+  }
+
+	.rodata : {
+    . = ALIGN(8);
+    _srodata = .;
+    *(.rodata .rodata*);
+		. = ALIGN(8);
+		_erodata = .;
+	}
+
+	.data : {
+    . = ALIGN(8);
+    _sdata = .;
+    *(.data .data.*);
+		. = ALIGN(8);
+		_edata = .;
+	}
 
   .bss (NOLOAD) :{
-    _sbss = .;
     . = ALIGN(8);
-    *(.bss*)
+    _sbss = .;
+    *(.bss*);
     . = ALIGN(8);
     _ebss = .;
-  } >RAM
+  }
 
+  . = ALIGN(8);
+  _estack = . + 2M;
 }
 
 

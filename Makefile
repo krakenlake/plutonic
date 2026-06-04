@@ -28,15 +28,11 @@ ifeq ($(TARGET), qemu-64g)
 #	QEMU_FLAGS			+= -device ramfb
 # wait for gdb to connect on startup
 #	QEMU_FLAGS			+= -S
-	FLASH_START			= 0x80200000
-	RAM_START			= 0x80020000
-	FLASH_SIZE			= 32M
-	RAM_SIZE			= 64M
+	BOOTRAM_START		= 0x80200000
 endif 
 
 ifeq ($(TARGET), vf2)
-	FLASH_START			= 0x80200000
-	RAM_START			= 0x80020000
+	BOOTRAM_START		= 0x80200000
 define VF2_RUN_MSG
 
 	running on VF2:
@@ -101,15 +97,12 @@ CFLAGS += -mcmodel=medany
 PLUTONIC_CFLAGS ?= $(CFLAGS)
 
 # LDFLAGS (passed through gcc via -Xlinker)
-PLUTONIC_LDFLAGS ?= -Xlinker --no-warn-rwx-segments 
+#PLUTONIC_LDFLAGS ?= -Xlinker --no-warn-rwx-segments 
 PLUTONIC_LDFLAGS += -Xlinker -m -Xlinker elf$(TARGET_XLEN)lriscv
 #PLUTONIC_LDFLAGS += -Xlinker -v
 
 # CPPFLAGS
-PLUTONIC_CPPFLAGS += -DFLASH_START=$(FLASH_START)
-PLUTONIC_CPPFLAGS += -DFLASH_SIZE=$(FLASH_SIZE)
-PLUTONIC_CPPFLAGS += -DRAM_START=$(RAM_START)
-PLUTONIC_CPPFLAGS += -DRAM_SIZE=$(RAM_SIZE)
+PLUTONIC_CPPFLAGS += -DBOOTRAM_START=$(BOOTRAM_START)
 
 # names
 NAME = $(notdir $(shell pwd))
@@ -158,7 +151,7 @@ $(BUILD)/$(NAME).elf: $(LIBS) Makefile $(BUILDDIRS) $(BUILD)/link.ld $(BUILD)/co
 	$(CC) $(CFLAGS) $(PLUTONIC_LDFLAGS) -T $(BUILD)/link.ld -o $@ $(OBJ) $(LIBS)
 
 $(BUILD)/link.ld: $(CONFIG)/link.ld.in Makefile
-	$(CPP) $(PLUTONIC_CPPFLAGS) $(PLUTONIC_CFLAGS) -E -P -x c $< > $@ 
+	$(CPP) $(PLUTONIC_CPPFLAGS) -E -P -x c $< > $@ 
 
 $(BUILD)/config.h: $(CONFIG)/config.$(TARGET).h Makefile
 	cp -p $(CONFIG)/config.$(TARGET).h $@

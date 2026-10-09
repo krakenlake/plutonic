@@ -54,7 +54,7 @@ endef
 endif
 
 # tools
-TOOLBIN	?= /usr/local/bin
+TOOLBIN	?= /opt/homebrew/bin
 CC		= $(TOOLBIN)/riscv64-unknown-elf-gcc
 CPP		= $(TOOLBIN)/riscv64-unknown-elf-cpp
 LD		= $(TOOLBIN)/riscv64-unknown-elf-ld
@@ -63,7 +63,7 @@ RANLIB	= $(TOOLBIN)/riscv64-unknown-elf-ranlib
 OBJCOPY	= $(TOOLBIN)/riscv64-unknown-elf-objcopy
 OBJDUMP	= $(TOOLBIN)/riscv64-unknown-elf-objdump
 STRIP	= $(TOOLBIN)/riscv64-unknown-elf-strip
-GDB		= $(TOOLBIN)/riscv64-elf-gdb
+GDB		= $(TOOLBIN)/riscv64-unknown-elf-gdb
 QEMU	= $(TOOLBIN)/qemu-system-riscv$(TARGET_XLEN)
 
 
@@ -77,9 +77,9 @@ CFLAGS += -march=rv$(TARGET_XLEN)g
 # warn if inline function cannot be substituted
 CFLAGS += -Winline
 # create position-independent code
-CFLAGS += -fPIC
+#CFLAGS += -fPIC
 # create position-independent executables
-CFLAGS += -fPIE
+#CFLAGS += -fPIE
 # gcc must not try to replace anything with built-in stuff
 CFLAGS += -fno-builtin
 #CFLAGS += -ffreestanding
